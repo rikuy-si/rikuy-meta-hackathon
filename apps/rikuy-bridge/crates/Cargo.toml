@@ -1,0 +1,27 @@
+[workspace]
+resolver = "2"
+members = ["common", "hikvision", "ezviz"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+publish = false
+
+[workspace.dependencies]
+rikuy-bridge-common = { path = "common" }
+clap = { version = "4", features = ["derive", "env"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+chrono = { version = "0.4", default-features = false, features = ["std", "clock", "serde"] }
+ureq = { version = "2", default-features = false, features = ["json"] }
+quick-xml = { version = "0.37", features = ["serialize"] }
+md-5 = "0.10"
+sha2 = "0.10"
+rand = "0.8"
+zeroize = "1"
+thiserror = "2"
+
+[profile.release]
+strip = true
+lto = "thin"
