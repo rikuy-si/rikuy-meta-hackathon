@@ -1,0 +1,26 @@
+# Disposable experiment workspaces (see .agents/skills/experiment-mode)
+/runs/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Rust
+target/
+
+# Node
+node_modules/
+
+# Local config and secrets
+.env
+*.env
+.secrets/
+
+# Logs, caches, temporary files
+*.log
+.cache/
+tmp/
+temp/
+.DS_Store
