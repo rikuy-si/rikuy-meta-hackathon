@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TrackList version="1.0" xmlns="http://www.hikvision.com/ver20/XMLSchema">
+<Track>
+<id>101</id>
+<Channel>1</Channel>
+<Enable>true</Enable>
+<Description>trackType=standard,sourceType=MPEG4-VIDEO,codecType=H.264-BP,resolution=1280x720,framerate=25.000000 fps,bitrate=2048 kbps</Description>
+<TrackGUID>{00000000-0000-0000-0000-000000000101}</TrackGUID>
+<DefaultRecordingMode>CMR</DefaultRecordingMode>
+</Track>
+<Track>
+<id>201</id>
+<Channel>2</Channel>
+<Enable>true</Enable>
+<Description>trackType=standard,sourceType=MPEG4-VIDEO,codecType=H.264-BP,resolution=1280x720,framerate=25.000000 fps,bitrate=2048 kbps</Description>
+<TrackGUID>{00000000-0000-0000-0000-000000000201}</TrackGUID>
+<DefaultRecordingMode>CMR</DefaultRecordingMode>
+</Track>
+</TrackList>

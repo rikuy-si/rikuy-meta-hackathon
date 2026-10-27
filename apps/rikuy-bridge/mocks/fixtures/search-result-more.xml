@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CMSearchResult version="1.0" xmlns="http://www.hikvision.com/ver20/XMLSchema">
+<searchID>3f2c9a10-0000-4000-8000-000000000001</searchID>
+<responseStatus>true</responseStatus>
+<responseStatusStrg>MORE</responseStatusStrg>
+<numOfMatches>1</numOfMatches>
+<matchList>
+<searchMatchItem>
+<sourceID>{00000000-0000-0000-0000-000000000101}</sourceID>
+<trackID>101</trackID>
+<timeSpan>
+<startTime>2026-10-29T05:00:00Z</startTime>
+<endTime>2026-10-29T05:15:00Z</endTime>
+</timeSpan>
+<mediaSegmentDescriptor>
+<contentType>video</contentType>
+<codecType>H.264-BP</codecType>
+<playbackURI>rtsp://dvr.local/Streaming/tracks/101/?starttime=20261029T050000Z&amp;endtime=20261029T051500Z&amp;name=00000000047000001&amp;size=1125</playbackURI>
+</mediaSegmentDescriptor>
+<metadataMatches>
+<metadataDescriptor>recordType.meta.std-cgi.com/CMR</metadataDescriptor>
+</metadataMatches>
+</searchMatchItem>
+</matchList>
+</CMSearchResult>
