@@ -8,6 +8,7 @@
 
 pub mod error;
 pub mod job;
+pub mod liveness;
 pub mod report;
 pub mod secret;
 
