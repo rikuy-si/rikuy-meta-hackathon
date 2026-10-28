@@ -1,9 +1,12 @@
 //! Hikvision ISAPI client: Digest auth, liveness, discovery and paged search.
-use std::io::Read;
+use std::fs;
+use std::io::{Read, Write};
+use std::path::Path;
 use std::time::Duration;
 
 use chrono::NaiveDateTime;
 use rand::RngCore;
+use sha2::{Digest, Sha256};
 use rikuy_bridge_common::liveness::{probe, DEFAULT_PROBE_TIMEOUT};
 use rikuy_bridge_common::{BridgeError, Credential};
 use url::Url;
@@ -14,6 +17,24 @@ use crate::xml::{self, ResponseStatus, SearchResult, TrackList};
 /// The DVR caps each search page at 64 results whatever `maxResults` says.
 pub const PAGE_SIZE: usize = 64;
 const MAX_PAGES: usize = 10_000;
+/// Every \`.dav\` the DVR serves is the advertised payload plus this wrapper.
+pub const IMKH_HEADER_LEN: u64 = 40;
+pub const IMKH_MAGIC: &[u8; 4] = b"IMKH";
+const MAX_SNAPSHOT: u64 = 20 * 1024 * 1024;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Stream {
+    Main = 1,
+    Sub = 2,
+}
+
+#[derive(Debug, Clone)]
+pub struct Downloaded {
+    pub bytes: u64,
+    pub sha256: String,
+    /// The file was already complete on disk; nothing was requested.
+    pub skipped: bool,
+}
 
 #[derive(Debug, Clone, serde::Serialize)]
 pub struct Track {
@@ -70,6 +91,10 @@ impl IsapiClient {
 
     pub fn host(&self) -> &str {
         &self.host
+    }
+
+    pub fn route(&self) -> (String, u16) {
+        (self.host.clone(), self.port)
     }
 
     /// One ISAPI request with Digest auth. Policy:
@@ -192,6 +217,91 @@ impl IsapiClient {
         }
         Err(BridgeError::Protocol("search: page limit exceeded".into()))
     }
+}
+
+impl IsapiClient {
+    /// Live JPEG: `GET /ISAPI/Streaming/channels/<camera><stream>/picture`
+    /// (camera 1 main stream is channel id 101).
+    pub fn snapshot(&mut self, camera: u32, stream: Stream) -> Result<Vec<u8>, BridgeError> {
+        let id = camera * 100 + stream as u32;
+        let resp = self.request("GET", &format!("/ISAPI/Streaming/channels/{id}/picture"), None)?;
+        let mut buf = Vec::new();
+        resp.into_reader()
+            .take(MAX_SNAPSHOT)
+            .read_to_end(&mut buf)
+            .map_err(|e| BridgeError::Unreachable(format!("snapshot read: {e}")))?;
+        if buf.len() < 4 || buf[0] != 0xFF || buf[1] != 0xD8 {
+            return Err(BridgeError::Protocol(format!("snapshot channel {id}: not a JPEG")));
+        }
+        Ok(buf)
+    }
+
+    /// Download one recording with `POST /ISAPI/ContentMgmt/download` (the GET
+    /// form is rejected by the DVR). Streams to `<out>.part`, validates the IMKH
+    /// wrapper and the advertised size, then renames into place. An existing
+    /// complete file is kept and not requested again.
+    pub fn download(&mut self, rec: &Recording, out: &Path) -> Result<Downloaded, BridgeError> {
+        let expected = rec.size.map(|s| s + IMKH_HEADER_LEN);
+        if let (Some(exp), Ok(meta)) = (expected, fs::metadata(out)) {
+            if meta.len() == exp {
+                return Ok(Downloaded { bytes: exp, sha256: sha256_file(out)?, skipped: true });
+            }
+        }
+        let body = xml::download_request(&rec.playback_uri);
+        let resp = self.request("POST", "/ISAPI/ContentMgmt/download", Some(body.as_bytes()))?;
+        let part = out.with_extension("dav.part");
+        let result = (|| {
+            let mut reader = resp.into_reader();
+            let mut file = fs::File::create(&part)?;
+            let mut hasher = Sha256::new();
+            let mut total = 0u64;
+            let mut head = Vec::with_capacity(4);
+            let mut buf = vec![0u8; 256 * 1024];
+            loop {
+                let n = reader.read(&mut buf).map_err(|e| BridgeError::Unreachable(format!("download read: {e}")))?;
+                if n == 0 {
+                    break;
+                }
+                if head.len() < 4 {
+                    head.extend_from_slice(&buf[..n.min(4 - head.len())]);
+                }
+                hasher.update(&buf[..n]);
+                file.write_all(&buf[..n])?;
+                total += n as u64;
+            }
+            file.sync_all()?;
+            if head.as_slice() != IMKH_MAGIC {
+                return Err(BridgeError::Protocol(format!("{}: missing IMKH wrapper", rec.playback_uri)));
+            }
+            if let Some(exp) = expected {
+                if total != exp {
+                    return Err(BridgeError::Protocol(format!("{}: got {total} bytes, expected {exp}", rec.playback_uri)));
+                }
+            }
+            Ok((total, hex(&hasher.finalize())))
+        })();
+        match result {
+            Ok((bytes, sha256)) => {
+                fs::rename(&part, out)?;
+                Ok(Downloaded { bytes, sha256, skipped: false })
+            }
+            Err(e) => {
+                let _ = fs::remove_file(&part);
+                Err(e)
+            }
+        }
+    }
+}
+
+pub fn hex(b: &[u8]) -> String {
+    b.iter().map(|x| format!("{x:02x}")).collect()
+}
+
+pub fn sha256_file(p: &Path) -> Result<String, BridgeError> {
+    let mut f = fs::File::open(p)?;
+    let mut h = Sha256::new();
+    std::io::copy(&mut f, &mut h)?;
+    Ok(hex(&h.finalize()))
 }
 
 fn recording_from(it: xml::MatchItem) -> Result<Recording, BridgeError> {

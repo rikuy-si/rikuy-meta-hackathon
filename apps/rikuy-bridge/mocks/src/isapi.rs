@@ -48,6 +48,8 @@ pub struct IsapiConfig {
     pub lockout_after: u32,
     /// Rotate the nonce after this many authenticated requests (stale=true).
     pub nonce_ttl: Option<u32>,
+    /// Serve recordings without the IMKH wrapper (corrupt device output).
+    pub corrupt_downloads: bool,
 }
 
 impl IsapiConfig {
@@ -79,6 +81,7 @@ impl IsapiConfig {
             page_cap: DVR_PAGE_CAP,
             lockout_after: 3,
             nonce_ttl: None,
+            corrupt_downloads: false,
         }
     }
 }
@@ -330,7 +333,11 @@ fn download_payload(cfg: &IsapiConfig, req: &str) -> Option<Vec<u8>> {
     let track: u32 = uri.split("/Streaming/tracks/").nth(1)?.split('/').next()?.parse().ok()?;
     let name = query_param(&uri, "name")?;
     let clip = cfg.clips.iter().find(|c| c.track == track && c.name == name)?;
-    Some(fake_dav(clip))
+    let mut bytes = fake_dav(clip);
+    if cfg.corrupt_downloads {
+        bytes.drain(..IMKH_HEADER_LEN);
+    }
+    Some(bytes)
 }
 
 /// Synthetic recording: 40-byte IMKH wrapper followed by `size` payload bytes.
