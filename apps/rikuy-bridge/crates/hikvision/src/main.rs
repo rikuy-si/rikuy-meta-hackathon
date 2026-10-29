@@ -1,10 +1,14 @@
 use std::io::Read;
 use std::path::PathBuf;
 use std::process::ExitCode as ProcExit;
+use std::time::Duration;
 
 use chrono::NaiveDateTime;
 use clap::{Args, Parser, Subcommand};
 use rikuy_bridge_common::{BridgeError, Credential, Secret};
+use rikuy_bridge_common::backend::BackendClient;
+use rikuy_bridge_common::daemon::{self, DaemonConfig};
+use rikuy_bridge_hikvision::connector::HikvisionConnector;
 use rikuy_bridge_hikvision::exec;
 use rikuy_bridge_hikvision::isapi::{IsapiClient, Stream};
 
@@ -79,6 +83,30 @@ enum Cmd {
         #[arg(long)]
         out: PathBuf,
     },
+    /// Run as the customer-site agent: poll the Rikuy backend for jobs,
+    /// execute them against the devices on this network, report results.
+    /// Device credentials arrive per job and are held in memory only.
+    Daemon {
+        /// Rikuy backend base URL.
+        #[arg(long, env = "RIKUY_BACKEND_URL")]
+        backend: String,
+        /// File holding this bridge's enrollment token (not a device secret).
+        #[arg(long, env = "RIKUY_BRIDGE_TOKEN_FILE")]
+        token_file: PathBuf,
+        /// Working directory for job outputs (recordings stay here).
+        #[arg(long, default_value = "spool")]
+        spool: PathBuf,
+        #[arg(long, default_value = "rikuy-bridge-hikvision")]
+        bridge_id: String,
+        #[arg(long, default_value_t = 5000)]
+        poll_interval_ms: u64,
+        /// Pause after a job fails because the device route is down.
+        #[arg(long, default_value_t = 30000)]
+        unreachable_backoff_ms: u64,
+        /// Exit when the queue is empty (tests, cron-style runs).
+        #[arg(long)]
+        exit_when_idle: bool,
+    },
 }
 
 /// Local wall-clock time on the device: 2026-10-29T05:00:00 (a trailing Z is
@@ -127,6 +155,19 @@ fn run(cli: Cli) -> Result<(), BridgeError> {
             if let Some(e) = s.error {
                 return Err(e);
             }
+        }
+        Cmd::Daemon { backend, token_file, spool, bridge_id, poll_interval_ms, unreachable_backoff_ms, exit_when_idle } => {
+            let token = std::fs::read_to_string(&token_file)
+                .map_err(|e| BridgeError::Usage(format!("token file {}: {e}", token_file.display())))?;
+            let backend = BackendClient::new(&backend, Secret::new(token.trim()), &bridge_id)?;
+            let cfg = DaemonConfig {
+                spool,
+                poll_interval: Duration::from_millis(poll_interval_ms),
+                unreachable_backoff: Duration::from_millis(unreachable_backoff_ms),
+                exit_when_idle,
+            };
+            let stats = daemon::run(&mut HikvisionConnector, &backend, &cfg)?;
+            daemon::log(&format!("idle: {} jobs, {} succeeded, {} not", stats.jobs, stats.succeeded, stats.failed));
         }
     }
     Ok(())

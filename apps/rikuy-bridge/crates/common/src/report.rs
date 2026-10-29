@@ -1,10 +1,11 @@
 use serde::Serialize;
 
-/// Result of a job, sent back to the backend.
+/// Result of a job, sent back to the backend. Never contains the credential.
 #[derive(Debug, Clone, Serialize)]
 pub struct Report {
     pub job_id: String,
     pub bridge: String,
+    pub family: String,
     pub status: JobStatus,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error_code: Option<String>,
@@ -19,6 +20,8 @@ pub struct Report {
 #[serde(rename_all = "snake_case")]
 pub enum JobStatus {
     Succeeded,
+    /// Some artifacts were produced before a fatal error.
+    Partial,
     Failed,
     AuthRejected,
 }
@@ -29,6 +32,10 @@ pub struct Artifact {
     pub name: String,
     pub bytes: u64,
     pub sha256: String,
+    /// True once the bytes were PUT to the backend; otherwise they stay in the
+    /// bridge spool directory.
+    #[serde(default)]
+    pub uploaded: bool,
 }
 
 #[derive(Debug, Clone, Copy, Serialize, PartialEq, Eq)]

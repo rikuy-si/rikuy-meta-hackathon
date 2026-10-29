@@ -1,5 +1,6 @@
 //! Hikvision/HiLook connector: ISAPI client and job executor.
 
+pub mod connector;
 pub mod digest;
 pub mod exec;
 pub mod isapi;

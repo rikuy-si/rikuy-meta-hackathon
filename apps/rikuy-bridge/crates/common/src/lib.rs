@@ -4,8 +4,10 @@
 //! cameras. The Rikuy backend decides *what* to fetch and provisions the device
 //! credential per job; the bridge executes the job against the device and
 //! reports back. Device families (Hikvision, Ezviz, ...) differ only in how a
-//! job is executed, so everything else lives here.
+//! job is executed ([`daemon::Connector`]), so everything else lives here.
 
+pub mod backend;
+pub mod daemon;
 pub mod error;
 pub mod job;
 pub mod liveness;
