@@ -6,12 +6,17 @@ operators and tests: enrollment, job submission, report inspection.
 
 from __future__ import annotations
 
+import json
 from typing import Annotated, Any, Optional
 
 from fastapi import APIRouter, Header, HTTPException, Query, Request, Response
 
-from .models import Job, Report
+from .models import Job, Report, UploadRequest
 from .state import GatewayError, GatewayState, is_plain_name
+
+
+def _put_ttl(state: GatewayState) -> int:
+    return state.settings.r2.presign_ttl_secs
 
 
 def _err(status: int, code: str) -> HTTPException:
@@ -43,6 +48,45 @@ def bridge_router(state: GatewayState, settings) -> APIRouter:
             return Response(status_code=204)
         return Response(content=job.model_dump_json(by_alias=True, exclude_none=True), media_type="application/json")
 
+    @r.post("/jobs/{job_id}/uploads")
+    async def job_uploads(
+        job_id: str,
+        req: UploadRequest,
+        authorization: Annotated[Optional[str], Header()] = None,
+    ) -> dict[str, Any]:
+        auth(authorization)
+        store = state.objectstore
+        if store is None:
+            # Contract: 404 means no object storage; the bridge keeps its spool
+            # and the job still succeeds.
+            raise _err(404, "object storage not configured")
+        grants: list[dict[str, Any]] = []
+        stored: list[dict[str, Any]] = []
+        for item in req.artifacts:
+            if not is_plain_name(item.name):
+                raise _err(400, "artifact name must be a plain file name")
+            key = f"recordings/{req.bridge}/{job_id}/{item.name}"  # backend chooses keys
+            head = store.head(key)
+            if head is not None and head[0] == item.bytes and (head[1] is None or head[1] == item.sha256):
+                stored.append({"name": item.name, "key": key})
+                continue
+            url, expires_at = store.presign_put(key, item.bytes, item.content_type, ttl=_put_ttl(state))
+            grants.append(
+                {
+                    "name": item.name,
+                    "key": key,
+                    "method": "PUT",
+                    "url": url,
+                    "headers": {"Content-Type": item.content_type},
+                    "expires_at": expires_at,
+                }
+            )
+        state.audit.record(
+            "upload_grants", job=job_id, bridge=req.bridge,
+            granted=len(grants), already_stored=len(stored),
+        )
+        return {"grants": grants, "stored": stored}
+
     @r.post("/jobs/{job_id}/report")
     def job_report(
         job_id: str,
@@ -53,8 +97,21 @@ def bridge_router(state: GatewayState, settings) -> APIRouter:
         if report.job_id != job_id:
             raise _err(400, "report job_id does not match the URL")
         state.record_report(report)
-        # Object-storage verification and the delete list land with the store
-        # step; without a store there is nothing the bridge may delete.
+        # Verify uploads (HEAD on each key) before the bridge may delete anything.
+        delete: list[str] = []
+        store = state.objectstore
+        if store is not None:
+            for a in report.artifacts:
+                if not (a.uploaded and a.object_key):
+                    continue
+                head = store.head(a.object_key)
+                if head is not None and head[0] == a.bytes and (head[1] is None or head[1] == a.sha256):
+                    delete.append(a.name)
+        if delete:
+            state.audit.record("spool_delete_ok", job=job_id, names=delete)
+            return Response(
+                content=json.dumps({"delete": delete}), media_type="application/json"
+            )
         return Response(status_code=204)
 
     @r.put("/jobs/{job_id}/artifacts/{name}")

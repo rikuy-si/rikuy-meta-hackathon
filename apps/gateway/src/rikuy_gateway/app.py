@@ -23,7 +23,18 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(bridge_router(state, settings))
     app.include_router(admin_router(state, settings))
 
-    # Object storage (step 3) and the MCP server (step 4) attach here next.
+    if settings.store == "r2":
+        from .objectstore import R2Store
+
+        state.objectstore = R2Store(settings.r2)
+    elif settings.store == "local":
+        from .objectstore import LocalStore
+
+        store = LocalStore(secret=settings.local_store_secret, base_url=settings.local_store_base)
+        state.objectstore = store
+        app.include_router(store.router())
+
+    # The MCP server is attached in the tools step.
     app.state.gateway = state
     app.state.settings = settings
     return app

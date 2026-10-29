@@ -83,6 +83,8 @@ class GatewayState:
         self.reports: dict[str, Report] = {}
         self.artifacts: dict[tuple[str, str], StoredArtifact] = {}
         self._known_jobs: set[str] = set()
+        #: Object store for recordings (R2 or local stand-in); set by the app factory.
+        self.objectstore: object | None = None
 
     # -- bridges -----------------------------------------------------------
 
