@@ -10,6 +10,7 @@ from fastapi import FastAPI
 from .audit import AuditLog
 from .bridge_api import admin_router, bridge_router
 from .config import Settings
+from .grants import GrantStore
 from .state import GatewayState
 
 
@@ -18,6 +19,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     settings.ensure_dirs()
     audit = AuditLog(settings.audit_path)
     state = GatewayState(settings, audit)
+    state.grants = GrantStore(audit)
+    if settings.default_actor_token:
+        state.grants.bootstrap(actor="demo-agent", token=settings.default_actor_token)
 
     app = FastAPI(title="rikuy-gateway", version="0.1.0")
     app.include_router(bridge_router(state, settings))
@@ -34,7 +38,11 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         state.objectstore = store
         app.include_router(store.router())
 
-    # The MCP server is attached in the tools step.
+    # Agents reach the same tools over streamable HTTP at /mcp.
+    from .mcp import build_mcp
+
+    app.mount("/mcp", build_mcp(state, settings).http_app(path="/"))
+
     app.state.gateway = state
     app.state.settings = settings
     return app

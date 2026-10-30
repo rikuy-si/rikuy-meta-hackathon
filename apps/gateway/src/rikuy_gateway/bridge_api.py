@@ -148,13 +148,43 @@ def admin_router(state: GatewayState, settings) -> APIRouter:
         authorization: Annotated[Optional[str], Header()] = None,
     ) -> dict[str, Any]:
         auth(authorization)
+        device = body.get("device") or {}
         try:
             b = state.enroll_bridge(
-                body["bridge"], body["token"], body.get("family", "hikvision"), body.get("tz", "")
+                body["bridge"],
+                body["token"],
+                body.get("family", "hikvision"),
+                body.get("tz", ""),
+                device_base_url=device.get("base_url", ""),
+                device_username=device.get("username", ""),
+                device_password=device.get("password", ""),
             )
         except (KeyError, GatewayError) as e:
             raise _err(400, str(e))
-        return {"bridge": b.id, "family": b.family, "tz": b.tz or settings.default_device_tz}
+        return {"bridge": b.id, "family": b.family, "tz": b.tz or settings.default_device_tz, "device": b.device_base_url}
+
+    @r.post("/grants")
+    def issue_grant(
+        body: dict[str, Any],
+        authorization: Annotated[Optional[str], Header()] = None,
+    ) -> dict[str, Any]:
+        auth(authorization)
+        g = state.grants.issue(
+            actor=body.get("actor", "anonymous"),
+            bridges=body.get("bridges"),
+            actions=body.get("actions"),
+            ttl_secs=body.get("ttl_secs"),
+        )
+        return {"grant": g.id, "actor": g.actor, "token": g.token, "bridges": sorted(g.bridges) if g.bridges else None, "actions": sorted(g.actions)}
+
+    @r.delete("/grants/{grant_id}")
+    def revoke_grant(
+        grant_id: str,
+        authorization: Annotated[Optional[str], Header()] = None,
+    ) -> dict[str, Any]:
+        auth(authorization)
+        state.grants.revoke(grant_id=grant_id)
+        return {"revoked": grant_id}
 
     @r.post("/jobs")
     def submit(

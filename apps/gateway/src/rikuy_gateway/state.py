@@ -38,11 +38,16 @@ class Bridge:
     token: str
     family: str = "hikvision"
     tz: str = ""
+    # The gateway provisions the device credential per job (backend-contract.md):
+    # it lives here, server-side, and is never stored on the bridge.
+    device_base_url: str = ""
+    device_username: str = ""
+    device_password: str = field(default="", repr=False)
     enrolled_at: datetime = field(default_factory=now_utc)
     revoked: bool = False
 
-    def __repr__(self) -> str:  # tokens stay out of logs
-        return f"Bridge(id={self.id!r}, family={self.family!r}, revoked={self.revoked})"
+    def __repr__(self) -> str:  # tokens and passwords stay out of logs
+        return f"Bridge(id={self.id!r}, family={self.family!r}, device={self.device_base_url!r}, revoked={self.revoked})"
 
 
 @dataclass
@@ -85,10 +90,29 @@ class GatewayState:
         self._known_jobs: set[str] = set()
         #: Object store for recordings (R2 or local stand-in); set by the app factory.
         self.objectstore: object | None = None
+        #: Actor grants; set by the app factory.
+        self.grants: object | None = None
+        self._job_seq = 0
+
+    def new_job_id(self) -> str:
+        """Contract-shaped job id: job-<date>-<sequence>."""
+        with self.lock:
+            self._job_seq += 1
+            n = self._job_seq
+        return f"job-{now_utc().strftime('%Y-%m-%d')}-{n:04d}"
 
     # -- bridges -----------------------------------------------------------
 
-    def enroll_bridge(self, bridge_id: str, token: str, family: str = "hikvision", tz: str = "") -> Bridge:
+    def enroll_bridge(
+        self,
+        bridge_id: str,
+        token: str,
+        family: str = "hikvision",
+        tz: str = "",
+        device_base_url: str = "",
+        device_username: str = "",
+        device_password: str = "",
+    ) -> Bridge:
         if not bridge_id or not is_plain_name(bridge_id) or "." in bridge_id:
             raise GatewayError("invalid_bridge", "bridge id must be plain [A-Za-z0-9_-]")
         with self.lock:
@@ -98,13 +122,20 @@ class GatewayState:
                     raise GatewayError("bridge_exists", "bridge id already enrolled with another token")
                 existing.family = family
                 existing.tz = tz or existing.tz
+                existing.device_base_url = device_base_url or existing.device_base_url
+                existing.device_username = device_username or existing.device_username
+                existing.device_password = device_password or existing.device_password
                 existing.revoked = False
                 return existing
-            b = Bridge(id=bridge_id, token=token, family=family, tz=tz)
+            b = Bridge(
+                id=bridge_id, token=token, family=family, tz=tz,
+                device_base_url=device_base_url, device_username=device_username,
+                device_password=device_password,
+            )
             self.bridges[bridge_id] = b
             self._by_token[token] = bridge_id
             self.queues.setdefault(bridge_id, deque())
-        self.audit.record("bridge_enrolled", bridge=bridge_id, family=family)
+        self.audit.record("bridge_enrolled", bridge=bridge_id, family=family, device=device_base_url)
         return b
 
     def bridge_for_token(self, token: str) -> Optional[Bridge]:

@@ -56,7 +56,7 @@ class Settings(BaseModel):
         self.audit_path.parent.mkdir(parents=True, exist_ok=True)
 
     @classmethod
-    def dev(cls, tmp: Optional[Path] = None, base: str = "http://127.0.0.1:8000") -> "Settings":
+    def dev(cls, tmp: Optional[Path] = None, base: str = "http://127.0.0.1:8000", **over) -> "Settings":
         tmp = tmp or Path(tempfile.mkdtemp(prefix="rikuy-gateway-"))
         return cls(
             store="local",
@@ -66,6 +66,7 @@ class Settings(BaseModel):
             default_actor_token="rikuy-actor-dev",
             artifacts_dir=tmp / "artifacts",
             audit_path=tmp / "audit.jsonl",
+            **over,
         )
 
 
