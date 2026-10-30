@@ -1,10 +1,14 @@
 [package]
 name = "rikuy-bridge-ezviz"
-description = "rikuy-bridge connector for Ezviz cameras (scaffold)."
+description = "rikuy-bridge connector for Ezviz cameras (scaffold: daemon wired, protocol client stubbed)."
 version.workspace = true
 edition.workspace = true
 license.workspace = true
 publish.workspace = true
+
+[features]
+default = ["tls"]
+tls = ["rikuy-bridge-common/tls"]
 
 [[bin]]
 name = "rikuy-bridge-ezviz"
@@ -12,3 +16,8 @@ path = "src/main.rs"
 
 [dependencies]
 rikuy-bridge-common.workspace = true
+clap.workspace = true
+
+[dev-dependencies]
+rikuy-bridge-mocks = { path = "../../mocks" }
+serde_json.workspace = true

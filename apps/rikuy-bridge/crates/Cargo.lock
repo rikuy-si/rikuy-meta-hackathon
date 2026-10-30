@@ -604,7 +604,10 @@ dependencies = [
 name = "rikuy-bridge-ezviz"
 version = "0.1.0"
 dependencies = [
+ "clap",
  "rikuy-bridge-common",
+ "rikuy-bridge-mocks",
+ "serde_json",
 ]
 
 [[package]]
