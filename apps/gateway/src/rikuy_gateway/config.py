@@ -56,6 +56,32 @@ class Settings(BaseModel):
         self.audit_path.parent.mkdir(parents=True, exist_ok=True)
 
     @classmethod
+    def from_env(cls, env: dict[str, str] | None = None) -> "Settings":
+        """RIKUY_STORE, RIKUY_ADMIN_TOKEN, RIKUY_ACTOR_TOKEN, RIKUY_LOCAL_BASE,
+        RIKUY_R2_BUCKET / _ENDPOINT / _ACCESS_KEY_ID / _SECRET_ACCESS_KEY."""
+        import os
+
+        e = env if env is not None else dict(os.environ)
+        r2 = R2Settings(
+            bucket=e.get("RIKUY_R2_BUCKET", "rikuy-recordings"),
+            endpoint=e.get("RIKUY_R2_ENDPOINT", ""),
+            access_key_id=e.get("RIKUY_R2_ACCESS_KEY_ID", ""),
+            secret_access_key=e.get("RIKUY_R2_SECRET_ACCESS_KEY", ""),
+        )
+        s = cls(
+            store=e.get("RIKUY_STORE", "local"),
+            r2=r2,
+            local_store_base=e.get("RIKUY_LOCAL_BASE", "http://127.0.0.1:8000"),
+            admin_token=e.get("RIKUY_ADMIN_TOKEN", ""),
+            default_actor_token=e.get("RIKUY_ACTOR_TOKEN", ""),
+        )
+        if not s.admin_token:
+            s.admin_token = "rikuy-admin-dev"
+        if not s.default_actor_token:
+            s.default_actor_token = "rikuy-actor-dev"
+        return s
+
+    @classmethod
     def dev(cls, tmp: Optional[Path] = None, base: str = "http://127.0.0.1:8000", **over) -> "Settings":
         tmp = tmp or Path(tempfile.mkdtemp(prefix="rikuy-gateway-"))
         return cls(
