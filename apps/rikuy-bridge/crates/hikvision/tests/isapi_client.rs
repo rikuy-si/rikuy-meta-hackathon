@@ -29,7 +29,7 @@ fn search_paginates_past_the_64_cap() {
     assert_eq!(recs.len(), 384);
     let searches = dvr.stats().requests.iter().filter(|(_, p)| p == "/ISAPI/ContentMgmt/search").count();
     // 384 / 64 = 6 pages (+ the unauthenticated first request on the very first call).
-    assert!(searches >= 6 && searches <= 7, "search requests: {searches}");
+    assert!((6..=7).contains(&searches), "search requests: {searches}");
     assert!(recs.iter().all(|r| r.size.is_some() && r.name.is_some()));
     // Tracks without recordings return nothing; timestamps stay local.
     assert!(recs.iter().all(|r| [101, 201, 301, 401].contains(&r.track)));
