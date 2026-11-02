@@ -19,4 +19,6 @@ zeroize.workspace = true
 thiserror.workspace = true
 ureq.workspace = true
 sha2.workspace = true
+md-5.workspace = true
+rand.workspace = true
 url = "2"

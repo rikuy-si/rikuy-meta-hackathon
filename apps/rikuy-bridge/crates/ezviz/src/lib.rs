@@ -1,30 +1,17 @@
-//! Ezviz connector (scaffold).
+//! Ezviz connector over ONVIF.
 //!
-//! The daemon, backend contract, credential handling and reporting all come
-//! from `rikuy-bridge-common` unchanged. Only the device protocol is missing:
-//! every job kind is answered `unsupported` until [`client`] is implemented.
+//! The bridge reaches the cameras on the customer LAN through ONVIF:
+//! Profile T (Media2) for live snapshots and Profile G (Search + Replay) for
+//! recordings. The daemon, backend contract, credential handling and reporting
+//! come from `rikuy-bridge-common` unchanged.
 
-pub mod client;
+pub mod connector;
+pub mod exec;
+pub mod media;
+pub mod onvif;
+pub mod rtsp;
+pub mod soap;
+pub mod tz;
+pub mod xml;
 
-use std::path::Path;
-
-use rikuy_bridge_common::daemon::{Connector, JobOutcome};
-use rikuy_bridge_common::{BridgeError, Job, JobKind};
-
-pub struct EzvizConnector;
-
-impl Connector for EzvizConnector {
-    fn family(&self) -> &'static str {
-        "ezviz"
-    }
-
-    fn execute(&mut self, job: &Job, _workdir: &Path) -> JobOutcome {
-        let what = match &job.kind {
-            JobKind::ListCameras => client::LIST_CAMERAS,
-            JobKind::Snapshot { .. } => client::SNAPSHOT,
-            JobKind::Search { .. } => client::SEARCH,
-            JobKind::Download { .. } => client::DOWNLOAD,
-        };
-        JobOutcome::err(BridgeError::Unsupported(format!("ezviz {what}: protocol client not implemented yet")))
-    }
-}
+pub use connector::EzvizConnector;

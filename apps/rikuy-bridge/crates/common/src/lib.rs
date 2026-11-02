@@ -8,6 +8,7 @@
 
 pub mod backend;
 pub mod daemon;
+pub mod digest;
 pub mod error;
 pub mod job;
 pub mod liveness;
