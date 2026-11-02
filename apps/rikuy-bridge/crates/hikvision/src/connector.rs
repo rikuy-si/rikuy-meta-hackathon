@@ -1,7 +1,7 @@
 //! The Hikvision implementation of the bridge's `Connector`.
 use std::path::Path;
 
-use rikuy_bridge_common::daemon::{Connector, JobOutcome, Produced};
+use rikuy_bridge_common::daemon::{Connector, Delivery, JobOutcome, Produced};
 use rikuy_bridge_common::{Job, JobKind};
 
 use crate::exec;
@@ -33,7 +33,7 @@ impl Connector for HikvisionConnector {
                 let path = workdir.join(format!("snapshot-cam{channel}.jpg"));
                 match exec::snapshot(&mut client, *channel, Stream::Main, &path) {
                     Ok(artifact) => JobOutcome {
-                        produced: vec![Produced { artifact, path, upload: Some("image/jpeg") }],
+                        produced: vec![Produced { artifact, path, delivery: Delivery::Backend("image/jpeg") }],
                         ..Default::default()
                     },
                     Err(e) => JobOutcome::err(e),
@@ -45,7 +45,11 @@ impl Connector for HikvisionConnector {
                     produced: s
                         .artifacts
                         .into_iter()
-                        .map(|a| Produced { path: workdir.join(&a.name), artifact: a, upload: None })
+                        .map(|a| Produced {
+                            path: workdir.join(&a.name),
+                            artifact: a,
+                            delivery: Delivery::ObjectStore("application/octet-stream"),
+                        })
                         .collect(),
                     error: s.error,
                 },

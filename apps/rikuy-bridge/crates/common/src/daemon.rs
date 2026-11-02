@@ -1,4 +1,5 @@
-//! The bridge daemon: poll the backend, execute jobs with a connector, report.
+//! The bridge daemon: poll the backend, execute jobs with a connector, deliver
+//! artifacts, report.
 //!
 //! Guarantees, whatever the connector:
 //! - the device credential arrives with the job, lives in memory for the job's
@@ -6,6 +7,8 @@
 //! - a credential the device rejected is never sent to that device again: later
 //!   jobs carrying it are answered `auth_rejected` without touching the device;
 //! - a dead device route backs off before the next poll instead of retrying;
+//! - recordings go to object storage through presigned URLs and are deleted
+//!   from the spool only after the backend has verified them;
 //! - a rejected bridge token stops the daemon (exit 77).
 use std::collections::HashSet;
 use std::fs;
@@ -16,14 +19,24 @@ use sha2::{Digest, Sha256};
 
 use crate::backend::{BackendClient, RawJob};
 use crate::report::{Artifact, JobStatus, Report};
+use crate::upload::{self, Pending};
 use crate::{BridgeError, Job};
+
+/// Where a produced artifact should end up.
+pub enum Delivery {
+    /// Stay in the spool.
+    Keep,
+    /// PUT straight to the backend (small and latency-sensitive: snapshots).
+    Backend(&'static str),
+    /// Object storage through a presigned URL (recordings).
+    ObjectStore(&'static str),
+}
 
 /// Something a connector produced on disk.
 pub struct Produced {
     pub artifact: Artifact,
     pub path: PathBuf,
-    /// PUT the bytes to the backend (small, latency-sensitive: snapshots).
-    pub upload: Option<&'static str>,
+    pub delivery: Delivery,
 }
 
 #[derive(Default)]
@@ -50,6 +63,8 @@ pub struct DaemonConfig {
     pub poll_interval: Duration,
     pub unreachable_backoff: Duration,
     pub exit_when_idle: bool,
+    /// Presigned URLs requested per batch.
+    pub upload_batch: usize,
 }
 
 #[derive(Debug, Default)]
@@ -99,18 +114,28 @@ pub fn run<C: Connector>(connector: &mut C, backend: &BackendClient, cfg: &Daemo
         } else {
             stats.failed += 1;
         }
+        let stored = report.artifacts.iter().filter(|a| a.object_key.is_some()).count();
         log(&format!(
-            "job={} status={:?} artifacts={}{}",
+            "job={} status={:?} artifacts={} in_object_store={}{}",
             report.job_id,
             report.status,
             report.artifacts.len(),
+            stored,
             report.error_code.as_ref().map(|c| format!(" error={c}")).unwrap_or_default()
         ));
         let unreachable = report.error_code.as_deref() == Some("unreachable");
-        if let Err(e) = backend.report(&report) {
-            log(&format!("job={} report failed: {e}", report.job_id));
-            if matches!(e, BridgeError::AuthRejected { .. }) {
-                return Err(e);
+        match backend.report(&report) {
+            Ok(delete) => {
+                let n = cleanup(&cfg.spool, &report, &delete);
+                if n > 0 {
+                    log(&format!("job={} removed {n} verified file(s) from the spool", report.job_id));
+                }
+            }
+            Err(e) => {
+                log(&format!("job={} report failed: {e}", report.job_id));
+                if matches!(e, BridgeError::AuthRejected { .. }) {
+                    return Err(e);
+                }
             }
         }
         if unreachable {
@@ -164,19 +189,48 @@ fn handle<C: Connector>(
     let outcome = connector.execute(&job, &workdir);
     drop(job); // zeroize the credential as soon as the device work is done
 
+    let mut to_store = Vec::new();
     for p in outcome.produced {
         let mut a = p.artifact;
-        if let Some(ct) = p.upload {
-            match fs::read(&p.path).map_err(BridgeError::from).and_then(|b| backend.upload(&id, &a.name, ct, &b)) {
-                Ok(()) => a.uploaded = true,
-                Err(e) => log(&format!("job={id} upload {} failed: {e}", a.name)),
+        match p.delivery {
+            Delivery::Keep => {}
+            Delivery::Backend(ct) => {
+                match fs::read(&p.path).map_err(BridgeError::from).and_then(|b| backend.upload(&id, &a.name, ct, &b)) {
+                    Ok(()) => a.uploaded = true,
+                    Err(e) => log(&format!("job={id} upload {} failed: {e}", a.name)),
+                }
             }
+            Delivery::ObjectStore(ct) => to_store.push(Pending { index: report.artifacts.len(), path: p.path, content_type: ct }),
         }
         report.artifacts.push(a);
     }
+    let delivery = if to_store.is_empty() {
+        upload::UploadSummary::default()
+    } else {
+        let s = upload::deliver(backend, &id, &mut report.artifacts, to_store, cfg.upload_batch);
+        if s.unsupported {
+            log(&format!("job={id} backend offers no object storage; recordings kept in the spool"));
+        } else {
+            log(&format!(
+                "job={id} object storage: {} uploaded, {} already stored, {} refreshed grant(s), {} failed",
+                s.uploaded,
+                s.already_stored,
+                s.refreshed_grants,
+                s.failed.len()
+            ));
+        }
+        s
+    };
     report.data = outcome.data;
     match outcome.error {
-        None => report.status = JobStatus::Succeeded,
+        None if delivery.failed.is_empty() => report.status = JobStatus::Succeeded,
+        None => {
+            report.status = JobStatus::Partial;
+            report.error_code = Some("upload".into());
+            report.error_message = Some(
+                delivery.failed.iter().map(|(n, why)| format!("{n}: {why}")).collect::<Vec<_>>().join("; "),
+            );
+        }
         Some(e) => {
             report.status = match &e {
                 BridgeError::AuthRejected { .. } => {
@@ -193,8 +247,31 @@ fn handle<C: Connector>(
     report
 }
 
+/// Delete spool files the backend verified in object storage. Only names that
+/// this report marked as uploaded, and only plain file names, are honored.
+fn cleanup(spool: &Path, report: &Report, delete: &[String]) -> usize {
+    if !is_safe_id(&report.job_id) {
+        return 0;
+    }
+    let dir = spool.join(&report.job_id);
+    let mut n = 0;
+    for name in delete {
+        let ours = report.artifacts.iter().any(|a| &a.name == name && a.uploaded && a.object_key.is_some());
+        if ours && is_safe_file_name(name) && fs::remove_file(dir.join(name)).is_ok() {
+            n += 1;
+        }
+    }
+    n
+}
+
 fn is_safe_id(id: &str) -> bool {
     !id.is_empty() && id.len() <= 128 && id.bytes().all(|b| b.is_ascii_alphanumeric() || b == b'-' || b == b'_')
+}
+
+fn is_safe_file_name(name: &str) -> bool {
+    !name.is_empty()
+        && !name.starts_with('.')
+        && name.bytes().all(|b| b.is_ascii_alphanumeric() || matches!(b, b'-' | b'_' | b'.'))
 }
 
 /// In-memory only: identifies (device, user, password) without keeping the password.
@@ -220,5 +297,13 @@ mod tests {
         assert!(!super::is_safe_id("../etc"));
         assert!(!super::is_safe_id(""));
         assert!(!super::is_safe_id("a/b"));
+    }
+
+    #[test]
+    fn only_plain_file_names_are_deleted() {
+        assert!(super::is_safe_file_name("track-101_20261029T050000_00001.dav"));
+        assert!(!super::is_safe_file_name("../manifest.json"));
+        assert!(!super::is_safe_file_name(".hidden"));
+        assert!(!super::is_safe_file_name("a/b.dav"));
     }
 }

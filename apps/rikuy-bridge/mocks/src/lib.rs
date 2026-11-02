@@ -4,9 +4,12 @@
 //!   auth, built from the field-validated protocol reference (paged search
 //!   capped at 64, POST-only download, IMKH-wrapped recordings, lockout).
 //! - [`backend::MockBackend`]: the Rikuy backend side of the bridge contract
-//!   (job queue, report sink, artifact sink).
+//!   (job queue, report sink, snapshot sink, presigned upload grants).
+//! - [`objstore::MockObjectStore`]: an R2 stand-in that only accepts uploads
+//!   through valid, unexpired presigned PUT URLs with an exact Content-Length.
 
 pub mod backend;
 pub mod digest;
 pub mod isapi;
+pub mod objstore;
 pub(crate) mod http;

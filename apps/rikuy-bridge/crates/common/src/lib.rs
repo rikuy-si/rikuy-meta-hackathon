@@ -13,6 +13,7 @@ pub mod job;
 pub mod liveness;
 pub mod report;
 pub mod secret;
+pub mod upload;
 
 pub use error::{BridgeError, ExitCode};
 pub use job::{DeviceRef, Job, JobKind};

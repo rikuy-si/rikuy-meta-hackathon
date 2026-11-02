@@ -36,6 +36,9 @@ pub struct Artifact {
     /// bridge spool directory.
     #[serde(default)]
     pub uploaded: bool,
+    /// Object-storage key the backend assigned, once the bytes are stored there.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub object_key: Option<String>,
 }
 
 #[derive(Debug, Clone, Copy, Serialize, PartialEq, Eq)]

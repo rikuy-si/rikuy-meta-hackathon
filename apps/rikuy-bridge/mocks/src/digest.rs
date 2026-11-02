@@ -28,7 +28,7 @@ pub fn parse_params(header: &str) -> Option<HashMap<String, String>> {
         let mut val = String::new();
         if chars.peek() == Some(&'"') {
             chars.next();
-            while let Some(c) = chars.next() {
+            for c in chars.by_ref() {
                 if c == '"' { break; }
                 val.push(c);
             }

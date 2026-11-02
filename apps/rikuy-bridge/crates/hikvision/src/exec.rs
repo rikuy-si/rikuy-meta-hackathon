@@ -29,6 +29,7 @@ pub fn snapshot(client: &mut IsapiClient, camera: u32, stream: Stream, out: &Pat
         bytes: jpeg.len() as u64,
         sha256: hex(&Sha256::digest(&jpeg)),
         uploaded: false,
+        object_key: None,
     })
 }
 
@@ -88,7 +89,7 @@ pub fn download_range(
                         sha256: d.sha256.clone(),
                     },
                 );
-                summary.artifacts.push(Artifact { kind: ArtifactKind::Recording, name, bytes: d.bytes, sha256: d.sha256, uploaded: false });
+                summary.artifacts.push(Artifact { kind: ArtifactKind::Recording, name, bytes: d.bytes, sha256: d.sha256, uploaded: false, object_key: None });
             }
             Err(e) => {
                 summary.error = Some(e);

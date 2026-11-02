@@ -35,12 +35,16 @@ enum Cmd {
         unreachable_backoff_ms: u64,
         #[arg(long)]
         exit_when_idle: bool,
+        /// Presigned upload URLs requested per batch (keeps them from expiring
+        /// while earlier recordings upload).
+        #[arg(long, default_value_t = 16)]
+        upload_batch: usize,
     },
 }
 
 fn run(cli: Cli) -> Result<(), BridgeError> {
     match cli.cmd {
-        Cmd::Daemon { backend, token_file, spool, bridge_id, poll_interval_ms, unreachable_backoff_ms, exit_when_idle } => {
+        Cmd::Daemon { backend, token_file, spool, bridge_id, poll_interval_ms, unreachable_backoff_ms, exit_when_idle, upload_batch } => {
             let token = std::fs::read_to_string(&token_file)
                 .map_err(|e| BridgeError::Usage(format!("token file {}: {e}", token_file.display())))?;
             let backend = BackendClient::new(&backend, Secret::new(token.trim()), &bridge_id)?;
@@ -49,6 +53,7 @@ fn run(cli: Cli) -> Result<(), BridgeError> {
                 poll_interval: Duration::from_millis(poll_interval_ms),
                 unreachable_backoff: Duration::from_millis(unreachable_backoff_ms),
                 exit_when_idle,
+                upload_batch,
             };
             daemon::run(&mut EzvizConnector, &backend, &cfg)?;
         }

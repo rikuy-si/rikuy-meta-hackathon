@@ -3,9 +3,58 @@
 use std::io::Read;
 use std::time::Duration;
 
+use serde::{Deserialize, Serialize};
 use url::Url;
 
 use crate::{BridgeError, Report};
+
+/// One file the bridge wants to deliver to object storage.
+#[derive(Debug, Clone, Serialize)]
+pub struct UploadRequest {
+    pub name: String,
+    pub bytes: u64,
+    pub sha256: String,
+    pub content_type: String,
+}
+
+/// A presigned upload: send exactly \`method url\` with \`headers\` and the body.
+#[derive(Debug, Clone, Deserialize)]
+pub struct UploadGrant {
+    pub name: String,
+    pub key: String,
+    #[serde(default = "put")]
+    pub method: String,
+    pub url: String,
+    #[serde(default)]
+    pub headers: std::collections::BTreeMap<String, String>,
+    #[serde(default)]
+    pub expires_at: Option<i64>,
+}
+
+fn put() -> String {
+    "PUT".into()
+}
+
+/// Already present and verified in object storage: nothing to send.
+#[derive(Debug, Clone, Deserialize)]
+pub struct StoredObject {
+    pub name: String,
+    pub key: String,
+}
+
+#[derive(Debug, Clone, Deserialize, Default)]
+pub struct UploadGrants {
+    #[serde(default)]
+    pub grants: Vec<UploadGrant>,
+    #[serde(default)]
+    pub stored: Vec<StoredObject>,
+}
+
+#[derive(Deserialize, Default)]
+struct ReportAck {
+    #[serde(default)]
+    delete: Vec<String>,
+}
 
 pub struct BackendClient {
     base: Url,
@@ -73,15 +122,36 @@ impl BackendClient {
         serde_json::from_str(&s).map(Some).map_err(|e| BridgeError::Protocol(format!("backend job json: {e}")))
     }
 
-    /// `POST v1/bridge/jobs/<id>/report`
-    pub fn report(&self, report: &Report) -> Result<(), BridgeError> {
+    /// `POST v1/bridge/jobs/<id>/report`. Returns the artifact names the backend
+    /// verified in object storage and allows the bridge to delete locally.
+    pub fn report(&self, report: &Report) -> Result<Vec<String>, BridgeError> {
         let u = self.url(&["v1", "bridge", "jobs", &report.job_id, "report"]);
-        self.agent
+        let resp = self
+            .agent
             .request_url("POST", &u)
             .set("Authorization", &self.auth())
             .send_json(report)
-            .map(|_| ())
-            .map_err(|e| self.map_err("report", e))
+            .map_err(|e| self.map_err("report", e))?;
+        if resp.status() == 204 {
+            return Ok(vec![]);
+        }
+        let ack: ReportAck = resp.into_json().unwrap_or_default();
+        Ok(ack.delete)
+    }
+
+    /// `POST v1/bridge/jobs/<id>/uploads`: ask for presigned upload URLs.
+    /// `Ok(None)` means the backend offers no object storage (404).
+    pub fn request_uploads(&self, job_id: &str, files: &[UploadRequest]) -> Result<Option<UploadGrants>, BridgeError> {
+        let u = self.url(&["v1", "bridge", "jobs", job_id, "uploads"]);
+        let body = serde_json::json!({ "bridge": self.bridge_id, "artifacts": files });
+        match self.agent.request_url("POST", &u).set("Authorization", &self.auth()).send_json(body) {
+            Ok(resp) => resp
+                .into_json::<UploadGrants>()
+                .map(Some)
+                .map_err(|e| BridgeError::Protocol(format!("backend uploads json: {e}"))),
+            Err(ureq::Error::Status(404, _)) => Ok(None),
+            Err(e) => Err(self.map_err("uploads", e)),
+        }
     }
 
     /// `PUT v1/bridge/jobs/<id>/artifacts/<name>`
