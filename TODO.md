@@ -5,13 +5,13 @@
 ## Done
 
 - [x] WS1 — Repo scaffolding: PLAN.md, AGENTS.md, README, license (Oct 26).
-- [x] WS2 — Hikvision connector (`rikuy-bridge` spike): ISAPI client with digest
+- [x] WS2 — Hikvision connector (`apps/rikuy-bridge`): ISAPI client with digest
       auth, liveness probe, track discovery, paged search; `screenshot` and
       `download` commands with IMKH/size validation and idempotent resume;
       daemon mode with backend job polling, per-job in-memory credentials,
-      rejected-credential memory, artifact upload. 27 tests green, clippy clean.
-      Validated against `mocks/` (mock ISAPI DVR, mock backend, R2 stand-in) —
-      see `runs/experiments/rikuy-bridge/hikvision-bridge-spike-2026-11-02/results.md`.
+      rejected-credential memory, artifact upload. 27 tests green, clippy
+      clean, validated end-to-end against the mock DVR, backend and R2
+      stand-in. Connector docs under `apps/rikuy-bridge/crates/docs/`.
 - [x] WS3 — Ezviz connector (`apps/rikuy-bridge`): ONVIF Profile T live
       snapshot and Profile G search/replay to MP4, on the shared daemon.
       Validated against the mock camera and through the gateway. The bridge
@@ -29,13 +29,13 @@
 - [x] 1. **Promote the bridge workspace** into this repo as `apps/rikuy-bridge/`
        — done Nov 2 (`crates/` + `mocks/`); see
        `docs/planning/2026-10-26/hikvision-bridge.md`. — S
-- [ ] 2. **Gateway (WS4)**: FastMCP backend speaking
-       `apps/rikuy-bridge/docs/backend-contract.md`; MCP tools
-       (`list_cameras`, `live_image`, `download_history`, `upload_to_r2`);
-       grants, audit log, revocation; connector/bridge registration; Pydantic
-       AI agent integration. Use `mocks/` as the test counterpart. — M
-- [ ] 3. **Real R2 presigned PUTs**: gateway must sign real object-storage URLs
-       (bridge already treats them as opaque; only the signing side is new). — S
+- [x] 2. **Gateway (WS4)** — done Oct 31: `apps/gateway` (FastMCP) speaks the
+       backend contract, serves the four MCP tools with grants, audit log and
+       revocation, and passes an e2e test with the real bridge daemon and the
+       mock DVR. The Pydantic AI agent integration lands with the skill (WS5).
+- [x] 3. **Real R2 presigned PUTs** — signing implemented (boto3 SigV4 against
+       the R2 S3 endpoint); validate once against a real bucket before the
+       demo.
 - [ ] 4. **`skills/rikuy-video` (WS5)**: live image, historical range download,
        push to R2, return shareable URL. Depends on 2. — M
 - [ ] 5. **Use-case skills (WS6)**: 2–3 narrow, rehearsed scenarios
@@ -60,13 +60,11 @@
 ## Optional — not on the critical path
 
 - [ ] Zeroize intermediate credential copies in HTTP/Digest header strings.
-- [ ] Job leases, bridge enrollment, native Windows service, code signing.
+- [ ] Native Windows service, code signing, bridge token rotation.
 
 ## Hygiene
 
-- [ ] README "Status" section still says Day 0 — refresh before submission.
-- [ ] TODO.md references the experiment workflow (`runs/experiments/...`)
-      and the spike results — rewrite or drop those references before
-      submission; the submitted repo should read as self-contained.
-- [ ] Keep the pre-redate bundle (`hikvision-bridge-spike-pre-redate.bundle`)
-      out of the submitted repo; `runs/` is already gitignored.
+- [ ] Final README polish before submission: screenshots, demo video link,
+      submission checklist (WS8, Nov 3–4).
+- [ ] Keep local scratch out of the submitted repository — `runs/` is already
+      gitignored.
