@@ -10,7 +10,7 @@ opens no inbound port.
 |---|---|---|
 | `common/` | — | Shared contract: jobs, reports, credential envelope, liveness probe, backend client, daemon loop, `Connector` trait, presigned-URL uploader for recordings |
 | `hikvision/` | `rikuy-bridge-hikvision` | Hikvision/HiLook DVR/NVR over ISAPI: cameras, live snapshot, recording search and download, daemon |
-| `ezviz/` | `rikuy-bridge-ezviz` | Scaffold. The daemon and contract work; the device protocol is still TODO. |
+| `ezviz/` | `rikuy-bridge-ezviz` | Ezviz cameras over ONVIF: Profile T (Media2) live snapshot, Profile G search and replay to MP4 (ffmpeg behind a credential-holding RTSP proxy), daemon. Needs ffmpeg/ffprobe. |
 
 ## Hikvision commands
 
@@ -42,7 +42,7 @@ Times are device-local. Exit codes:
 ## Develop
 
 ```
-cargo test                         # 25 tests; mocks (DVR, backend, R2 stand-in) come from ../mocks
+cargo test                         # 49 tests; mocks (DVR, ONVIF camera, backend, R2 stand-in) come from ../mocks; needs ffmpeg/ffprobe
 cargo build --release
 ./scripts/build-windows.sh         # x86_64-pc-windows-gnu .exe files
 ```

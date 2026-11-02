@@ -114,11 +114,11 @@ single PUT at about 5 GB. Larger files would need presigned multipart uploads.
 |---|---|
 | `id` | `[A-Za-z0-9_-]{1,128}`. Any other id is reported `invalid_job` and never used as a path. |
 | `device.family` | Must match the bridge binary (`hikvision`, `ezviz`). A mismatch is reported `unsupported`. |
-| `device.base_url` | The device as seen from the bridge host. Hikvision uses `http://` only, because ISAPI on the LAN is plain HTTP. |
+| `device.base_url` | The device as seen from the bridge host. Hikvision uses `http://` only, because ISAPI on the LAN is plain HTTP. Ezviz uses the ONVIF device service URL. |
 | `credential` | Held in memory for the job only and zeroized afterwards. Never logged, reported or written. |
 | `kind` | `list_cameras` · `snapshot` (`channel`) · `search` (`from`, `to`, `tracks?`) · `download` (`from`, `to`, `tracks?`) |
 | `from` / `to` | **Device-local wall-clock time**, with no zone. Hikvision recorders write local time with a misleading `Z` suffix, so the bridge never converts it as UTC. The backend must convert user requests into the device's local time. |
-| `tracks` | Recording track ids (`101` = camera 1 main stream). Empty means every enabled track. |
+| `tracks` | Recording track ids. Hikvision: `101` = camera 1 main stream. Ezviz: the camera channel number (`1`, `2`, …). Empty means every enabled track. |
 | `channel` | Camera number, 1-based. Snapshots use the main stream (`<n>01`). |
 
 ## Report
@@ -151,7 +151,7 @@ single PUT at about 5 GB. Larger files would need presigned multipart uploads.
 | `unreachable` | The device route is down. The bridge pauses before its next poll. Retry later. |
 | `protocol` | The device answered with something unexpected, such as a missing IMKH wrapper or a size mismatch. |
 | `upload` | Recordings were downloaded but some did not reach object storage. They stay in the spool. Re-issue the job: files already stored are skipped. |
-| `unsupported` | Wrong family, or the job kind is not implemented yet (Ezviz). |
+| `unsupported` | Wrong family for this bridge binary. |
 | `invalid_job` | The job is malformed or has an unsafe id. |
 | `io` | Local disk problem on the bridge. |
 
@@ -169,7 +169,10 @@ file name. Until the backend confirms, nothing is deleted.
 - **Recording.** A Hikvision `.dav` is the advertised payload plus a 40-byte
   `IMKH` wrapper (H.264 1280×720 + µ-law audio on the reference device). The
   bridge checks the magic number and the exact size before keeping a file. It
-  writes to `.dav.part` and renames only after validation.
+  writes to `.dav.part` and renames only after validation. An Ezviz recording
+  is an MP4 (H.265 + AAC, `-c copy` through ffmpeg) named
+  `cam<channel>_<local start>_<seconds>s.mp4`. ffprobe must accept the
+  container, the video codec and the duration before the file is kept.
 - Re-running a download job skips files that are already complete. The
   per-directory `manifest.json` is merged and written atomically, so
   overlapping runs do not drop each other's entries.
