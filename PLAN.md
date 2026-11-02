@@ -17,9 +17,10 @@ One safe connection layer that lets AI agents see through any camera: local Rust
         |
         | connector protocol (HTTPS/WS to customer network)
         v
-[Rust binaries on customer network]  -- one per device family
-   - hiklook  -> Hikvision / HiLook DVR/NVR (ISAPI + RTSP)
-   - ezviz    -> Ezviz cloud cameras
+[Rust binaries on customer network]  -- one connector per device family,
+                                     one shared contract crate (common)
+   - rikuy-bridge-hikvision -> Hikvision / HiLook DVR/NVR (ISAPI + RTSP)
+   - rikuy-bridge-ezviz    -> Ezviz cloud cameras
         |
         v
 [Cloudflare R2]  -- archived clips & evidence
@@ -30,13 +31,16 @@ One safe connection layer that lets AI agents see through any camera: local Rust
 Modeled after the main `rikuy` monorepo (`apps/`, `packages/`, `infra/`):
 
 ```
-apps/gateway/        FastMCP backend (Python + Pydantic AI integration)
-binaries/hiklook/    Rust connector: Hikvision/HiLook DVR/NVR via ISAPI/RTSP
-binaries/ezviz/      Rust connector: Ezviz cameras
-skills/rikuy-video/  Core agent skill: video download/live image via MCP
-skills/<use-case>/   End-user use-case skills (one dir per scenario)
-demo/                POC artifacts, demo video, submission material
-infra/               R2 buckets, deployment, env/secrets
+apps/gateway/            FastMCP backend (Python + Pydantic AI integration)
+apps/rikuy-bridge/       Rust workspace (promoted from the hikvision-bridge spike)
+   crates/common/        shared connector contract: jobs, reports, uploads, secrets
+   crates/hikvision/     Hikvision/HiLook connector (ISAPI + RTSP): CLI and daemon
+   crates/ezviz/         Ezviz connector: daemon on the shared contract
+   mocks/                mock ISAPI DVR, mock backend and R2 stand-in for tests
+skills/rikuy-video/      Core agent skill: video download/live image via MCP
+skills/<use-case>/       End-user use-case skills (one dir per scenario)
+demo/                    POC artifacts, demo video, submission material
+infra/                   R2 buckets, deployment, env/secrets
 ```
 
 ## Workstreams
@@ -46,8 +50,8 @@ Effort: S (< half day), M (~1 day), L (2+ days) — sequential per stream, paral
 | # | Workstream | Effort | Start | End | Notes |
 |---|------------|--------|-------|-----|-------|
 | 1 | Repo scaffolding + architecture (this plan, AGENTS.md, README) | S | Oct 26 | Oct 26 | Done — Day 0 commits |
-| 2 | `binaries/hiklook` — Rust connector for Hikvision/HiLook: auth, ISAPI channel discovery, live snapshot (RTSP→JPEG), playback download (RTSP over ISAPI), upload handshake to gateway | L | Oct 26 | Oct 29 | Hardest connector; validate on real DVR |
-| 3 | `binaries/ezviz` — Rust connector for Ezviz cameras: login/session, live snapshot, recording download | M | Oct 27 | Oct 30 | Reuse hiklook connector crate (protocol + upload client) |
+| 2 | `apps/rikuy-bridge` — `hikvision` crate: Rust connector for Hikvision/HiLook: auth, ISAPI channel discovery, live snapshot (RTSP→JPEG), playback download (RTSP over ISAPI), daemon mode driven by the backend (job polling, per-job credentials, presigned-PUT uploads to R2) | L | Oct 26 | Oct 29 | Hardest connector; validate on real DVR |
+| 3 | `apps/rikuy-bridge` — `ezviz` crate: Rust connector for Ezviz cameras: login/session, live snapshot, recording download | M | Oct 27 | Oct 30 | Reuses the shared `common` contract. ONVIF client landed Nov 2: Profile T live snapshot, Profile G search and replay to MP4 |
 | 4 | `apps/gateway` — FastMCP backend: MCP tools (`list_cameras`, `live_image`, `download_history`, `upload_to_r2`), grants/audit log/revocation, connector registration, Pydantic AI agent integration | L | Oct 27 | Oct 31 | Tools defined contract-first so skills can start against stubs |
 | 5 | `skills/rikuy-video` — agent skill: how to ask the MCP for a live image, download a historical range, push to R2, and return a shareable URL | M | Oct 31 | Nov 1 | Depends on 4 (tools stable) |
 | 6 | End-user use-case skills — one skill per scenario (e.g. "did the salon open on time", "find the moment X happened and save the clip", "package left at the door") | M | Nov 1 | Nov 2 | Depends on 5 |
@@ -62,7 +66,7 @@ Ezviz (3) runs parallel off the shared connector crate; it enriches the demo but
 
 ## Milestones
 
-- **Oct 29** — Real Hikvision/HiLook DVR answering live snapshots + playback downloads via `hiklook`.
+- **Oct 29** — Real Hikvision/HiLook DVR answering live snapshots + playback downloads via `rikuy-bridge-hikvision`.
 - **Oct 31** — Gateway MCP server live: agent can call `live_image` and `download_history` against a real camera, audit log written.
 - **Nov 1** — Agent completes a full task unassisted via `rikuy-video` skill (live image + historical clip uploaded to R2 with returned URL).
 - **Nov 2** — Use-case skills demonstrated on 2–3 scenarios.
