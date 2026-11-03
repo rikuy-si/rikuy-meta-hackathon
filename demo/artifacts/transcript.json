@@ -1,0 +1,53 @@
+{
+  "scenario": "package-at-the-door",
+  "skill": "skills/package-at-door",
+  "bridge": "demo-door",
+  "family": "ezviz",
+  "cameras": 2,
+  "live_image": {
+    "status": "succeeded",
+    "channel": 1,
+    "bytes": 17146,
+    "sha256": "052ea34c1d9e622ee2dadc9c968e2d84f3fda9f9659f56d781ef2c72f1730e4c",
+    "shared": true
+  },
+  "history": {
+    "start": "2026-10-30T10:28:00-04:00",
+    "end": "2026-10-30T10:37:00-04:00",
+    "tracks": [
+      1
+    ],
+    "recordings": [
+      {
+        "name": "cam1_20261030T102800_120s.mp4",
+        "bytes": 5690657,
+        "sha256": "e2e8987b64c75df6ac379e520d51b80aff111ecc3175180971417991750ebbe7",
+        "uploaded": true,
+        "served_bytes": 5690657
+      },
+      {
+        "name": "cam1_20261030T103500_120s.mp4",
+        "bytes": 5690657,
+        "sha256": "e2e8987b64c75df6ac379e520d51b80aff111ecc3175180971417991750ebbe7",
+        "uploaded": true,
+        "served_bytes": 5690657
+      }
+    ]
+  },
+  "clip": null,
+  "snapshot": "door.jpg",
+  "audit_actions": [
+    "artifact_stored",
+    "bridge_enrolled",
+    "grant_issued",
+    "job_polled",
+    "job_reported",
+    "job_submitted",
+    "snapshot_uploaded",
+    "spool_delete_ok",
+    "tool_call",
+    "upload_grants"
+  ],
+  "video": "demo/poc.mp4",
+  "video_note": "First 6 seconds of cam1_20261030T102800_120s.mp4, then the live JPEG. Full clips stayed in the object store for the run; only the cut is in the repo."
+}
