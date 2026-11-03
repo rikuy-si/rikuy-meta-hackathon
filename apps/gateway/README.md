@@ -42,9 +42,8 @@ Environment (see `rikuy_gateway/config.py`): `RIKUY_STORE` (`local` stand-in ·
 ## Test
 
 ```
-pytest                # 32 unit/API/tool tests, no hardware needed
-pytest tests/test_e2e_daemon.py   # + the real Rust bridge daemon against the
-                                  # mock ISAPI DVR; builds it on demand
+pytest                # 35 tests. The two end-to-end files build the Rust
+                          # bridge binaries on demand; the rest need no device.
 ```
 
 The e2e test is the whole architecture in one run: an agent calls
@@ -54,5 +53,6 @@ uploads recordings with presigned URLs, and the gateway verifies each object
 (HEAD, size + SHA-256) before telling the bridge to clean its spool — with
 the audit log catching every step and no credential ever touching disk.
 
-The end-user agent skill that drives these tools lives in `skills/rikuy-video`
-(workstream 5).
+The end-user agent skill that drives these tools is `skills/rikuy-video`.
+Rehearsed scenarios are `skills/shop-opened`, `skills/find-moment`, and
+`skills/package-at-door`.

@@ -1,6 +1,6 @@
 # Rikuy Connect — TODO
 
-**Deadline: Nov 4, 2026, 5:00 pm (UTC-5).** ~1.5 days left as of Nov 2.
+**Deadline: Nov 4, 2026, 5:00 pm (UTC-5).** About one day left as of Nov 3.
 
 ## Done
 
@@ -36,16 +36,16 @@
 - [x] 3. **Real R2 presigned PUTs** — signing implemented (boto3 SigV4 against
        the R2 S3 endpoint); validate once against a real bucket before the
        demo.
-- [ ] 4. **`skills/rikuy-video` (WS5)**: live image, historical range download,
-       push to R2, return shareable URL. Depends on 2. — M
-- [ ] 5. **Use-case skills (WS6)**: 2–3 narrow, rehearsed scenarios
-       ("did the shop open on time", "find the moment X happened and save the
-       clip", "package left at the door"). Depends on 4. — M
-- [ ] 6. **POC + demo video (WS7)**: record end-to-end agent run
-       (agent → skill → MCP → bridge → camera → R2) as soon as 4 works; cut
-       the submission video. — M
-- [ ] 7. **Polish + submission (WS8)**: README refresh, screenshots, submission
-       form, final push. No new features after this. — S
+- [x] 4. **`skills/rikuy-video` (WS5)** — done Nov 3: live image, historical
+       range, upload, shareable URL. `skills/rikuy-video/SKILL.md`.
+- [x] 5. **Use-case skills (WS6)** — done Nov 3: `shop-opened`, `find-moment`,
+       `package-at-door`. Each one calls the rikuy-video procedure.
+- [x] 6. **POC + demo video (WS7)** — done Nov 3: `demo/run_poc.py` runs the
+       package-at-the-door skill against the mock Ezviz camera. Cut is
+       `demo/poc.mp4`; still is `demo/artifacts/door.jpg`.
+- [ ] 7. **Polish + submission (WS8)**: README is on day 9 and the checklist
+       is in `demo/README.md`. Fill the hackathon form by hand before
+       Nov 4, 5:00 pm (UTC-5). No new features after this. — S
 
 ## Blocked / conditional
 
