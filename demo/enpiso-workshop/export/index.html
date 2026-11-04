@@ -1,0 +1,763 @@
+<!doctype html>
+<html lang="es-CO">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#14133f">
+<meta name="description" content="EnPiso Visión: hallazgos del Módulo 28 con prueba en video." data-i18n-attr="content:meta.description">
+<title>EnPiso Visión · Módulo 28</title>
+<link rel="icon" href="favicon-enpiso.png" type="image/png">
+<link rel="preload" href="font-onest-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="font-grift-600.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="logo-enpiso.png" as="image">
+<style>
+/* Rikuy design system v2.0.0 (2026-11-01): vendored subset for EnPiso Visión v0.1.3.
+   Tokens and component rules copied from rikuy.si (design.md) and the live kit CSS (Base.*.css, fetched 2026-11-03).
+   Fonts are served from this bundle (no font CDN). Grift is licensed to Rikuy; Onest and JetBrains Mono are OFL. */
+@font-face{font-family:'Grift';src:url(font-grift-500.woff2) format('woff2');font-weight:500;font-display:swap}
+@font-face{font-family:'Grift';src:url(font-grift-600.woff2) format('woff2');font-weight:600;font-display:swap}
+@font-face{font-family:'Onest';src:url(font-onest-latin.woff2) format('woff2');font-weight:300 700;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Onest';src:url(font-onest-latin-ext.woff2) format('woff2');font-weight:300 700;font-display:swap;unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'JetBrains Mono';src:url(font-jetbrains-mono.woff2) format('woff2');font-weight:400 600;font-display:swap}
+
+:root{
+  --c-noche:#14133f;--c-noche-rgb:20,19,63;--c-noche-2:#263962;--c-noche-2-rgb:38,57,98;--c-menta:#7fccb4;--c-menta-rgb:127,204,180;
+  --c-teal:#2e7d7c;--c-teal-rgb:46,125,124;--c-blanco:#f6f9f8;--c-blanco-rgb:246,249,248;--c-amarillo:#dce064;--c-amarillo-rgb:220,224,100;
+  --c-gris-tinta:#5b5b74;--c-hielo:#a9b6d3;--c-bruma:#cdd6e8;--c-menta-palida:#bfe6da;--c-papel:#fbfbf7;--c-error:#b42318;--c-error-bg:#fdecea;
+  --font-display:'Grift','Onest',system-ui,sans-serif;--font-text:'Onest',system-ui,sans-serif;--font-mono:'JetBrains Mono',ui-monospace,monospace;
+  --fs-display:clamp(34px,1.4vw + 26px,56px);--lh-display:1.14;--tr-display:-.02em;
+  --fs-h2:clamp(28px,.6vw + 24px,36px);--lh-h2:1.25;--tr-h2:-.015em;
+  --fs-h3:clamp(20px,.4vw + 17px,24px);--lh-h3:1.25;--tr-h3:-.01em;
+  --fs-lead:clamp(17px,.3vw + 14px,18px);--lh-lead:1.45;--fs-body:16px;--lh-body:1.5;--fs-small:14px;--lh-small:1.43;--fs-caption:13px;--lh-caption:1.45;--fs-data:13px;
+  --s-1:4px;--s-2:8px;--s-3:12px;--s-4:16px;--s-5:20px;--s-6:24px;--s-7:32px;--s-8:40px;--s-9:48px;--s-10:64px;--s-11:80px;--s-12:96px;
+  --gutter:16px;--section:clamp(56px,8vw,96px);--section-tight:clamp(40px,5vw,56px);--wrap:1600px;
+  --r-xs:8px;--r-sm:12px;--r-md:18px;--r-lg:24px;--r-xl:32px;--r-pill:999px;
+  --sh-glass:0 1px 2px #14133f0a,0 24px 48px -28px #14133f47;--sh-dark:inset 0 1px 0 #ffffff1f,0 30px 60px -30px #0009;--sh-ring:inset 0 0 0 1px #14133f1a;--sh-focus:0 0 0 3px #2e7d7c59;
+  --ease:cubic-bezier(.2,.7,.2,1);--t-fast:.15s;--t-base:.3s;--t-slow:.6s;--z-sticky:20;--z-menu:30;--z-toast:40;--tap:44px;--field-h:52px;--btn-h:48px
+}
+@media (min-width:640px){:root{--gutter:24px}}
+@media (min-width:1024px){:root{--gutter:32px}}
+:root,.theme-light{--hi:#2e7d7c;--hi-rgb:46,125,124;--muted:#5b5b74;--tq:#2e7d7c}
+.theme-menta{--hi:#14133f;--hi-rgb:20,19,63;--muted:#263962;--tq:#14133f}
+.theme-noche{--hi:#dce064;--hi-rgb:220,224,100;--muted:#a9b6d3;--tq:#dce064}
+.theme-teal{--hi:#f6f9f8;--hi-rgb:246,249,248;--muted:#f6f9f8;--tq:#dce064}
+
+*,:before,:after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;scroll-behavior:smooth}
+body{background:var(--c-blanco);margin:0}
+img,video,svg,canvas{max-width:100%}
+a{color:var(--c-noche);text-decoration:none}
+::selection{background:var(--c-amarillo);color:var(--c-noche)}
+.rk{font-family:var(--font-text);color:var(--c-noche);background:var(--c-blanco);-webkit-font-smoothing:antialiased;font-size:16px;line-height:1.5;overflow-x:clip}
+.sr-only{clip:rect(0 0 0 0);white-space:nowrap;width:1px;height:1px;position:absolute;overflow:hidden}
+.display{font-family:var(--font-display);font-weight:500;font-size:var(--fs-display);line-height:var(--lh-display);letter-spacing:var(--tr-display);margin:0}
+.h2{font-family:var(--font-display);font-weight:500;font-size:var(--fs-h2);line-height:var(--lh-h2);letter-spacing:var(--tr-h2);margin:0}
+.h3{font-family:var(--font-display);font-weight:500;font-size:var(--fs-h3);line-height:var(--lh-h3);letter-spacing:var(--tr-h3);margin:0}
+.lead{font-size:var(--fs-lead);line-height:var(--lh-lead);color:var(--c-noche-2);margin:0}
+.p{font-size:var(--fs-body);line-height:var(--lh-body);color:var(--c-noche-2);margin:0}
+.sm{font-size:var(--fs-small);line-height:var(--lh-small)}
+.cap{font-size:var(--fs-caption);line-height:var(--lh-caption);color:var(--muted);margin:0}
+.muted{color:var(--muted)}
+.data,.m{font-family:var(--font-mono);font-size:var(--fs-data);font-weight:500}
+.wrap{max-width:var(--wrap);padding:0 var(--gutter);margin:0 auto;position:relative}
+.section{padding:var(--section) 0}
+.section-tight{padding:var(--section-tight) 0}
+.stack{gap:var(--gap,16px);flex-direction:column;display:flex}
+.row{align-items:center;gap:var(--gap,12px);flex-wrap:wrap;display:flex}
+.gap-1{--gap:4px}.gap-2{--gap:8px}.gap-3{--gap:12px}.gap-4{--gap:16px}.gap-5{--gap:20px}.gap-6{--gap:24px}.gap-7{--gap:32px}
+.measure{max-width:640px}
+.grid2,.grid3{grid-template-columns:minmax(0,1fr);gap:16px;display:grid}
+@media (min-width:768px){.grid2{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}}
+@media (min-width:1024px){.grid3{grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}}
+
+/* Bands */
+.band-blanco{background:var(--c-blanco)}
+.band-menta{--hi:#14133f;--hi-rgb:20,19,63;--muted:#263962;--tq:#14133f;background:var(--c-menta)}
+.band-papel{background:var(--c-papel)}
+.band-noche{--hi:#dce064;--hi-rgb:220,224,100;--muted:#a9b6d3;background:var(--c-noche);color:var(--c-bruma)}
+
+/* Surfaces */
+.glass{isolation:isolate;backdrop-filter:blur(22px) saturate(1.25) brightness(1.04);-webkit-backdrop-filter:blur(22px) saturate(1.25) brightness(1.04);position:relative;box-shadow:var(--sh-glass)}
+.glass:after{content:"";border-radius:inherit;z-index:-1;pointer-events:none;background:linear-gradient(160deg,#ffffff57,#ffffff1f);position:absolute;inset:0}
+.glass:before{content:"";border-radius:inherit;pointer-events:none;z-index:-1;mix-blend-mode:screen;box-shadow:inset 0 0 0 1px #ffffff61,inset 0 1px 0 #ffffffb3,inset 0 -1px 0 rgba(var(--hi-rgb),.14);background:radial-gradient(120% 70% at 12% 0,#ffffff57,#fff0 55%);position:absolute;inset:0}
+.glass-dark{backdrop-filter:blur(20px) saturate(1.4);-webkit-backdrop-filter:blur(20px) saturate(1.4);color:#f6f9f8;background:linear-gradient(160deg,#14133ff2,#14133fe6);position:relative;box-shadow:var(--sh-dark);--hi:#dce064;--hi-rgb:220,224,100;--muted:#a9b6d3}
+.card{border-radius:var(--r-lg);padding:20px}
+.card-sm{border-radius:var(--r-lg);padding:16px}
+@media (min-width:768px){.card{border-radius:var(--r-xl);padding:28px}}
+.dark-card{border-radius:var(--r-lg);padding:22px;background:#23325c;color:var(--c-bruma)}
+.panel{border-radius:var(--r-lg);padding:20px}
+@media (min-width:768px){.panel{border-radius:var(--r-xl);padding:clamp(26px,3vw,36px)}}
+
+/* Actions */
+.btn{min-height:var(--btn-h);border-radius:var(--r-pill);font-family:var(--font-text);cursor:pointer;text-align:center;border:0;justify-content:center;align-items:center;gap:8px;padding:0 20px;font-size:15px;font-weight:600;line-height:1.2;transition:transform .3s,box-shadow .3s,background .25s;display:inline-flex;position:relative;text-decoration:none}
+.btn:hover{transform:translateY(-1px)}
+.btn:disabled,.btn[aria-disabled=true]{opacity:.5;cursor:not-allowed;transform:none}
+.btn-block{width:100%}
+.btn-sm{min-height:var(--tap);padding:0 16px;font-size:14px}
+.btn-ink{color:#f6f9f8;background:#14133f;box-shadow:inset 0 1px #ffffff2e,0 10px 24px -10px #14133f8c}
+.btn-ink:hover{color:#fff}
+.btn-glow{color:#14133f;background:#dce064;box-shadow:inset 0 1px #ffffffa6,0 10px 26px -12px #bec43cf2}
+.btn-glow:hover{color:#14133f;box-shadow:inset 0 1px #ffffffb3,0 16px 32px -12px #bec43c}
+.btn-soft{background:rgba(var(--c-noche-rgb),.07);color:var(--c-noche)}
+.btn-paper{background:var(--c-blanco);color:var(--c-noche)}
+.btn-paper:hover{color:var(--c-noche);background:#fff}
+.btn-ghostdark{color:var(--c-blanco);background:#ffffff0a;box-shadow:inset 0 0 0 1px #ffffff29}
+.btn-ghostdark:hover{color:#fff;box-shadow:inset 0 0 0 1px #ffffff80}
+.btn-row{flex-direction:column;gap:12px;display:flex}
+.btn-row .btn{width:100%}
+@media (min-width:480px){.btn-row{flex-direction:row;flex-wrap:wrap}.btn-row .btn{width:auto}}
+
+/* Display */
+.chip{border-radius:var(--r-pill);align-items:center;gap:6px;min-height:28px;padding:0 11px;font-size:12px;font-weight:500;display:inline-flex}
+.chip-hl{background:var(--c-amarillo)!important;color:var(--c-noche)!important}
+.st-now,.st-next,.st-open{border-radius:var(--r-pill);align-items:center;min-height:26px;padding:0 10px;font-size:12px;font-weight:500;display:inline-flex}
+.st-now{background:var(--c-noche);color:var(--c-blanco)}
+.st-next{background:rgba(var(--c-noche-rgb),.06);color:var(--c-noche-2)}
+.st-open{background:rgba(var(--hi-rgb),.14);color:#1f5f5e}
+.stat{flex-direction:column;gap:4px;display:flex}
+.stat .n{font-family:var(--font-display);letter-spacing:-.04em;font-size:clamp(32px,4vw + 8px,56px);font-weight:600;line-height:1}
+.hl-tile{--hi:#14133f;--muted:#263962;background:#dce064!important;color:var(--c-noche)}
+.checks{flex-direction:column;gap:10px;margin:0;padding:0;list-style:none;display:flex}
+.checks li{color:var(--c-noche-2);align-items:flex-start;gap:10px;font-size:15px;line-height:1.45;display:flex}
+.checks li:before{content:"";background:var(--c-teal) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'%3E%3Cpath d='M5 9.4l2.6 2.6L13 6.6' fill='none' stroke='%23fff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/100% no-repeat;border-radius:50%;flex:0 0 18px;height:18px;margin-top:2px}
+.tbl-wrap{border-radius:var(--r-lg);-webkit-overflow-scrolling:touch;overflow-x:auto}
+.tbl{border-collapse:collapse;width:100%;min-width:520px;font-size:14px}
+.tbl th{text-align:left;color:var(--muted);border-bottom:1px solid rgba(var(--c-noche-rgb),.1);font-size:12.5px;font-weight:500;font-family:var(--font-mono);letter-spacing:.02em;white-space:nowrap;padding:14px 16px}
+.tbl td{border-bottom:1px solid rgba(var(--c-noche-rgb),.06);color:var(--c-noche-2);vertical-align:top;padding:14px 16px}
+.tbl tr:last-child td{border-bottom:0}
+@media (min-width:768px){.tbl{font-size:15px}}
+
+/* Feedback */
+.note{border-radius:var(--r-md);background:rgba(var(--hi-rgb),.1);color:var(--c-noche);gap:12px;padding:14px 16px;font-size:14.5px;line-height:1.5;display:flex}
+.note-error{background:var(--c-error-bg);color:var(--c-error)}
+.note-ok{background:rgba(var(--c-menta-rgb),.25);color:var(--c-noche)}
+
+/* Forms: switch */
+.switch{min-height:var(--field-h);border-radius:var(--r-md);box-shadow:inset 0 0 0 1px rgba(var(--c-noche-rgb),.12);cursor:pointer;background:#ffffffb3;justify-content:space-between;align-items:center;gap:16px;padding:8px 14px;display:flex;position:relative}
+.switch input{opacity:0;cursor:pointer;width:100%;height:100%;margin:0;position:absolute;inset:0}
+.switch .txt{color:var(--c-noche);font-size:15px;line-height:1.35}
+.switch .track{border-radius:var(--r-pill);background:rgba(var(--c-noche-rgb),.22);flex:0 0 48px;width:48px;height:28px;transition:background .25s;position:relative}
+.switch .track:after{content:"";width:22px;height:22px;box-shadow:0 2px 6px rgba(var(--c-noche-rgb),.3);background:#fff;border-radius:50%;transition:transform .25s cubic-bezier(.3,1.3,.5,1);position:absolute;top:3px;left:3px}
+.switch:has(input:checked) .track{background:var(--c-teal)}
+.switch:has(input:checked) .track:after{transform:translate(20px)}
+.switch:has(input:focus-visible){outline:2px solid var(--hi);outline-offset:2px}
+
+/* Navigation */
+.seg{border-radius:var(--r-pill);flex-wrap:wrap;gap:4px;padding:5px;display:inline-flex}
+.seg button,.seg a{all:unset;cursor:pointer;min-height:var(--tap);border-radius:var(--r-pill);color:var(--c-noche-2);align-items:center;justify-content:center;padding:0 16px;font-size:14px;display:inline-flex;box-sizing:border-box}
+.seg button.on,.seg a.on,.seg [aria-current=page],.seg [aria-pressed=true]{background:var(--c-noche);color:var(--c-blanco)}
+.seg button:focus-visible,.seg a:focus-visible{outline:2px solid var(--hi);outline-offset:2px}
+.faq-q{width:100%;min-height:var(--field-h);cursor:pointer;text-align:left;font-family:var(--font-text);color:var(--c-noche);background:0 0;border:0;justify-content:space-between;align-items:center;gap:16px;padding:16px 4px;font-size:16px;font-weight:500;display:flex}
+
+/* Footer */
+.ft{background:var(--c-teal);color:var(--c-blanco);padding:48px 0 32px;position:relative;overflow:hidden;--hi:#f6f9f8;--muted:#f6f9f8;--tq:#dce064}
+.ft a{color:var(--c-blanco)}
+
+.skip-link{z-index:1000;background:var(--c-noche);color:var(--c-blanco);border-radius:12px;padding:12px 16px;font-weight:600;text-decoration:none;position:absolute;top:-60px;left:12px}
+.skip-link:focus{top:12px}
+:focus-visible{outline:2px solid var(--c-teal);outline-offset:3px}
+.band-noche :focus-visible,.theme-noche :focus-visible,.glass-dark :focus-visible{outline-color:var(--c-amarillo)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
+
+/* EnPiso Visión v0.1.3: app layout on top of the Rikuy kit. Mobile first (375 px), additions with min-width queries. */
+.row-between{justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;display:flex}
+.solid{background:#fff;box-shadow:var(--sh-ring),0 1px 2px #14133f0a}
+.view[hidden]{display:none!important}
+main:focus{outline:none}
+b,strong{font-weight:600}
+
+/* ---------- header (Noche) */
+.app-head{background:var(--c-noche);color:var(--c-blanco);--hi:#dce064;--hi-rgb:220,224,100;--muted:#a9b6d3}
+.head-row{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"brand powered" "nav nav";align-items:center;gap:10px 12px;padding-top:12px;padding-bottom:12px}
+.brand{grid-area:brand;display:inline-flex;align-items:center;gap:10px;min-height:var(--tap);color:var(--c-blanco)}
+.brand-enpiso{height:26px;width:auto;display:block}
+.brand-sub{font-family:var(--font-display);font-weight:500;font-size:22px;letter-spacing:-.02em;line-height:1;color:var(--c-blanco);padding-left:10px;border-left:1px solid #ffffff33}
+.powered{grid-area:powered;margin:0;display:flex;align-items:center;gap:8px;color:var(--c-hielo);font-size:12px;line-height:1.2}
+.powered img{width:72px;height:auto;display:block}
+.powered span{max-width:7em;text-align:right}
+.nav-seg{grid-area:nav;justify-self:start;background:#ffffff0f;box-shadow:inset 0 0 0 1px #ffffff1f;width:calc(100% - var(--lang-w) - 10px);display:grid;grid-template-columns:auto auto}
+.nav-seg a{color:var(--c-bruma);gap:8px;font-weight:500;font-size:15px;padding:0 12px;white-space:nowrap}
+.nav-seg svg{flex:none}
+.nav-seg a[aria-current=page]{background:var(--c-amarillo);color:var(--c-noche)}
+/* ES | EN switch: same pill track as the nav; Blanco (not Amarillo) marks the active language so the nav keeps the one highlight */
+/* phone: the switch shares the nav row (same grid area, pinned right; the nav leaves room for it) */
+.head-row{--lang-w:96px}
+.lang-seg{grid-area:nav;justify-self:end;width:var(--lang-w);box-sizing:border-box;background:#ffffff0f;box-shadow:inset 0 0 0 1px #ffffff1f;flex-wrap:nowrap;gap:2px}
+.lang-seg button{color:var(--c-bruma);padding:0;width:42px;font-weight:600;font-size:13px;letter-spacing:.06em}
+.lang-seg button[aria-pressed=true]{background:var(--c-blanco);color:var(--c-noche)}
+.lang-seg button:hover:not([aria-pressed=true]){background:#ffffff14}
+@media (min-width:768px){
+  .head-row{grid-template-columns:auto 1fr auto auto;grid-template-areas:"brand nav lang powered";padding-top:10px;padding-bottom:10px}
+  .nav-seg{width:auto;justify-self:center;min-width:280px}
+  .lang-seg{grid-area:lang}
+  .brand-enpiso{height:30px}
+  .powered span{max-width:none}
+}
+
+/* ---------- hero + insight cards (glass on Menta) */
+.hero{padding:28px 0 48px;position:relative;overflow:hidden}
+.hero:before{content:"";position:absolute;inset:-30% -10% auto auto;width:70vw;height:70vw;max-width:900px;max-height:900px;border-radius:50%;background:radial-gradient(circle,#ffffff8c 0%,#fff0 70%);pointer-events:none}
+.hero .wrap{display:flex;flex-direction:column;gap:16px}
+.ctx{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.ctx li{font-size:12.5px;line-height:1.3;color:var(--c-noche);background:#ffffff73;border-radius:var(--r-pill);padding:5px 10px;box-shadow:inset 0 0 0 1px #ffffff99}
+@media (min-width:640px){.ctx li{font-size:13px;padding:6px 11px}}
+.ctx li b{font-weight:600}
+.insights{margin-top:8px;align-items:stretch}
+.insight{display:flex;flex-direction:column;gap:14px;color:var(--c-noche)}
+.ins-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.rank{font-family:var(--font-display);font-weight:600;font-size:15px;width:30px;height:30px;border-radius:50%;display:inline-grid;place-items:center;background:var(--c-noche);color:var(--c-blanco);flex:none}
+.src{background:rgba(var(--c-noche-rgb),.08);color:var(--c-noche)}
+.src svg{flex:none}
+.conf{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;color:var(--c-noche-2);margin-left:auto}
+.conf .bars{display:inline-flex;gap:2px;align-items:flex-end}
+.conf .bars i{width:5px;border-radius:2px;background:rgba(var(--c-noche-rgb),.2)}
+.conf .bars i:nth-child(1){height:7px}.conf .bars i:nth-child(2){height:10px}.conf .bars i:nth-child(3){height:13px}
+.conf .bars i.on{background:var(--c-noche)}
+.band-noche .conf,.glass-dark .conf{color:var(--c-hielo)}
+.band-noche .conf .bars i{background:#ffffff33}.band-noche .conf .bars i.on{background:var(--c-amarillo)}
+.insight .h3{font-weight:500}
+.big{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin:0}
+.big .n{font-family:var(--font-display);font-weight:600;letter-spacing:-.04em;line-height:1;font-size:clamp(44px,5vw + 20px,64px);color:var(--c-noche)}
+.big .u{font-family:var(--font-display);font-weight:600;font-size:.42em;letter-spacing:-.02em;margin-left:2px}
+.big .lbl{font-size:14px;color:var(--c-noche-2);line-height:1.3;max-width:14em}
+.insight .p{color:var(--c-noche-2)}
+.proof{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:0}
+.proof button{all:unset;cursor:pointer;display:flex;flex-direction:column;gap:4px;border-radius:var(--r-xs);position:relative}
+.proof img{width:100%;height:auto;aspect-ratio:480/304;object-fit:cover;border-radius:var(--r-xs);display:block;background:var(--c-noche-2);box-shadow:0 6px 16px -10px #14133f8c}
+.proof .pt{font-family:var(--font-mono);font-size:12px;font-weight:500;color:var(--c-noche);line-height:1.2}
+.proof .pc{font-size:12px;line-height:1.25;color:var(--c-noche-2)}
+.proof button:focus-visible{outline:2px solid var(--c-noche);outline-offset:2px}
+.proof button:hover img{transform:translateY(-1px)}
+.proof-cap{font-size:12px;color:var(--c-noche-2);margin:0}
+.ins-actions{display:flex;flex-direction:column;gap:6px;margin-top:auto}
+.ins-actions .btn{width:100%}
+.ins-actions .cap{text-align:center}
+.how{border-top:1px solid rgba(var(--c-noche-rgb),.14);padding-top:4px}
+.how summary{cursor:pointer;min-height:var(--tap);display:flex;align-items:center;justify-content:space-between;gap:12px;font-weight:600;font-size:14.5px;list-style:none}
+.how summary::-webkit-details-marker{display:none}
+.how summary:after{content:"+";font-family:var(--font-mono);font-size:18px}
+.how[open] summary:after{content:"−"}
+.how .body{display:flex;flex-direction:column;gap:8px;font-size:14px;line-height:1.5;color:var(--c-noche-2);padding-bottom:6px}
+.how ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px}
+.idea{font-size:14px;line-height:1.45;background:#ffffff80;border-radius:var(--r-md);padding:12px 14px;margin:0;color:var(--c-noche)}
+.idea b{display:block;font-size:12px;letter-spacing:.01em;color:var(--c-noche-2);margin-bottom:2px}
+.insight.flash{animation:rk-flash 1.6s var(--ease)}
+@keyframes rk-flash{0%{box-shadow:0 0 0 4px var(--c-amarillo),var(--sh-glass)}100%{box-shadow:var(--sh-glass)}}
+
+/* ---------- trust band (Noche) */
+.trust-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:24px;align-items:center}
+.trust .h2{color:var(--c-blanco)}
+.trust .lead{color:var(--c-bruma)}
+.trust-num{display:flex;align-items:baseline;gap:6px 14px;flex-wrap:wrap;margin:0}
+.trust .num{font-family:var(--font-display);font-weight:600;letter-spacing:-.04em;line-height:1;font-size:clamp(64px,8vw + 24px,112px);color:var(--c-amarillo)}
+.trust .num-of{font-family:var(--font-display);font-weight:500;font-size:clamp(20px,1vw + 16px,26px);line-height:1.2;color:var(--c-bruma);letter-spacing:-.01em;max-width:13em}
+.trust .proof-cap{color:var(--c-hielo)}
+.trust .how{border-top-color:#ffffff26}
+.trust .how summary{color:var(--c-blanco)}
+.trust .how .body{color:var(--c-bruma)}
+.trust .how .body b{color:var(--c-blanco)}
+.trust-facts{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.trust-facts li{background:#ffffff0d;box-shadow:inset 0 0 0 1px #ffffff1a;border-radius:var(--r-md);padding:12px 14px;display:flex;flex-direction:column;gap:2px}
+.trust-facts b{font-family:var(--font-display);font-weight:600;font-size:24px;color:var(--c-blanco);letter-spacing:-.02em}
+.trust-facts span{font-size:13px;color:var(--c-hielo);line-height:1.35}
+.trust .proof .pt{color:var(--c-blanco)}.trust .proof .pc{color:var(--c-hielo)}
+.trust .proof img{box-shadow:0 0 0 1px #ffffff26}
+.trust .proof button:focus-visible{outline-color:var(--c-amarillo)}
+.trust .src{background:#ffffff14;color:var(--c-blanco)}
+@media (min-width:980px){.trust-grid{grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:48px}}
+
+/* ---------- data cards */
+.card-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 16px;margin-bottom:8px}
+.card .p+.p{margin-top:8px}
+.tip{all:unset;cursor:help;border-bottom:1.5px dotted currentColor;font-weight:600;color:inherit;line-height:1.2}
+.tip:focus-visible{outline:2px solid var(--c-teal);outline-offset:2px;border-radius:2px}
+.tip-pop{position:absolute;z-index:var(--z-toast);max-width:min(300px,calc(100vw - 32px));background:var(--c-noche);color:var(--c-blanco);font-size:14px;line-height:1.45;padding:10px 12px;border-radius:var(--r-sm);box-shadow:0 18px 40px -12px #14133f8c}
+.tip-pop b{color:var(--c-amarillo)}
+
+.chart{margin:20px 0 8px}
+.bars-h{--h:220px;display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));gap:6px;align-items:end;position:relative;height:calc(var(--h) + 58px);padding-top:4px}
+.bars-h .ref{position:absolute;left:0;right:0;border-top:1.5px dashed rgba(var(--c-noche-rgb),.35);pointer-events:none}
+.bars-h .ref span{position:absolute;right:0;top:-20px;font-size:12px;color:var(--c-noche-2);background:#fff;padding:0 4px;font-family:var(--font-mono)}
+.bars-h .ref.std{border-top-style:solid;border-color:rgba(var(--c-teal-rgb),.6)}
+.bars-h .ref.std span{color:var(--c-teal);left:0;right:auto}
+.bcol{display:flex;flex-direction:column;align-items:stretch;justify-content:flex-end;height:100%;gap:4px;min-width:0;text-decoration:none;color:inherit;position:relative}
+.bcol .v{font-family:var(--font-display);font-weight:600;font-size:13px;text-align:center;letter-spacing:-.03em;color:var(--c-noche);white-space:nowrap}
+.bcol .v small{font-size:.75em;font-weight:500}
+.bcol .v sup{font-size:.8em;color:var(--c-teal)}
+.bcol .bar{border-radius:8px 8px 3px 3px;background:var(--c-teal);min-height:3px;position:relative}
+.bcol.f-partial .bar,.bcol.f-pause .bar,.bcol.f-gap .bar{background:rgba(var(--c-teal-rgb),.55)}
+.bcol.f-burst .bar{background:repeating-linear-gradient(135deg,var(--c-teal) 0 6px,#8dbdbc 6px 12px)}
+.bcol.best .bar{background:var(--c-noche)}
+.bcol .hr{font-family:var(--font-mono);font-size:12px;text-align:center;color:var(--c-noche-2);white-space:nowrap}
+.bcol .fl{font-size:12px;color:var(--c-noche-2);height:22px;line-height:1.3;display:flex;align-items:center;justify-content:center}
+.bcol .cam{display:inline-flex;align-items:center;justify-content:center;gap:3px;background:var(--c-noche);color:var(--c-blanco);border-radius:var(--r-pill);font-size:12px;padding:3px 7px;margin:0 auto;white-space:nowrap}
+.bcol .cam .t{display:none}
+.chart-legend{list-style:none;margin:12px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12.5px;color:var(--c-noche-2)}
+.chart-legend li{display:flex;align-items:center;gap:6px}
+.chart-legend i{display:inline-block;width:18px;height:0;border-top:1.5px dashed rgba(var(--c-noche-rgb),.5)}
+.chart-legend i.std{border-top:2px solid rgba(var(--c-teal-rgb),.7)}
+.chart-legend i.sw{width:12px;height:12px;border:0;border-radius:3px;background:var(--c-teal)}
+.chart-legend i.sw.lt{background:rgba(var(--c-teal-rgb),.55)}
+.chart-legend i.sw.bu{background:repeating-linear-gradient(135deg,var(--c-teal) 0 3px,#8dbdbc 3px 6px)}
+.chart-legend i.sw.be{background:var(--c-noche)}
+a.bcol:hover .bar{filter:brightness(1.1)}
+a.bcol:focus-visible{outline:2px solid var(--c-teal);outline-offset:3px;border-radius:8px}
+@media (min-width:768px){.bars-h{--h:260px;gap:12px}.bcol .v{font-size:17px}.bcol .cam .t{display:inline}}
+.flag-notes{list-style:none;margin:10px 0 12px;padding:0;display:flex;flex-direction:column;gap:6px;font-size:13.5px;color:var(--c-noche-2)}
+.flag-notes li{display:flex;gap:8px;align-items:flex-start}
+.flag-notes .k{font-family:var(--font-mono);font-weight:600;color:var(--c-noche);flex:none;min-width:3.2em}
+
+.hbar{display:flex;height:34px;border-radius:10px;overflow:hidden;box-shadow:var(--sh-ring);margin:6px 0 4px}
+.hbar span{display:block;height:100%}
+.k-cose{background:var(--c-teal)}.k-busca{background:var(--c-menta)}.k-entrega{background:var(--c-menta-palida)}.k-espera{background:var(--c-amarillo)}.k-fuera{background:var(--c-bruma)}
+.k-puesto{background:rgba(var(--c-teal-rgb),.45)}.k-pie{background:var(--c-menta-palida)}
+.hb-row{margin-top:14px}
+#st-note{margin-top:10px}
+.hb-row .row-between .cap{font-size:12.5px}
+.hb-row h4{margin:0;font-size:15px;font-weight:600}
+.legend{list-style:none;margin:8px 0 0;padding:0;display:grid;grid-template-columns:1fr;gap:4px}
+.legend li{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--c-noche-2)}
+.legend i{width:12px;height:12px;border-radius:3px;flex:none;box-shadow:var(--sh-ring)}
+.legend b{margin-left:auto;font-family:var(--font-mono);font-weight:500;font-size:13px;color:var(--c-noche)}
+@media (min-width:480px){.legend{grid-template-columns:1fr 1fr;column-gap:20px}}
+.lowconf{opacity:.85}
+
+.cmp{display:flex;flex-direction:column;gap:10px;margin:14px 0}
+.cmp .r{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;align-items:center}
+.cmp .r .t{font-size:14px;color:var(--c-noche-2)}
+.cmp .r b{font-family:var(--font-display);font-size:20px;letter-spacing:-.02em}
+.cmp .r .track{grid-column:1/-1;height:12px;border-radius:6px;background:rgba(var(--c-noche-rgb),.06);overflow:hidden}
+.cmp .r .track span{display:block;height:100%;border-radius:6px;background:var(--c-noche)}
+.cmp .r.b2 .track span{background:var(--c-amarillo)}
+.res-big{font-family:var(--font-display);font-weight:600;font-size:clamp(28px,2vw + 20px,36px);letter-spacing:-.03em;line-height:1.1;margin:4px 0 6px}
+.soon{display:flex;gap:10px;align-items:flex-start;border-radius:var(--r-md);background:rgba(var(--c-noche-rgb),.05);padding:12px 14px;font-size:14px;color:var(--c-noche-2);margin-top:12px}
+.soon .st-next{flex:none}
+.link{color:var(--c-teal);font-weight:600;text-decoration:underline;text-underline-offset:3px}
+
+.tbl td b{font-family:var(--font-display);font-weight:600;font-size:17px;color:var(--c-noche);letter-spacing:-.01em}
+.tbl td small{display:block;font-size:12.5px;color:var(--muted);line-height:1.35}
+.tbl .st-next{white-space:nowrap}
+.tbl.narrow{min-width:0}
+.tbl tbody th{font-family:var(--font-mono);font-weight:500;color:var(--c-noche);font-size:13px;text-align:left;padding:12px 16px;border-bottom:1px solid rgba(var(--c-noche-rgb),.06)}
+.tbl.narrow td,.tbl.narrow th{padding:10px 12px}
+.stations{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;margin-top:14px}
+@media (min-width:768px){.stations{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}}
+.station{border-radius:var(--r-md);box-shadow:var(--sh-ring);padding:16px;display:flex;flex-direction:column;gap:10px;background:var(--c-blanco)}
+.station.low{background:#fff}
+.station .row-between h4{margin:0;font-family:var(--font-display);font-weight:600;font-size:20px;letter-spacing:-.02em}
+.station .row-between h4 small{display:block;font-family:var(--font-text);font-weight:400;font-size:13px;color:var(--muted);letter-spacing:0}
+.station dl{margin:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.station dt{font-size:12.5px;color:var(--muted);line-height:1.3}
+.station dd{margin:2px 0 0;font-family:var(--font-display);font-weight:600;font-size:22px;letter-spacing:-.02em;color:var(--c-noche);line-height:1.15}
+.station dd small{display:block;font-family:var(--font-text);font-weight:400;font-size:12.5px;color:var(--c-noche-2);letter-spacing:0;margin-top:2px}
+.station dd .st-next{font-family:var(--font-text);font-size:12px;letter-spacing:0}
+
+.review-card{display:flex;flex-direction:column;gap:10px}
+.review-card .big .n{font-size:40px}
+
+/* ---------- mock (ejemplo) */
+.mock{position:relative}
+.mock-banner{display:flex;align-items:center;gap:12px;flex-wrap:wrap;border-radius:var(--r-md);padding:12px 16px;font-size:14.5px;font-weight:500;color:var(--c-noche);background:repeating-linear-gradient(135deg,#dce06440 0 14px,#dce06414 14px 28px);box-shadow:inset 0 0 0 1.5px #c9cd4a}
+.mock-chip{background:var(--c-amarillo);color:var(--c-noche);font-weight:600;letter-spacing:.02em;text-transform:uppercase}
+.mock .card{position:relative}
+.mock .card:after{content:var(--t-mock-chip,"Ejemplo");position:absolute;top:14px;right:16px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:#6d7020;background:#dce06459;border-radius:var(--r-pill);padding:3px 8px}
+.mock .card .h3{padding-right:76px}
+.zbars{display:flex;flex-direction:column;gap:14px;margin-top:16px;position:relative}
+.zbar .row-between{margin-bottom:4px}
+.zbar .row-between b{font-family:var(--font-display);font-weight:600;font-size:18px}
+.zbar .trk{position:relative;height:28px;border-radius:8px;background:rgba(var(--c-noche-rgb),.05)}
+.zbar .fill{position:absolute;left:0;top:0;bottom:0;border-radius:8px;display:flex;overflow:hidden}
+.zbar .fill .sew{background:var(--c-teal)}.zbar .fill .ext{background:repeating-linear-gradient(135deg,var(--c-menta) 0 5px,var(--c-menta-palida) 5px 10px)}
+.zbar .takt{position:absolute;top:-6px;bottom:-6px;width:0;border-left:2px dashed var(--c-noche)}
+.zbar.bott .fill .sew{background:var(--c-noche)}
+.ops{list-style:none;margin:12px 0 0;padding:0;display:flex;flex-direction:column;gap:8px;counter-reset:op}
+.ops li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 12px;align-items:center;font-size:14px}
+.ops li .nm{color:var(--c-noche);font-weight:500}
+.ops li .nm small{display:block;font-weight:400;color:var(--muted);font-size:12.5px}
+.ops li .s{font-family:var(--font-mono);font-size:13px;color:var(--c-noche)}
+.ops li .tr{grid-column:1/-1;height:6px;border-radius:3px;background:rgba(var(--c-noche-rgb),.06);overflow:hidden}
+.ops li .tr span{display:block;height:100%;background:var(--c-teal);border-radius:3px}
+.ops li.top .tr span{background:var(--c-noche)}
+.ops li.top .nm:after{content:var(--t-op-bottleneck,"Restricción del ejemplo");margin-left:8px;font-size:12px;font-weight:600;background:var(--c-amarillo);color:var(--c-noche);border-radius:var(--r-pill);padding:2px 8px;white-space:nowrap}
+.cell-eff{font-family:var(--font-mono);font-weight:500}
+.cell-eff.hi{font-weight:600;color:var(--c-noche)}
+.mock-video{display:flex;flex-direction:column;gap:16px}
+.pair-legend{list-style:none;margin:12px 0 4px;padding:0;display:flex;gap:16px;font-size:12.5px;color:var(--c-noche-2)}
+.pair-legend li{display:flex;align-items:center;gap:6px}
+.pair-legend i{width:12px;height:8px;border-radius:2px;display:inline-block}
+.pair-legend .pa,.pairs .a span{background:var(--c-menta)}.pair-legend .pb,.pairs .b span{background:var(--c-noche)}
+.pair-legend .p100{width:0;height:12px;border-left:1.5px dashed var(--c-noche-2);border-radius:0}
+.pairs{list-style:none;margin:6px 0 8px;padding:0;display:flex;flex-direction:column;gap:7px}
+.pairs li{display:grid;grid-template-columns:3.6em minmax(0,1fr) 3.2em;grid-template-rows:auto auto;column-gap:10px;row-gap:3px;align-items:center}
+.pairs .h{grid-row:1/3;font-family:var(--font-mono);font-size:12.5px;color:var(--c-noche)}
+.pairs .a,.pairs .b{position:relative;height:9px;border-radius:5px;background:rgba(var(--c-noche-rgb),.05)}
+.pairs .a span,.pairs .b span{position:absolute;left:0;top:0;bottom:0;border-radius:5px}
+.pairs .a:after,.pairs .b:after{content:"";position:absolute;top:-3px;bottom:-3px;left:var(--x100);border-left:1.5px dashed rgba(var(--c-noche-2-rgb),.6)}
+.pairs .va,.pairs .vb{font-family:var(--font-mono);font-size:12px;text-align:right;color:var(--c-noche-2)}
+.pairs .vb{color:var(--c-noche);font-weight:600}
+.pairs li.burst .a span,.pairs li.burst .b span{opacity:.5}
+.mock-video-box video,.mock-video-box img{width:100%;border-radius:var(--r-md);display:block;background:var(--c-noche)}
+@media (min-width:900px){.mock-video{grid-template-columns:minmax(0,1fr) minmax(0,1.3fr)}}
+
+/* ---------- glossary */
+.glossary{margin:0;display:grid;gap:12px;color:var(--c-noche)}
+.glossary div{display:flex;flex-direction:column;gap:2px}
+.glossary dt{font-weight:600;font-size:15px}
+.glossary dd{margin:0;font-size:14.5px;color:var(--c-noche-2);line-height:1.45}
+
+/* ---------- footer */
+.ft-row{display:flex;flex-direction:column;gap:16px}
+.ft-brand{margin:0;display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:15px}
+.ft-brand img{width:72px;height:auto}
+.ft .cap{color:#e6f1f0}
+@media (min-width:900px){.ft-row{flex-direction:row;justify-content:space-between;align-items:flex-end}.ft-note{max-width:440px;text-align:right}}
+
+/* ---------- video view */
+.video-band{padding:16px 0 48px}
+.back-bar{display:flex;align-items:center;gap:10px 14px;margin-bottom:12px}
+.back-bar .btn{flex:none}
+.back-ctx{margin:0;font-size:13.5px;line-height:1.3;color:var(--c-noche-2)}
+@media (min-width:640px){.back-ctx{font-size:14px}}
+.back-ctx b{color:var(--c-noche)}
+.video-layout{display:grid;grid-template-columns:minmax(0,1fr);gap:16px}
+@media (min-width:1024px){.video-layout{grid-template-columns:minmax(0,max(600px,calc((100vh - 390px) * 16 / 9))) 340px;justify-content:center;gap:24px;align-items:start}}
+@media (min-width:1280px){.video-layout{grid-template-columns:minmax(0,max(640px,calc((100vh - 390px) * 16 / 9))) 380px}}
+.stage-panel{background:var(--c-noche);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--sh-dark);color:var(--c-bruma)}
+.stage{position:relative;aspect-ratio:16/9;background:#0d0c2e;overflow:hidden;touch-action:pan-y}
+.stage .vid{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;background:#0d0c2e}
+.stage .vid.active{opacity:1}
+#overlay{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.frame-corners i{position:absolute;width:18px;height:18px;border-color:var(--c-menta);border-style:solid;border-width:0;pointer-events:none;opacity:.9}
+.frame-corners i:nth-child(1){top:10px;left:10px;border-top-width:2px;border-left-width:2px;border-top-left-radius:4px}
+.frame-corners i:nth-child(2){top:10px;right:10px;border-top-width:2px;border-right-width:2px;border-top-right-radius:4px}
+.frame-corners i:nth-child(3){bottom:10px;left:10px;border-bottom-width:2px;border-left-width:2px;border-bottom-left-radius:4px}
+.frame-corners i:nth-child(4){bottom:10px;right:10px;border-bottom-width:2px;border-right-width:2px;border-bottom-right-radius:4px}
+.time-badge{display:none;position:absolute;top:12px;left:50%;transform:translateX(-50%);margin:0;font-family:var(--font-mono);font-size:13px;font-weight:500;color:var(--c-blanco);background:#14133fcc;border-radius:var(--r-pill);padding:4px 10px;pointer-events:none}
+@media (min-width:640px){.time-badge{display:block}}
+.loading{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);margin:0;background:#14133fe6;color:var(--c-blanco);border-radius:var(--r-pill);padding:6px 14px;font-size:13px}
+.big-play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:68px;height:68px;border-radius:50%;border:0;cursor:pointer;background:var(--c-amarillo);color:var(--c-noche);display:grid;place-items:center;box-shadow:0 10px 30px -8px #000a}
+.big-play[hidden]{display:none}
+.big-play:focus-visible{outline:3px solid var(--c-blanco);outline-offset:3px}
+.controls{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:10px 10px 6px}
+.ctl{min-width:var(--tap);min-height:var(--tap);border-radius:var(--r-pill);border:0;cursor:pointer;background:#ffffff0f;color:var(--c-blanco);box-shadow:inset 0 0 0 1px #ffffff26;font-family:var(--font-text);font-weight:600;font-size:13.5px;padding:0 12px;display:inline-flex;align-items:center;justify-content:center}
+.ctl:hover{box-shadow:inset 0 0 0 1px #ffffff80}
+.ctl svg{fill:currentColor}
+#play{background:var(--c-amarillo);color:var(--c-noche);box-shadow:none;padding:0}
+#play .i-pause{display:none}#play.playing .i-pause{display:block}#play.playing .i-play{display:none}
+.ctl-sm{min-width:var(--tap);font-size:20px;line-height:1}
+.clock{margin:0 0 0 auto;display:flex;flex-direction:column;align-items:flex-end;line-height:1.1;padding:0 4px}
+.clock-now{font-family:var(--font-mono);font-weight:500;font-size:16px;color:var(--c-blanco)}
+.clock-unit{font-size:12px;color:var(--c-hielo)}
+.speed{background:#ffffff0a;box-shadow:inset 0 0 0 1px #ffffff1f;padding:3px}
+.speed button{color:var(--c-bruma);padding:0 12px;min-height:38px;font-size:13.5px}
+.speed button[aria-pressed=true]{background:var(--c-blanco);color:var(--c-noche)}
+@media (max-width:479px){.speed{order:5;width:100%;justify-content:center}.speed button{flex:1}.clock{margin-left:auto}}
+.clip-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 12px;margin:0 10px 12px;padding:10px 12px;border-radius:var(--r-md);background:#dce0641f;box-shadow:inset 0 0 0 1px #dce06466}
+.clip-bar[hidden]{display:none}
+.clip-txt{margin:0;font-size:13.5px;color:var(--c-blanco)}
+.clip-txt b{color:var(--c-amarillo)}
+.tl-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:4px 10px 0}
+.tl-zoom{background:#ffffff0a;box-shadow:inset 0 0 0 1px #ffffff1f;padding:3px}
+.tl-zoom button{color:var(--c-bruma);padding:0 12px;min-height:38px;font-size:13px}
+.tl-zoom button[aria-pressed=true]{background:var(--c-blanco);color:var(--c-noche)}
+.timeline{position:relative;margin:6px 10px 0;height:104px;cursor:pointer;touch-action:pan-y;border-radius:var(--r-sm)}
+.timeline:focus-visible{outline:2px solid var(--c-amarillo);outline-offset:2px}
+#tl-canvas{width:100%;height:100%;display:block}
+.tl-legend{list-style:none;margin:0;padding:8px 12px 12px;display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12px;color:var(--c-hielo)}
+.tl-legend li{display:flex;align-items:center;gap:6px}
+.tl-legend i{display:inline-block;width:12px;height:8px;border-radius:2px}
+.lg-ins{background:var(--c-amarillo);transform:rotate(45deg);width:9px!important;height:9px!important}
+.lg-cyc{background:var(--c-menta)}
+.lg-cp{background:var(--c-blanco);width:3px!important;height:12px!important}
+.lg-wait{background:repeating-linear-gradient(90deg,var(--c-amarillo) 0 6px,var(--c-hielo) 6px 12px)}
+.live{list-style:none;margin:12px 0 0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+@media (min-width:768px){.live{display:flex;flex-wrap:wrap}}
+/* phone: name, then state, then the confidence note, all left aligned beside the dot; from 768 px one pill line "Name: state note" */
+.live li{display:grid;grid-template-columns:10px minmax(0,1fr);align-items:start;column-gap:8px;row-gap:2px;font-size:13.5px;line-height:1.3;background:#fff;box-shadow:var(--sh-ring);border-radius:var(--r-md);padding:9px 12px;min-height:40px;color:var(--c-noche)}
+.live li > span{display:flex;flex-direction:column}
+.live li small{grid-column:2}
+.live li i{margin-top:3px}
+@media (min-width:768px){.live li{display:flex;gap:8px;border-radius:var(--r-pill);align-items:center;padding:8px 14px}.live li > span{display:inline}.live li b:after{content:":\00a0"}.live li i{margin-top:0}}
+.live li i{width:10px;height:10px;border-radius:50%;flex:none;box-shadow:var(--sh-ring)}
+.live li small{color:var(--muted);font-size:12px}
+.side{display:flex;flex-direction:column;gap:16px}
+.side .switch .txt{display:flex;flex-direction:column;gap:2px;font-weight:500}
+.side .switch .txt small{font-size:12.5px;color:var(--muted);font-weight:400}
+.filters{display:flex;flex-wrap:wrap;gap:6px}
+.fchip{min-height:40px;border-radius:var(--r-pill);border:0;cursor:pointer;padding:0 14px;font-family:var(--font-text);font-size:13.5px;font-weight:500;background:rgba(var(--c-noche-rgb),.06);color:var(--c-noche-2)}
+.fchip[aria-pressed=true]{background:var(--c-noche);color:var(--c-blanco)}
+.fchip:focus-visible{outline:2px solid var(--c-teal);outline-offset:2px}
+.moments{list-style:none;margin:0;padding:0;max-height:360px;overflow:auto;display:flex;flex-direction:column;gap:2px;overscroll-behavior:contain}
+@media (min-width:1024px){.moments{max-height:calc(100vh - 470px);min-height:260px}}
+.moments button{all:unset;box-sizing:border-box;cursor:pointer;width:100%;display:grid;grid-template-columns:4.6em minmax(0,1fr);gap:2px 10px;align-items:center;padding:9px 10px;border-radius:var(--r-sm);min-height:var(--tap)}
+.moments button:hover{background:rgba(var(--c-noche-rgb),.05)}
+.moments button:focus-visible{outline:2px solid var(--c-teal);outline-offset:-2px}
+.moments button.now{background:rgba(var(--c-menta-rgb),.3)}
+.moments .mt{font-family:var(--font-mono);font-size:12.5px;font-weight:500;color:var(--c-noche)}
+.moments .ml{font-size:14px;color:var(--c-noche);line-height:1.3}
+.moments .ml small{display:block;color:var(--muted);font-size:12px}
+.moments .k{width:8px;height:8px;border-radius:2px;display:inline-block;margin-right:6px;vertical-align:1px}
+.moments .k.hallazgo{background:var(--c-amarillo);transform:rotate(45deg);box-shadow:0 0 0 1px #b5b83c}
+.moments .k.ciclo{background:var(--c-teal)}.moments .k.cp{background:var(--c-noche)}.moments .k.espera{background:#c9cd4a}
+.moments .empty{font-size:14px;color:var(--muted);padding:8px 10px}
+
+.need-h{margin:0;font-size:15px;font-weight:600}
+
+</style>
+<script type="application/json" id="i18n">{"es":{"meta.title":"EnPiso Visión · Módulo 28","meta.titleVideo":"Video · EnPiso Visión · Módulo 28","meta.description":"EnPiso Visión: hallazgos del Módulo 28 con prueba en video.","skip":"Saltar al contenido","head.brandAria":"EnPiso Visión, ir al panel","head.sections":"Secciones","head.powered":"con tecnología","head.lang":"Idioma","nav.panel":"Panel","nav.video":"Video","hero.ctxAria":"Contexto de los datos","hero.title_html":"Lo que vimos en el Módulo&nbsp;28","hero.lead_html":"Tres hallazgos para equilibrar el módulo, cada uno con su prueba en video. Toque <b>Ver en video<\/b> para revisarlo usted mismo.","ctx.module":"Módulo {id}","ctx.video":"Video de {a} a {b}","station":"Puesto {id}","data.title":"Los datos","data.lead":"Lo que pidió el experto de la industria: eficiencia por hora, por puesto, la operación que frena el módulo y los minutos efectivos.","eff.title":"Eficiencia del módulo por hora","eff.lead_html":"Cuánto del tiempo pagado se convirtió en minutos estándar de camiseta (<button type=\"button\" class=\"tip\" data-tip=\"sam\">SAM<\/button>, <button type=\"button\" class=\"tip\" data-tip=\"eficiencia\">eficiencia<\/button>). Las horas con cámara se pueden abrir en video.","eff.srcDetail":"{n} piezas","eff.confNote":"Supone 2 personas y que el SAM cubre solo costura.","eff.barAria":"{h}: {pct}, {n} piezas","eff.barOpen":"Abrir esta hora en video","eff.cam":"video","eff.chartAria":"Eficiencia por hora. Promedio {pct}.","eff.lgStd":"{p} = estándar","eff.lgAvg":"promedio del día {pct}","eff.lgBest":"mejor hora","eff.lgLight":"hora incompleta, con pausa o sin registros un rato","eff.lgBurst":"* registro acumulado","eff.lgPieces":"Número bajo la barra: piezas","eff.howK":"Cómo se calcula: ","eff.how":"piezas registradas en CP × {sam} min ÷ ({ops} personas × 60 min). ","eff.assumeK":"Supuestos: ","eff.assume":"{ops} personas en el módulo toda la hora, y el SAM de CP ({sam} min) cubre solo costura. Con la ficha técnica real se podrá calcular por puesto.","min.title":"Minutos efectivos y de espera","min.srcDetail":"{n} min","min.confNote":"Puesto B media; Puesto A baja.","min.lead":"En los {n} minutos grabados (de {a} a {b}), así se repartió el tiempo de cada puesto.","min.aNote":"“En su puesto” no siempre es cosiendo: desde este ángulo no se distingue. Minutos de costura del Puesto A: próximamente.","res.title":"Operación restricción","res.srcDetail":"{n} ciclos","res.confNote":"La cola tiene confianza baja.","res.pre":"Hoy, el puesto que pone el ritmo:","res.big":"Puesto B · fileteadora","res.p":"Las piezas esperan al Puesto B más de lo que el Puesto B espera piezas. Si se le quita carga al Puesto B, todo el módulo saca más piezas.","res.r1":"La pieza espera al Puesto B en la cola","res.r2":"El Puesto B espera pieza","res.cap":"Medianas de los ciclos claros. La espera en la cola tiene confianza baja.","res.soonText":"La operación exacta dentro del Puesto B, cuando cargue la ficha técnica con el SAM de cada operación. ","res.seeExample":"Ver el ejemplo","soon":"Próximamente","st.title":"Por puesto, solo costura","st.lead_html":"Comparamos puestos, no personas. El ritmo <b>solo costura<\/b> deja por fuera los traslados y las esperas, como pidió el experto.","st.srcDetail":"ciclos claros","st.sewPace":"Ritmo solo costura","st.perHour":"{n} pz/h","st.sewEach":"{n} s cosiendo cada pieza","st.realPace":"Ritmo real","st.cycleWith":"ciclo de {n} s con traslados","st.busy":"Tiempo cosiendo","st.ofRecorded":"del tiempo grabado","st.wait":"Espera de pieza","st.perPiece":"por pieza","st.supply":"Entrega a la cola","st.between":"entre piezas","st.seat":"En su puesto","st.notAlways":"no siempre cosiendo","st.note":"Medianas de {n} ciclos claros. Desde este ángulo el Puesto A tapa su propia mesa: su ritmo de costura queda para la próxima prueba, con otra cámara o con la ficha técnica.","review.title":"Para revisar en video","mock.chip":"Ejemplo","mock.title":"Eficiencia contra SAM, por puesto y por operación","mock.lead":"Así se verá cuando cargue la ficha técnica real de la camiseta, con el SAM de cada operación. Por ahora usamos una ficha simulada.","mock.zonesTitle_html":"Carga de cada puesto contra el <button type=\"button\" class=\"tip\" data-tip=\"takt\">takt<\/button>","mock.opsTitle":"Operaciones de costura, de la más larga a la más corta","mock.hourlyTitle":"Eficiencia por puesto y por hora","mock.hourlyLead":"Piezas de CP × SAM de las operaciones de cada puesto en la ficha simulada ÷ 60 min. Sirve para ver dónde está el desbalance, no para medir a nadie.","mock.videoTitle":"Así se arma la camiseta en la ficha simulada","mock.videoLead":"Animación de 33 s con las once operaciones del ejemplo. No es la ficha del cliente.","mock.labelExtra":" Los tiempos por operación son inventados para mostrar el formato; los únicos datos reales son las piezas por hora de CP.","mock.opBottleneck":"Restricción del ejemplo","mock.bottleneck":"Restricción","mock.zoneData":"{sec} s · {sam} min","mock.zoneAria":"{name}: {sec} s por pieza contra un takt de {takt} s","mock.zoneExtra":"{sew} min de costura + {extra} min de preparación y terminación (rayado)","mock.taktNote":"Línea punteada: takt de {takt} s para {target} piezas por hora. Con esta ficha, los dos puestos quedan por encima del takt: con 2 personas saldrían unas {th} piezas por hora (balance {bal}).","mock.needTitle":"Para hacerlo con datos reales necesitamos","mock.need1":"La ficha técnica de la camiseta con el SAM de cada operación.","mock.need2":"Qué operaciones hace cada puesto (el balanceo del módulo).","mock.need3":"Cuántas personas hubo en el módulo cada hora.","mock.hourAria":"{h}: Puesto A {a}, Puesto B {b}, módulo {m}","mock.hourlyNote":"Ejemplo. Puesto A: {a} min de costura por pieza; Puesto B: {b} min. Con estos tiempos el Puesto B carga más en todas las horas. * registro acumulado en CP.","mock.videoAria":"Animación de ejemplo: armado de la camiseta por operaciones","mock.posterAlt":"Resumen de la ficha simulada","gl.title":"Cómo leer estos datos","gl.p1":"Hablamos de puestos y del módulo, no de personas. Sin nombres ni rankings de personas.","gl.p2":"Es para equilibrar el trabajo y apoyar al equipo: separamos el tiempo de costura del tiempo de espera y de traslado.","gl.p3":"Cada número dice de dónde sale (video, CP o ejemplo) y qué tan seguros estamos.","gl.p4":"Todo está en hora de planta. El reloj dentro del video va una hora adelantado.","tip.sam.t":"SAM","tip.sam.d":"Minutos estándar que debería tomar la prenda a ritmo normal. La camiseta {product} tiene {sam} min en CP.","tip.eficiencia.t":"Eficiencia","tip.eficiencia.d":"Minutos estándar producidos ÷ minutos disponibles de las personas. {p} es trabajar justo al estándar.","tip.takt.t":"Takt","tip.takt.d":"Cada cuánto debe salir una pieza para cumplir la meta. Para {target} piezas por hora: 3600 s ÷ {target} = {takt} s.","tip.ciclo.t":"Ciclo","tip.ciclo.d":"Lo que tarda el Puesto B con una pieza: ir por ella, volver, coser y entregarla.","tip.cola.t":"Cola","tip.cola.d":"Piezas que el Puesto A deja en su mesa, listas para el Puesto B.","tip.registro.t":"Registro CP","tip.registro.d":"Cada vez que se marca una pieza en el teclado de EnPiso CP.","tip.restriccion.t":"Operación restricción","tip.restriccion.d":"La operación o el puesto más lento frente a su estándar: el que pone el ritmo de todo el módulo.","tip.confianza.t":"Confianza","tip.confianza.d":"Alta: comprobado uno por uno. Media: medido en video, con error de pocos segundos. Baja: la cámara lo ve a ratos.","src":"Fuente: {label}","src.k":"Fuente: ","conf.k":"Confianza: ","conf.alta":"Confianza alta","conf.media":"Confianza media","conf.baja":"Confianza baja","conf.low":"confianza baja","ins.rankAria":"Hallazgo {n}","ins.idea":"Idea para conversar","ins.see":"Ver en video","ins.clip":"Clip de {range} (hora planta)","ins.how":"¿Cómo lo medimos?","proof.aria":"{alt}. Ver en video a las {time}","proof.cap":"Prueba en video. Toque una imagen para abrir ese momento.","trust.title":"¿Se puede confiar en estos números?","trust.of":"de {n} registros de CP se ven en el video","trust.f1":"diferencia típica entre el registro y la mano en el teclado","trust.f2":"coincidiría si los registros cayeran al azar","trust.f3":"después de volver con la pieza: CP marca el inicio de cada pieza","trust.f4":"ciclos vio la cámara; CP tiene {n} registros (ver abajo)","trust.see":"Ver un registro en video","video.back":"Volver al panel","video.srTitle":"Video del Módulo 28","video.aria":"Grabación del Módulo 28","video.loading":"Cargando video…","video.error":"No se pudo cargar el video. Revise la conexión e intente de nuevo.","video.play":"Reproducir","video.pause":"Pausar","video.controls":"Controles del video","video.back10":"Atrás 10 segundos","video.fwd10":"Adelante 10 segundos","video.plantTime":"hora planta","video.speed":"Velocidad","video.zoomAria":"Escala de la línea de tiempo","video.zoomAll":"Toda la grabación","video.zoom10":"10 minutos","video.prev":"Momento anterior","video.next":"Momento siguiente","video.timeline":"Línea de tiempo de la grabación","video.showing":"Viendo: ","video.full_html":"Grabación completa del Módulo 28, de <b>{a} a {b}<\/b> (hora planta).","tl.legend":"Leyenda de la línea de tiempo","tl.ins":"Hallazgos","tl.cyc":"Ciclos del Puesto B","tl.cp":"Registros CP","tl.wait":"Esperas y cola","clip.label":"Clip ","clip.replay":"Repetir clip","clip.clear":"Seguir viendo","clip.end_html":"Terminó el clip. <b>Repítalo<\/b> o siga viendo la grabación.","range":"{a} a {b}","live.aria":"Qué pasa en este momento","live.queue":"Cola","live.queueOn":"con pieza","live.queueOff":"vacía","live.cycle":"Ciclo {n}","live.incomplete":"incompleto","live.withCp":"con registro CP","live.noCp":"sin registro CP","state.nd":"Sin dato","state.b.cose":"Cosiendo","state.b.busca":"Buscando la pieza","state.b.entrega":"Entregando la pieza","state.b.espera":"Esperando pieza","state.b.fuera":"Fuera de cámara","state.b.nd":"Sin dato","state.a.puesto":"En su puesto","state.a.pie":"De pie","state.a.fuera":"Fuera de cámara","side.aria":"Opciones del video","layers.title":"Capas sobre el video","layers.lead":"Encendidas al inicio. Apáguelas si quiere ver el video limpio.","layers.zonas":"Zonas","layers.zonasSub":"Cola de piezas y teclado CP","layers.puestos":"Puestos","layers.puestosSub":"Puesto A y Puesto B","layers.esqueletos":"Esqueletos","layers.esqueletosSub":"Postura y dedos estimados, no identifica a nadie","ov.keypad":"Teclado CP","ov.loading":"Cargando posturas…","ov.error":"No se pudieron cargar las posturas.","ov.ready":"Posturas listas.","ov.fixed":"Las zonas son fijas: la cámara no se mueve.","moments.title":"Momentos","moments.copy":"Copiar enlace","moments.copied":"Enlace copiado: abre el video a las {time}.","moments.filters":"Mostrar en la lista","moments.empty":"Elija qué mostrar en la lista.","f.hallazgo":"Hallazgos","f.ciclo":"Ciclos","f.cp":"Registros CP","f.espera":"Esperas","m.review":"Para revisar","m.trust":"Confianza","m.finding":"Hallazgo {n}","m.cycle":"Ciclo {n} del Puesto B","m.lowConf":" · confianza baja","m.noCp":" · sin registro CP","m.incomplete":"Ciclo incompleto","m.capture":"Registro CP {n}","m.hand":"Mano en el teclado a {s} s","m.noHand":"Sin mano en el teclado a 15 s","m.wait":"El Puesto B espera pieza","m.queue":"Pieza esperando en la cola","ft.powered":"con tecnología","ft.meta":"Versión {version} · uso privado · generado {built}. Datos del {date}, Módulo 28, planta [PLANT].","ft.note":"{clock} Video disponible hasta cerca del 1 de diciembre de 2026."},"en":{"meta.title":"EnPiso Visión · Module 28","meta.titleVideo":"Video · EnPiso Visión · Module 28","meta.description":"EnPiso Visión: what we found in Module 28, with video proof.","skip":"Skip to content","head.brandAria":"EnPiso Visión, go to the dashboard","head.sections":"Sections","head.powered":"powered by","head.lang":"Language","nav.panel":"Dashboard","nav.video":"Video","hero.ctxAria":"About this data","hero.title_html":"What we saw in Module&nbsp;28","hero.lead_html":"Three findings to help balance the module, each with proof on video. Tap <b>See it on video<\/b> to check it yourself.","ctx.module":"Module {id}","ctx.video":"Video from {a} to {b}","station":"Station {id}","data.title":"The data","data.lead":"What the industry expert asked for: efficiency by hour and by station, the operation that holds the module back, and productive minutes.","eff.title":"Module efficiency by hour","eff.lead_html":"How much of the paid time turned into standard minutes of T-shirt (<button type=\"button\" class=\"tip\" data-tip=\"sam\">SAM<\/button>, <button type=\"button\" class=\"tip\" data-tip=\"eficiencia\">efficiency<\/button>). Hours covered by the camera open on video.","eff.srcDetail":"{n} pieces","eff.confNote":"Assumes 2 people and that the SAM covers sewing only.","eff.barAria":"{h}: {pct}, {n} pieces","eff.barOpen":"Open this hour on video","eff.cam":"video","eff.chartAria":"Efficiency by hour. Average {pct}.","eff.lgStd":"{p} = standard","eff.lgAvg":"daily average {pct}","eff.lgBest":"best hour","eff.lgLight":"partial hour, a break, or a stretch with no captures","eff.lgBurst":"* catch-up captures","eff.lgPieces":"Number under each bar: pieces","eff.howK":"How it is calculated: ","eff.how":"pieces captured in CP × {sam} min ÷ ({ops} people × 60 min). ","eff.assumeK":"Assumptions: ","eff.assume":"{ops} people in the module for the whole hour, and the CP SAM ({sam} min) covers sewing only. With the real technical sheet we can calculate it by station.","min.title":"Productive and waiting minutes","min.srcDetail":"{n} min","min.confNote":"Station B medium; Station A low.","min.lead":"Over the {n} recorded minutes ({a} to {b}), this is how each station spent its time.","min.aNote":"“At the station” is not always sewing: from this angle we cannot tell. Station A sewing minutes: coming soon.","res.title":"Bottleneck operation","res.srcDetail":"{n} cycles","res.confNote":"The queue has low confidence.","res.pre":"Today, the station that sets the pace:","res.big":"Station B · overlock","res.p":"Pieces wait for Station B longer than Station B waits for pieces. Take some load off Station B and the whole module turns out more pieces.","res.r1":"A piece waits for Station B in the queue","res.r2":"Station B waits for a piece","res.cap":"Medians of the clear cycles. The queue wait has low confidence.","res.soonText":"The exact operation inside Station B, once you load the technical sheet with the SAM of each operation. ","res.seeExample":"See the example","soon":"Coming soon","st.title":"By station, sewing only","st.lead_html":"We compare stations, not people. The <b>sewing only<\/b> pace leaves out walking and waiting, as the expert asked.","st.srcDetail":"clear cycles","st.sewPace":"Sewing only pace","st.perHour":"{n} pcs/h","st.sewEach":"{n} s sewing each piece","st.realPace":"Actual pace","st.cycleWith":"{n} s cycle including walking","st.busy":"Time sewing","st.ofRecorded":"of the recorded time","st.wait":"Wait for a piece","st.perPiece":"per piece","st.supply":"Hands off to the queue","st.between":"between pieces","st.seat":"At the station","st.notAlways":"not always sewing","st.note":"Medians of {n} clear cycles. From this angle Station A blocks the view of its own table, so its sewing pace waits for the next test, with another camera or with the technical sheet.","review.title":"Worth a look on video","mock.chip":"Example","mock.title":"Efficiency against SAM, by station and by operation","mock.lead":"This is how it will look once you load the real technical sheet for the T-shirt, with the SAM of each operation. For now we use a simulated sheet.","mock.zonesTitle_html":"Each station’s load against <button type=\"button\" class=\"tip\" data-tip=\"takt\">takt<\/button>","mock.opsTitle":"Sewing operations, longest to shortest","mock.hourlyTitle":"Efficiency by station and by hour","mock.hourlyLead":"CP pieces × the SAM of each station’s operations in the simulated sheet ÷ 60 min. It shows where the work is out of balance; it is not for rating anyone.","mock.videoTitle":"How the T-shirt comes together in the simulated sheet","mock.videoLead":"A 33 s animation of the eleven example operations (its labels are in Spanish). This is not your technical sheet.","mock.labelExtra":" The times per operation are made up to show the format; the only real data are the CP pieces per hour.","mock.opBottleneck":"Example bottleneck","mock.bottleneck":"Bottleneck","mock.zoneData":"{sec} s · {sam} min","mock.zoneAria":"{name}: {sec} s per piece against a takt of {takt} s","mock.zoneExtra":"{sew} min sewing + {extra} min prep and finishing (striped)","mock.taktNote":"Dotted line: takt of {takt} s for {target} pieces per hour. With this sheet both stations sit above takt: with 2 people the module would make about {th} pieces per hour (balance {bal}).","mock.needTitle":"To do this with real data we need","mock.need1":"The T-shirt technical sheet with the SAM of each operation.","mock.need2":"Which operations each station does (the module’s line balance).","mock.need3":"How many people were in the module each hour.","mock.hourAria":"{h}: Station A {a}, Station B {b}, module {m}","mock.hourlyNote":"Example. Station A: {a} min of sewing per piece; Station B: {b} min. With these times Station B carries more load every hour. * catch-up captures in CP.","mock.videoAria":"Example animation: how the T-shirt is assembled, operation by operation","mock.posterAlt":"Summary of the simulated sheet","gl.title":"How to read this data","gl.p1":"We talk about stations and the module, not about people. No names, and no rankings of people.","gl.p2":"It is meant to balance the work and support the team: we keep sewing time apart from waiting and walking time.","gl.p3":"Every number says where it comes from (video, CP or example) and how sure we are.","gl.p4":"All times are plant time. The clock inside the video runs one hour ahead.","tip.sam.t":"SAM","tip.sam.d":"Standard minutes the garment should take at a normal pace. The {product} T-shirt has {sam} min in CP.","tip.eficiencia.t":"Efficiency","tip.eficiencia.d":"Standard minutes produced ÷ minutes people had available. {p} means working right at standard.","tip.takt.t":"Takt","tip.takt.d":"How often a piece has to come off the line to hit the target. For {target} pieces per hour: 3600 s ÷ {target} = {takt} s.","tip.ciclo.t":"Cycle","tip.ciclo.d":"The time Station B spends on one piece: going for it, coming back, sewing it and handing it off.","tip.cola.t":"Queue","tip.cola.d":"Pieces Station A leaves on its table, ready for Station B.","tip.registro.t":"CP capture","tip.registro.d":"Each time a piece is keyed in on the EnPiso CP keypad.","tip.restriccion.t":"Bottleneck operation","tip.restriccion.d":"The operation or station that is slowest against its standard: the one that sets the pace for the whole module.","tip.confianza.t":"Confidence","tip.confianza.d":"High: checked one by one. Medium: measured on video, within a few seconds. Low: the camera only sees it part of the time.","src":"Source: {label}","src.k":"Source: ","conf.k":"Confidence: ","conf.alta":"High confidence","conf.media":"Medium confidence","conf.baja":"Low confidence","conf.low":"low confidence","ins.rankAria":"Finding {n}","ins.idea":"An idea to discuss","ins.see":"See it on video","ins.clip":"Clip from {range} (plant time)","ins.how":"How did we measure this?","proof.aria":"{alt}. See it on video at {time}","proof.cap":"Proof on video. Tap a picture to open that moment.","trust.title":"Can you trust these numbers?","trust.of":"of {n} CP captures show up on the video","trust.f1":"typical gap between the capture and the hand on the keypad","trust.f2":"would match if captures landed at random","trust.f3":"after coming back with the piece: CP marks the start of each piece","trust.f4":"cycles seen by the camera; CP has {n} captures (see below)","trust.see":"See a capture on video","video.back":"Back to the dashboard","video.srTitle":"Module 28 video","video.aria":"Module 28 recording","video.loading":"Loading video…","video.error":"The video could not load. Check your connection and try again.","video.play":"Play","video.pause":"Pause","video.controls":"Video controls","video.back10":"Back 10 seconds","video.fwd10":"Forward 10 seconds","video.plantTime":"plant time","video.speed":"Speed","video.zoomAria":"Timeline scale","video.zoomAll":"Whole recording","video.zoom10":"10 minutes","video.prev":"Previous moment","video.next":"Next moment","video.timeline":"Recording timeline","video.showing":"Now showing: ","video.full_html":"Full Module 28 recording, <b>{a} to {b}<\/b> (plant time).","tl.legend":"Timeline legend","tl.ins":"Findings","tl.cyc":"Station B cycles","tl.cp":"CP captures","tl.wait":"Waits and queue","clip.label":"Clip ","clip.replay":"Replay clip","clip.clear":"Keep playing","clip.end_html":"The clip is over. <b>Replay it<\/b> or keep playing the recording.","range":"{a} to {b}","live.aria":"What is happening right now","live.queue":"Queue","live.queueOn":"has a piece","live.queueOff":"empty","live.cycle":"Cycle {n}","live.incomplete":"incomplete","live.withCp":"with a CP capture","live.noCp":"no CP capture","state.nd":"No data","state.b.cose":"Sewing","state.b.busca":"Getting the piece","state.b.entrega":"Handing off the piece","state.b.espera":"Waiting for a piece","state.b.fuera":"Off camera","state.b.nd":"No data","state.a.puesto":"At the station","state.a.pie":"Standing","state.a.fuera":"Off camera","side.aria":"Video options","layers.title":"Layers on the video","layers.lead":"On at the start. Turn them off to see the plain video.","layers.zonas":"Zones","layers.zonasSub":"Piece queue and CP keypad","layers.puestos":"Stations","layers.puestosSub":"Station A and Station B","layers.esqueletos":"Skeletons","layers.esqueletosSub":"Estimated posture and fingers; it does not identify anyone","ov.keypad":"CP keypad","ov.loading":"Loading postures…","ov.error":"The postures could not load.","ov.ready":"Postures ready.","ov.fixed":"The zones are fixed: the camera does not move.","moments.title":"Moments","moments.copy":"Copy link","moments.copied":"Link copied: it opens the video at {time}.","moments.filters":"Show in the list","moments.empty":"Choose what to show in the list.","f.hallazgo":"Findings","f.ciclo":"Cycles","f.cp":"CP captures","f.espera":"Waits","m.review":"Worth a look","m.trust":"Confidence","m.finding":"Finding {n}","m.cycle":"Station B cycle {n}","m.lowConf":" · low confidence","m.noCp":" · no CP capture","m.incomplete":"Incomplete cycle","m.capture":"CP capture {n}","m.hand":"Hand on the keypad {s} s away","m.noHand":"No hand on the keypad within 15 s","m.wait":"Station B waits for a piece","m.queue":"A piece waits in the queue","ft.powered":"powered by","ft.meta":"Version {version} · private use · built {built}. Data from {date}, Module 28, [PLANT] plant.","ft.note":"{clock} Video available until about December 1, 2026."}}</script>
+<script type="application/json" id="app-data">{"version":"0.1.3","meta":{"module":{"id":28,"name":"[MODULE]"},"plant":"[PLANT]","date":"2026-10-30","product":"[PRODUCT]","sam":3.8,"operators":2,"plantStart":"13:09:21","plantEnd":"14:45:21","windowMin":96,"videoUntil":"2026-12-01","clockNote":{"es":"El reloj que aparece dentro del video va una hora adelantado. Aquí todo está en hora de planta.","en":"The clock shown inside the video runs one hour ahead. Everything here is in plant time."},"mockVideo":"mock-ficha-3d.mp4"},"playlist":{"end":5760,"offset":3603,"recordings":[{"id":1,"file":"module-full-01.mp4","url":"","start":0,"duration":1024.333333,"cameraStart":"14:09:24","plantStart":"13:09:21"},{"id":2,"file":"module-full-02.mp4","url":"","start":1024.333333,"duration":1024.0,"cameraStart":"14:26:28","plantStart":"13:26:25"},{"id":3,"file":"module-full-03.mp4","url":"","start":2048.333333,"duration":1024.0,"cameraStart":"14:43:32","plantStart":"13:43:29"},{"id":4,"file":"module-full-04.mp4","url":"","start":3072.333333,"duration":1025.533333,"cameraStart":"15:00:36","plantStart":"14:00:33"},{"id":5,"file":"module-full-05.mp4","url":"","start":4097.866666,"duration":1024.0,"cameraStart":"15:17:42","plantStart":"14:17:39"},{"id":6,"file":"module-full-06.mp4","url":"","start":5121.866666,"duration":1024.0,"cameraStart":"15:34:46","plantStart":"14:34:43"}]},"zones":{"cola":[0.22,0.7,0.45,0.7,0.47,0.95,0.22,0.95],"teclado":[0.555,0.665,0.61,0.665,0.61,0.75,0.555,0.75],"A":[0.15,0.72,0.45,0.72,0.45,1.0,0.15,1.0],"B":[0.6,0.4,0.86,0.4,0.86,1.0,0.6,1.0]},"lanes":{"B":[[0,25,"nd"],[25,57,"busca"],[57,180,"cose"],[180,183,"busca"],[183,195,"cose"],[195,208,"busca"],[208,298,"cose"],[298,302,"entrega"],[302,324,"busca"],[324,447,"cose"],[447,450,"entrega"],[450,460,"busca"],[460,545,"cose"],[545,565,"busca"],[565,656,"cose"],[656,660,"entrega"],[660,667,"espera"],[667,723,"busca"],[723,885,"cose"],[885,889,"entrega"],[889,905,"espera"],[905,934,"busca"],[934,969,"cose"],[969,986,"busca"],[986,1127,"cose"],[1127,1129,"entrega"],[1129,1137,"busca"],[1137,1245,"cose"],[1245,1247,"entrega"],[1247,1249,"busca"],[1249,1383,"cose"],[1383,1396,"busca"],[1396,1499,"cose"],[1499,1502,"entrega"],[1502,1512,"busca"],[1512,1642,"cose"],[1642,1656,"fuera"],[1656,1667,"cose"],[1667,1674,"busca"],[1674,1785,"cose"],[1785,1788,"entrega"],[1788,1797,"busca"],[1797,1891,"cose"],[1891,1904,"busca"],[1904,2018,"cose"],[2018,2022,"entrega"],[2022,2023,"busca"],[2023,2037,"busca"],[2037,2180,"cose"],[2180,2184,"entrega"],[2184,2198,"busca"],[2198,2310,"cose"],[2310,2325,"busca"],[2325,2407,"cose"],[2407,2422,"fuera"],[2422,2513,"cose"],[2513,2515,"entrega"],[2515,2529,"busca"],[2529,2682,"cose"],[2682,2686,"busca"],[2686,2796,"cose"],[2796,2798,"entrega"],[2798,2806,"busca"],[2806,2900,"cose"],[2900,2904,"entrega"],[2904,2929,"busca"],[2929,3019,"cose"],[3019,3026,"busca"],[3026,3080,"cose"],[3080,3152,"busca"],[3152,3295,"cose"],[3295,3297,"entrega"],[3297,3306,"busca"],[3306,3377,"cose"],[3377,3395,"busca"],[3395,3476,"cose"],[3476,3478,"entrega"],[3478,3499,"busca"],[3499,3507,"cose"],[3507,3511,"busca"],[3511,3620,"cose"],[3620,3624,"entrega"],[3624,3626,"espera"],[3626,3634,"busca"],[3634,3648,"busca"],[3648,3756,"cose"],[3756,3758,"entrega"],[3758,3778,"busca"],[3778,3907,"cose"],[3907,3911,"entrega"],[3911,3912,"espera"],[3912,3941,"busca"],[3941,4053,"cose"],[4053,4057,"entrega"],[4057,4060,"espera"],[4060,4074,"busca"],[4074,4189,"cose"],[4189,4191,"entrega"],[4191,4202,"busca"],[4202,4305,"cose"],[4305,4308,"entrega"],[4308,4321,"busca"],[4321,4428,"cose"],[4428,4432,"entrega"],[4432,4451,"espera"],[4451,4473,"busca"],[4473,4476,"cose"],[4476,4542,"fuera"],[4542,4567,"cose"],[4567,4590,"fuera"],[4590,4630,"cose"],[4630,4634,"entrega"],[4634,4656,"espera"],[4656,4708,"busca"],[4708,4718,"cose"],[4718,4766,"fuera"],[4766,4768,"entrega"],[4768,4789,"busca"],[4789,4797,"cose"],[4797,4871,"busca"],[4871,4998,"cose"],[4998,5002,"entrega"],[5002,5005,"espera"],[5005,5015,"fuera"],[5015,5064,"busca"],[5064,5192,"cose"],[5192,5220,"fuera"],[5220,5241,"cose"],[5241,5250,"fuera"],[5250,5391,"cose"],[5391,5395,"entrega"],[5395,5397,"espera"],[5397,5400,"busca"],[5400,5506,"cose"],[5506,5509,"entrega"],[5509,5529,"busca"],[5529,5629,"cose"],[5629,5633,"entrega"],[5633,5636,"espera"],[5636,5638,"busca"],[5638,5707,"fuera"],[5707,5712,"busca"],[5712,5731,"cose"],[5731,5733,"entrega"],[5733,5738,"busca"],[5738,5760,"fuera"]],"A":[[0,152,"puesto"],[152,167,"pie"],[167,809,"puesto"],[809,810,"pie"],[810,1009,"puesto"],[1009,1028,"fuera"],[1028,1113,"puesto"],[1113,1128,"pie"],[1128,1233,"puesto"],[1233,1234,"pie"],[1234,1236,"puesto"],[1236,1248,"pie"],[1248,1352,"puesto"],[1352,1354,"pie"],[1354,1355,"puesto"],[1355,1369,"pie"],[1369,1602,"puesto"],[1602,1612,"pie"],[1612,2462,"puesto"],[2462,2486,"pie"],[2486,2487,"puesto"],[2487,2503,"pie"],[2503,2559,"puesto"],[2559,2564,"fuera"],[2564,2582,"puesto"],[2582,2586,"fuera"],[2586,2695,"puesto"],[2695,2696,"pie"],[2696,2707,"puesto"],[2707,2731,"fuera"],[2731,2776,"puesto"],[2776,2778,"pie"],[2778,2790,"puesto"],[2790,2800,"pie"],[2800,2921,"puesto"],[2921,2931,"fuera"],[2931,3287,"puesto"],[3287,3288,"pie"],[3288,3289,"puesto"],[3289,3290,"pie"],[3290,3291,"puesto"],[3291,3304,"pie"],[3304,3317,"puesto"],[3317,3327,"fuera"],[3327,3755,"puesto"],[3755,3757,"pie"],[3757,3806,"puesto"],[3806,3808,"pie"],[3808,3989,"puesto"],[3989,3993,"fuera"],[3993,4278,"puesto"],[4278,4462,"fuera"],[4462,4492,"puesto"],[4492,4619,"fuera"],[4619,4640,"puesto"],[4640,4644,"fuera"],[4644,4658,"puesto"],[4658,4773,"fuera"],[4773,4775,"puesto"],[4775,4787,"fuera"],[4787,4815,"puesto"],[4815,4821,"fuera"],[4821,4881,"puesto"],[4881,4904,"fuera"],[4904,5051,"puesto"],[5051,5055,"fuera"],[5055,5196,"puesto"],[5196,5228,"pie"],[5228,5234,"puesto"],[5234,5235,"pie"],[5235,5327,"puesto"],[5327,5337,"pie"],[5337,5372,"puesto"],[5372,5374,"pie"],[5374,5443,"puesto"],[5443,5459,"pie"],[5459,5462,"puesto"],[5462,5464,"pie"],[5464,5470,"puesto"],[5470,5574,"fuera"],[5574,5724,"puesto"],[5724,5728,"fuera"],[5728,5729,"puesto"],[5729,5732,"pie"],[5732,5747,"puesto"],[5747,5760,"fuera"]],"queue":[[0,37],[166,199],[319,323],[418,457],[554,564],[668,722],[1109,1112],[1369,1395],[1489,1494],[1499,1512],[1612,1615],[1752,1786],[1873,1876],[1880,1903],[1978,2036],[2117,2186],[2209,2321],[2346,2375],[2388,2425],[2433,2439],[2450,2458],[2460,2590],[2602,2610],[2623,2624],[2633,2683],[2695,2698],[2704,2732],[2919,2928],[3107,3141],[3283,3287],[3511,3518],[3626,3638],[3764,3771],[3772,3777],[3792,3793],[3922,3927],[3971,3979],[4060,4073],[4172,4200],[4272,4320],[4862,4871],[5016,5042],[5045,5051],[5190,5198],[5234,5265],[5268,5294],[5438,5442],[5459,5463],[5477,5481],[5501,5529]]},"cycles":[{"n":1,"start":25,"back":56,"deposit":null,"end":180,"work":null,"cycle":155,"queue":24,"wait":null,"clean":false,"cp":[56.0],"plant":"13:09:46"},{"n":2,"start":180,"back":182,"deposit":null,"end":195,"work":null,"cycle":15,"queue":14,"wait":null,"clean":false,"cp":[],"plant":"13:12:21"},{"n":3,"start":195,"back":207,"deposit":298,"end":302,"work":91,"cycle":107,"queue":12,"wait":null,"clean":true,"cp":[207.0],"plant":"13:12:36"},{"n":4,"start":302,"back":323,"deposit":447,"end":450,"work":124,"cycle":148,"queue":null,"wait":null,"clean":false,"cp":[325.0],"plant":"13:14:23"},{"n":5,"start":450,"back":459,"deposit":null,"end":545,"work":null,"cycle":95,"queue":32,"wait":0,"clean":false,"cp":[459.0],"plant":"13:16:51"},{"n":6,"start":545,"back":564,"deposit":656,"end":667,"work":92,"cycle":122,"queue":null,"wait":null,"clean":false,"cp":[567.0],"plant":"13:18:26"},{"n":7,"start":667,"back":722,"deposit":885,"end":905,"work":163,"cycle":238,"queue":0,"wait":57,"clean":true,"cp":[724.0],"plant":"13:20:28"},{"n":8,"start":905,"back":933,"deposit":null,"end":969,"work":null,"cycle":64,"queue":null,"wait":null,"clean":false,"cp":[],"plant":"13:24:26"},{"n":9,"start":969,"back":985,"deposit":1127,"end":1129,"work":142,"cycle":160,"queue":null,"wait":null,"clean":false,"cp":[988.0],"plant":"13:25:30"},{"n":10,"start":1129,"back":1136,"deposit":1245,"end":1247,"work":109,"cycle":118,"queue":20,"wait":0,"clean":true,"cp":[1142.3],"plant":"13:28:10"},{"n":11,"start":1247,"back":1248,"deposit":null,"end":1383,"work":null,"cycle":136,"queue":0,"wait":2,"clean":false,"cp":[1252.3],"plant":"13:30:08"},{"n":12,"start":1383,"back":1395,"deposit":1499,"end":1502,"work":104,"cycle":119,"queue":14,"wait":null,"clean":true,"cp":[1398.3],"plant":"13:32:24"},{"n":13,"start":1502,"back":1511,"deposit":null,"end":1667,"work":null,"cycle":165,"queue":13,"wait":0,"clean":false,"cp":[1514.3,1618.3],"plant":"13:34:23"},{"n":14,"start":1667,"back":1673,"deposit":1785,"end":1788,"work":112,"cycle":121,"queue":55,"wait":null,"clean":true,"cp":[],"plant":"13:37:08"},{"n":15,"start":1788,"back":1796,"deposit":null,"end":1891,"work":null,"cycle":103,"queue":36,"wait":0,"clean":false,"cp":[1800.3],"plant":"13:39:09"},{"n":16,"start":1891,"back":1903,"deposit":2018,"end":2023,"work":115,"cycle":132,"queue":18,"wait":null,"clean":true,"cp":[1906.3],"plant":"13:40:52"},{"n":17,"start":2023,"back":2036,"deposit":2180,"end":2184,"work":144,"cycle":161,"queue":45,"wait":3,"clean":true,"cp":[2039.3],"plant":"13:43:04"},{"n":18,"start":2184,"back":2197,"deposit":null,"end":2310,"work":null,"cycle":126,"queue":67,"wait":3,"clean":false,"cp":[2200.3],"plant":"13:45:45"},{"n":19,"start":2310,"back":2324,"deposit":2513,"end":2515,"work":189,"cycle":205,"queue":101,"wait":null,"clean":true,"cp":[2314.3,2326.3],"plant":"13:47:51"},{"n":20,"start":2515,"back":2528,"deposit":null,"end":2682,"work":null,"cycle":167,"queue":176,"wait":3,"clean":false,"cp":[],"plant":"13:51:16"},{"n":21,"start":2682,"back":2685,"deposit":2796,"end":2798,"work":111,"cycle":116,"queue":80,"wait":null,"clean":true,"cp":[2689.3],"plant":"13:54:03"},{"n":22,"start":2798,"back":2805,"deposit":2900,"end":2904,"work":95,"cycle":106,"queue":103,"wait":0,"clean":true,"cp":[2811.3],"plant":"13:55:59"},{"n":23,"start":2904,"back":2928,"deposit":null,"end":3019,"work":null,"cycle":115,"queue":null,"wait":null,"clean":false,"cp":[2917.3],"plant":"13:57:45"},{"n":24,"start":3019,"back":3025,"deposit":null,"end":3080,"work":null,"cycle":61,"queue":null,"wait":null,"clean":false,"cp":[],"plant":"13:59:40"},{"n":25,"start":3080,"back":3151,"deposit":3295,"end":3297,"work":144,"cycle":217,"queue":null,"wait":null,"clean":false,"cp":[3171.3],"plant":"14:00:41"},{"n":26,"start":3297,"back":3305,"deposit":null,"end":3377,"work":null,"cycle":80,"queue":14,"wait":0,"clean":false,"cp":[3323.3],"plant":"14:04:18"},{"n":27,"start":3377,"back":3394,"deposit":3476,"end":3478,"work":82,"cycle":101,"queue":null,"wait":null,"clean":false,"cp":[],"plant":"14:05:38"},{"n":28,"start":3478,"back":3498,"deposit":null,"end":3507,"work":null,"cycle":29,"queue":null,"wait":null,"clean":false,"cp":[],"plant":"14:07:19"},{"n":29,"start":3507,"back":3510,"deposit":3620,"end":3634,"work":110,"cycle":127,"queue":null,"wait":null,"clean":false,"cp":[3522.3],"plant":"14:07:48"},{"n":30,"start":3634,"back":3647,"deposit":3756,"end":3758,"work":109,"cycle":124,"queue":8,"wait":9,"clean":true,"cp":[3650.3],"plant":"14:09:55"},{"n":31,"start":3758,"back":3777,"deposit":3907,"end":3912,"work":130,"cycle":154,"queue":0,"wait":11,"clean":true,"cp":[3780.3],"plant":"14:11:59"},{"n":32,"start":3912,"back":3940,"deposit":4053,"end":4060,"work":113,"cycle":148,"queue":120,"wait":18,"clean":true,"cp":[3944.3],"plant":"14:14:33"},{"n":33,"start":4060,"back":4073,"deposit":4189,"end":4191,"work":116,"cycle":131,"queue":89,"wait":3,"clean":true,"cp":[4076.3],"plant":"14:17:01"},{"n":34,"start":4191,"back":4201,"deposit":4305,"end":4308,"work":104,"cycle":117,"queue":19,"wait":0,"clean":true,"cp":[4202.9],"plant":"14:19:12"},{"n":35,"start":4308,"back":4320,"deposit":4428,"end":4451,"work":108,"cycle":143,"queue":36,"wait":2,"clean":true,"cp":[4322.9],"plant":"14:21:09"},{"n":36,"start":4451,"back":4472,"deposit":4630,"end":4656,"work":158,"cycle":205,"queue":null,"wait":null,"clean":false,"cp":[],"plant":"14:23:32"},{"n":37,"start":4656,"back":4707,"deposit":4766,"end":4768,"work":59,"cycle":112,"queue":null,"wait":null,"clean":false,"cp":[],"plant":"14:26:57"},{"n":38,"start":4768,"back":4788,"deposit":null,"end":4797,"work":null,"cycle":29,"queue":null,"wait":null,"clean":false,"cp":[],"plant":"14:28:49"},{"n":39,"start":4797,"back":4870,"deposit":4998,"end":5015,"work":128,"cycle":218,"queue":null,"wait":null,"clean":false,"cp":[4874.9],"plant":"14:29:18"},{"n":40,"start":5015,"back":5063,"deposit":5391,"end":5397,"work":328,"cycle":382,"queue":0,"wait":56,"clean":true,"cp":[5066.9,5295.9],"plant":"14:32:56"},{"n":41,"start":5397,"back":5399,"deposit":5506,"end":5509,"work":107,"cycle":112,"queue":207,"wait":0,"clean":true,"cp":[5405.9],"plant":"14:39:18"},{"n":42,"start":5509,"back":5528,"deposit":5629,"end":5636,"work":101,"cycle":127,"queue":71,"wait":9,"clean":true,"cp":[5530.9],"plant":"14:41:10"},{"n":43,"start":5636,"back":5638,"deposit":null,"end":5707,"work":null,"cycle":71,"queue":null,"wait":null,"clean":false,"cp":[],"plant":"14:43:17"},{"n":44,"start":5707,"back":5711,"deposit":5731,"end":5733,"work":20,"cycle":26,"queue":null,"wait":null,"clean":false,"cp":[],"plant":"14:44:28"},{"n":45,"start":5733,"back":5738,"deposit":null,"end":5760,"work":null,"cycle":null,"queue":0,"wait":2,"clean":false,"cp":[],"plant":"14:44:54"}],"captures":[{"id":"R01","t":56.0,"plant":"13:10:17","keypad":0.0,"cycle":1},{"id":"R02","t":207.0,"plant":"13:12:48","keypad":4.4,"cycle":3},{"id":"R03","t":325.0,"plant":"13:14:46","keypad":0.0,"cycle":4},{"id":"R04","t":459.0,"plant":"13:17:00","keypad":-13.0,"cycle":5},{"id":"R05","t":567.0,"plant":"13:18:48","keypad":-2.6,"cycle":6},{"id":"R06","t":724.0,"plant":"13:21:25","keypad":0.0,"cycle":7},{"id":"R07","t":988.0,"plant":"13:25:49","keypad":-0.6,"cycle":9},{"id":"R08","t":1142.3,"plant":"13:28:23","keypad":0.6,"cycle":10},{"id":"R09","t":1252.3,"plant":"13:30:13","keypad":-2.6,"cycle":11},{"id":"R10","t":1398.3,"plant":"13:32:39","keypad":-0.2,"cycle":12},{"id":"R11","t":1514.3,"plant":"13:34:35","keypad":1.4,"cycle":13},{"id":"R12","t":1618.3,"plant":"13:36:19","keypad":-2.6,"cycle":14},{"id":"R13","t":1800.3,"plant":"13:39:21","keypad":-2.8,"cycle":15},{"id":"R14","t":1906.3,"plant":"13:41:07","keypad":-2.4,"cycle":16},{"id":"R15","t":2039.3,"plant":"13:43:20","keypad":-3.6,"cycle":17},{"id":"R16","t":2200.3,"plant":"13:46:01","keypad":1.6,"cycle":18},{"id":"R17","t":2314.3,"plant":"13:47:55","keypad":0.6,"cycle":19},{"id":"R18","t":2326.3,"plant":"13:48:07","keypad":-1.8,"cycle":19},{"id":"R19","t":2689.3,"plant":"13:54:10","keypad":-1.8,"cycle":21},{"id":"R20","t":2811.3,"plant":"13:56:12","keypad":-2.2,"cycle":22},{"id":"R21","t":2917.3,"plant":"13:57:58","keypad":-13.0,"cycle":23},{"id":"R22","t":3171.3,"plant":"14:02:12","keypad":-0.6,"cycle":25},{"id":"R23","t":3323.3,"plant":"14:04:44","keypad":-0.6,"cycle":26},{"id":"R24","t":3522.3,"plant":"14:08:03","keypad":null,"cycle":29},{"id":"R25","t":3650.3,"plant":"14:10:11","keypad":-2.6,"cycle":30},{"id":"R26","t":3780.3,"plant":"14:12:21","keypad":-0.0,"cycle":31},{"id":"R27","t":3944.3,"plant":"14:15:05","keypad":-2.4,"cycle":32},{"id":"R28","t":4076.3,"plant":"14:17:17","keypad":-0.0,"cycle":33},{"id":"R29","t":4202.9,"plant":"14:19:24","keypad":-2.0,"cycle":34},{"id":"R30","t":4322.9,"plant":"14:21:24","keypad":-2.2,"cycle":35},{"id":"R31","t":4874.9,"plant":"14:30:36","keypad":0.6,"cycle":39},{"id":"R32","t":5066.9,"plant":"14:33:48","keypad":-2.2,"cycle":40},{"id":"R33","t":5295.9,"plant":"14:37:37","keypad":0.6,"cycle":41},{"id":"R34","t":5405.9,"plant":"14:39:27","keypad":-2.2,"cycle":41},{"id":"R35","t":5530.9,"plant":"14:41:32","keypad":-0.2,"cycle":42}],"waits":[{"s":660,"e":667},{"s":889,"e":905},{"s":3624,"e":3626},{"s":3911,"e":3912},{"s":4057,"e":4060},{"s":4432,"e":4451},{"s":4634,"e":4656},{"s":5002,"e":5005},{"s":5395,"e":5397},{"s":5633,"e":5636}],"queueEpisodes":[{"s":0,"e":37},{"s":166,"e":199},{"s":418,"e":457},{"s":668,"e":722},{"s":1752,"e":1786},{"s":1978,"e":2036},{"s":2117,"e":2186},{"s":2209,"e":2321},{"s":2388,"e":2425},{"s":2460,"e":2590},{"s":2633,"e":2683},{"s":3107,"e":3141},{"s":4272,"e":4320},{"s":5234,"e":5265}],"hourly":{"rows":[{"hour":6,"label":"06:00","pieces":13,"eff":41.2,"flags":["partial"],"notes":[{"es":"Hora incompleta: el turno arrancó a las 06:10 y la primera pieza se registró a las 06:28.","en":"Partial hour: the shift started at 06:10 and the first piece was captured at 06:28."}]},{"hour":7,"label":"07:00","pieces":18,"eff":57.0,"flags":[],"notes":[]},{"hour":8,"label":"08:00","pieces":18,"eff":57.0,"flags":[],"notes":[]},{"hour":9,"label":"09:00","pieces":10,"eff":31.7,"flags":["gap","pause"],"notes":[{"es":"Incluye una pausa registrada en CP a las 09:20.","en":"Includes a break logged in CP at 09:20."},{"es":"Sin registros entre las 09:00 y las 09:25.","en":"No captures between 09:00 and 09:25."}]},{"hour":10,"label":"10:00","pieces":10,"eff":31.7,"flags":["gap"],"notes":[{"es":"Sin registros entre las 10:00 y las 10:21.","en":"No captures between 10:00 and 10:21."}]},{"hour":11,"label":"11:00","pieces":41,"eff":129.8,"flags":["burst"],"notes":[{"es":"A las 11:01 se registraron 12 piezas en 20 s: probablemente piezas de la hora anterior marcadas tarde.","en":"At 11:01, 12 pieces were captured in 20 s: most likely pieces from the hour before, keyed in late."}]},{"hour":12,"label":"12:00","pieces":20,"eff":63.3,"flags":["pause"],"notes":[{"es":"Incluye una pausa registrada en CP a las 12:10.","en":"Includes a break logged in CP at 12:10."}]},{"hour":13,"label":"13:00","pieces":23,"eff":72.8,"flags":[],"notes":[]},{"hour":14,"label":"14:00","pieces":14,"eff":44.3,"flags":["partial"],"notes":[{"es":"Hora incompleta: el módulo terminó hacia las 14:45.","en":"Partial hour: the module finished around 14:45."}]}],"total":167,"avg":58.8,"sam":3.8,"operators":2},"kpis":{"bCycle":127.0,"bCycleIqr":[117.5,151.0],"bWork":111.0,"bWait":3.0,"bFront":12.0,"queue":36.0,"aInterval":66.0,"perHour":28.4,"cpPerHour":22.1,"cycles":45,"clean":19,"captures":35,"keypad":{"hits":34,"n":35,"median":-1.2,"chance":0.428}},"bTime":[{"key":"cose","label":{"es":"Cosiendo","en":"Sewing"},"share":0.772,"min":74.1},{"key":"busca","label":{"es":"Buscando la pieza","en":"Getting the piece"},"share":0.15,"min":14.4},{"key":"entrega","label":{"es":"Entregando la pieza","en":"Handing off the piece"},"share":0.016,"min":1.5},{"key":"espera","label":{"es":"Esperando pieza","en":"Waiting for a piece"},"share":0.014,"min":1.3},{"key":"fuera","label":{"es":"Fuera de cámara","en":"Off camera"},"share":0.049,"min":4.7}],"aTime":[{"key":"puesto","label":{"es":"En su puesto","en":"At the station"},"share":0.848,"min":81.4},{"key":"pie","label":{"es":"De pie","en":"Standing"},"share":0.036,"min":3.5},{"key":"fuera","label":{"es":"Fuera de cámara","en":"Off camera"},"share":0.115,"min":11.0}],"stations":[{"id":"B","name":{"es":"Puesto B","en":"Station B"},"machine":{"es":"Fileteadora","en":"Overlock"},"cycle":127.0,"sew":111.0,"wait":3.0,"perHourCycle":28.3,"perHourSew":32.4,"busy":0.772,"confidence":"media"},{"id":"A","name":{"es":"Puesto A","en":"Station A"},"machine":{"es":"Mesa delantera","en":"Front table"},"cycle":null,"sew":null,"wait":null,"supply":66.0,"busy":0.848,"confidence":"baja"}],"insights":[{"id":"restriccion","kind":"top","rank":1,"headline":{"es":"El Puesto B marca el ritmo del módulo","en":"Station B sets the pace for the module"},"number":"127","unit":"s","numberLabel":{"es":"por pieza en el Puesto B","en":"per piece at Station B"},"context":{"es":"Las piezas lo esperan en la cola unos 36 s. El Puesto B espera pieza solo 3 s.","en":"Pieces wait about 36 s for it in the queue. Station B waits only 3 s for a piece."},"source":{"kind":"video","label":"Video","detail":{"es":"19 ciclos claros de 45","en":"19 clear cycles out of 45"}},"confidence":{"level":"media","note":{"es":"Media para el Puesto B. Baja para la cola, que a ratos el Puesto A tapa con los brazos.","en":"Medium for Station B. Low for the queue, which Station A’s arms sometimes hide."}},"moment":{"t":2455,"clip":[2455,2530],"plant":["13:50:16","13:51:31"]},"proof":[{"t":2470,"caption":{"es":"Hay piezas en la cola","en":"Pieces in the queue"},"alt":{"es":"Piezas blancas esperan en la mesa del Puesto A mientras el Puesto B cose","en":"White pieces wait on Station A’s table while Station B sews"},"plant":"13:50:31","src":"proof-restriccion-1.jpg"},{"t":2500,"caption":{"es":"El Puesto B sigue cosiendo","en":"Station B is still sewing"},"alt":{"es":"El Puesto B sigue cosiendo la pieza anterior; las piezas siguen en la mesa","en":"Station B is still sewing the previous piece; the pieces are still on the table"},"plant":"13:51:01","src":"proof-restriccion-2.jpg"},{"t":2518,"caption":{"es":"Toma la siguiente","en":"Takes the next one"},"alt":{"es":"El Puesto B va a la mesa del Puesto A y toma la siguiente pieza","en":"Station B goes to Station A’s table and takes the next piece"},"plant":"13:51:19","src":"proof-restriccion-3.jpg"}],"method":{"es":"Con la cámara medimos cada ciclo del Puesto B: ir por la pieza a la mesa del Puesto A, volver, coser y entregar. Luego comparamos cuánto espera la pieza en la cola con cuánto espera el Puesto B. Si la pieza espera más, quien pone el ritmo es el Puesto B.","en":"With the camera we timed every Station B cycle: going to Station A’s table for the piece, coming back, sewing and handing it off. Then we compared how long the piece waits in the queue with how long Station B waits. If the piece waits longer, Station B is the one setting the pace."},"caveats":[{"es":"Es una tarde de grabación (96 minutos), no un estudio de tiempos.","en":"This is one afternoon of video (96 minutes), not a time study."},{"es":"Las esperas en la cola son aproximadas: desde este ángulo la cola se ve a ratos.","en":"Queue waits are approximate: from this angle the queue is only visible part of the time."}],"idea":{"es":"Pasar una parte del trabajo del Puesto B al Puesto A podría subir las piezas por hora del módulo. Vale la pena probarlo con la ficha técnica en mano.","en":"Moving part of Station B’s work to Station A could raise the module’s pieces per hour. It is worth trying with the technical sheet in hand."}},{"id":"eficiencia-hora","kind":"top","rank":2,"headline":{"es":"La eficiencia del módulo cambió mucho durante el día","en":"Module efficiency swung a lot during the day"},"number":"59","unit":"%","numberLabel":{"es":"promedio de las 9 horas","en":"average over the 9 hours"},"context":{"es":"La mejor hora fue las 13:00 con 73 %. Las más bajas, 09:00 y 10:00 con 32 %.","en":"The best hour was 13:00 at 73%. The lowest were 09:00 and 10:00 at 32%."},"source":{"kind":"cp","label":"CP (EnPiso)","detail":{"es":"167 piezas registradas en el día","en":"167 pieces captured during the day"}},"confidence":{"level":"media","note":{"es":"Las piezas vienen de CP. La eficiencia supone 2 personas y que el SAM de CP cubre solo costura.","en":"The pieces come from CP. Efficiency assumes 2 people and that the CP SAM covers sewing only."}},"moment":{"t":50,"clip":[50,72],"plant":["13:10:11","13:10:33"]},"proof":[{"t":55.0,"caption":{"es":"Registra una pieza","en":"Keys in a piece"},"alt":{"es":"El Puesto B marca una pieza en el teclado CP","en":"Station B keys in a piece on the CP keypad"},"plant":"13:10:16","src":"proof-eficiencia-hora-1.jpg"},{"t":206.0,"caption":{"es":"Registra la siguiente","en":"Keys in the next one"},"alt":{"es":"El Puesto B marca otra pieza en el teclado CP","en":"Station B keys in another piece on the CP keypad"},"plant":"13:12:47","src":"proof-eficiencia-hora-2.jpg"},{"t":324.0,"caption":{"es":"Y la siguiente","en":"And the next"},"alt":{"es":"El Puesto B marca una tercera pieza en el teclado CP","en":"Station B keys in a third piece on the CP keypad"},"plant":"13:14:45","src":"proof-eficiencia-hora-3.jpg"}],"method":{"es":"Eficiencia de cada hora = piezas registradas en CP × SAM de la camiseta (3,8 min) ÷ minutos disponibles (2 personas × 60 min). En video se ven las horas 13:00 y 14:00.","en":"Efficiency for each hour = pieces captured in CP × T-shirt SAM (3.8 min) ÷ available minutes (2 people × 60 min). The video covers the 13:00 and 14:00 hours."},"caveats":[{"es":"11:00: A las 11:01 se registraron 12 piezas en 20 s: probablemente piezas de la hora anterior marcadas tarde.","en":"11:00: At 11:01, 12 pieces were captured in 20 s: most likely pieces from the hour before, keyed in late."},{"es":"06:00 y 14:00 son horas incompletas; 09:00 y 12:00 tienen pausa registrada.","en":"06:00 and 14:00 are partial hours; 09:00 and 12:00 have a break logged."},{"es":"Si el módulo tuvo otra cantidad de personas, el resultado cambia.","en":"If the module had a different number of people, the result changes."}],"idea":{"es":"Revisar con la supervisora qué pasó entre las 09:00 y las 11:00, cuando bajaron los registros.","en":"Go over with the supervisor what happened between 09:00 and 11:00, when captures dropped."}},{"id":"minutos","kind":"top","rank":3,"headline":{"es":"El Puesto B cosió 74 de 96 minutos y casi no esperó","en":"Station B sewed 74 of 96 minutes and barely waited"},"number":"77","unit":"%","numberLabel":{"es":"del tiempo grabado, cosiendo","en":"of the recorded time, sewing"},"context":{"es":"Esperó pieza solo 1,3 min. Lo que no cose se va sobre todo en ir por la pieza: 14 min.","en":"It waited for a piece only 1.3 min. Most of its time away from sewing went to getting the piece: 14 min."},"source":{"kind":"video","label":"Video","detail":{"es":"96 min grabados, de 13:09 a 14:45","en":"96 min recorded, 13:09 to 14:45"}},"confidence":{"level":"media","note":{"es":"Cada segundo se clasifica por postura y posición. Error típico de unos 2 s por evento.","en":"Every second is classified by posture and position. Typical error is about 2 s per event."}},"moment":{"t":1378,"clip":[1378,1440],"plant":["13:32:19","13:33:21"]},"proof":[{"t":1386,"caption":{"es":"Va por la pieza","en":"Goes for the piece"},"alt":{"es":"El Puesto B camina hasta la mesa del Puesto A","en":"Station B walks over to Station A’s table"},"plant":"13:32:27","src":"proof-minutos-1.jpg"},{"t":1397,"caption":{"es":"Vuelve y la registra","en":"Comes back and keys it in"},"alt":{"es":"El Puesto B vuelve a su máquina con la pieza","en":"Station B returns to its machine with the piece"},"plant":"13:32:38","src":"proof-minutos-2.jpg"},{"t":1425,"caption":{"es":"Cose","en":"Sews"},"alt":{"es":"El Puesto B cose la pieza en la fileteadora","en":"Station B sews the piece on the overlock"},"plant":"13:33:06","src":"proof-minutos-3.jpg"}],"method":{"es":"Clasificamos cada segundo del Puesto B con la postura y la posición que ve la cámara: cosiendo, buscando la pieza, entregándola, esperando pieza o fuera de cámara. Sumamos los minutos de cada estado.","en":"We classified every second of Station B from the posture and position the camera sees: sewing, getting the piece, handing it off, waiting for a piece, or off camera. Then we added up the minutes in each state."},"caveats":[{"es":"Solo cubre la ventana grabada, no el turno completo.","en":"It covers only the recorded window, not the full shift."},{"es":"El Puesto A se ve peor desde este ángulo: sus minutos tienen confianza baja.","en":"Station A is harder to see from this angle: its minutes have low confidence."}],"idea":{"es":"Dejar la pieza al alcance del Puesto B podría convertir parte de esos minutos de traslado en costura.","en":"Keeping the next piece within Station B’s reach could turn part of those walking minutes into sewing."}},{"id":"cp-video","kind":"trust","rank":4,"headline":{"es":"34 de 35 registros de CP se ven en el video","en":"34 of 35 CP captures show up on the video"},"number":"34/35","unit":"","numberLabel":{"es":"registros que coinciden","en":"captures that match"},"context":{"es":"En cada registro, la mano del Puesto B está en el teclado CP. Diferencia típica: 1,2 s. Si fuera al azar, coincidirían solo 43 de cada 100.","en":"At each capture, Station B’s hand is on the CP keypad. Typical gap: 1.2 s. By chance, only 43 out of 100 would match."},"source":{"kind":"cp+video","label":"CP + Video","detail":{"es":"35 registros del Módulo 28 durante la grabación","en":"35 Module 28 captures during the recording"}},"confidence":{"level":"alta","note":{"es":"Comprobado registro por registro contra el video.","en":"Checked capture by capture against the video."}},"moment":{"t":558,"clip":[558,578],"plant":["13:18:39","13:18:59"]},"proof":[{"t":563,"caption":{"es":"Vuelve con la pieza","en":"Comes back with the piece"},"alt":{"es":"El Puesto B vuelve a su máquina con una pieza","en":"Station B returns to its machine with a piece"},"plant":"13:18:44","src":"proof-cp-video-1.jpg"},{"t":566,"caption":{"es":"Marca en el teclado","en":"Keys it in"},"alt":{"es":"El Puesto B marca la pieza en el teclado CP","en":"Station B keys in the piece on the CP keypad"},"plant":"13:18:47","src":"proof-cp-video-2.jpg"},{"t":571,"caption":{"es":"Empieza a coser","en":"Starts sewing"},"alt":{"es":"El Puesto B empieza a coser","en":"Station B starts sewing"},"plant":"13:18:52","src":"proof-cp-video-3.jpg"}],"method":{"es":"Para cada registro de CP buscamos en el video la mano del Puesto B sobre el teclado, 15 s antes o después. Cada registro llega unos 3 s después de que el Puesto B vuelve con la pieza: CP marca el inicio de la pieza.","en":"For each CP capture we looked on the video for Station B’s hand on the keypad, within 15 s before or after. Each capture comes about 3 s after Station B gets back with the piece: CP marks the start of the piece."},"caveats":[{"es":"El reloj de la cámara va una hora adelantado; aquí todo está en hora de planta.","en":"The camera clock runs one hour ahead; everything here is in plant time."}],"idea":""},{"id":"sin-registro","kind":"review","rank":5,"headline":{"es":"La cámara vio 45 ciclos del Puesto B y CP tiene 35 registros","en":"The camera saw 45 Station B cycles and CP has 35 captures"},"number":"13","unit":"","numberLabel":{"es":"ciclos sin registro en CP","en":"cycles with no CP capture"},"context":{"es":"12 de los 13 son ciclos de confianza baja, a menudo cortes de la detección. Un ciclo claro no tiene registro: el de las 13:37.","en":"12 of the 13 are low-confidence cycles, often where the detection split a cycle. One clear cycle has no capture: the one at 13:37."},"source":{"kind":"cp+video","label":"CP + Video","detail":{"es":"13 de 45 ciclos","en":"13 of 45 cycles"}},"confidence":{"level":"media","note":{"es":"La cámara y CP no cuentan lo mismo: CP marca el inicio de la pieza.","en":"The camera and CP do not count the same thing: CP marks the start of the piece."}},"moment":{"t":1663,"clip":[1663,1693],"plant":["13:37:04","13:37:34"]},"proof":[],"method":{"es":"Cruzamos cada ciclo del Puesto B con los registros de CP.","en":"We matched each Station B cycle against the CP captures."},"caveats":[],"idea":{"es":"Revise el ciclo en video y confirme si la pieza se registró.","en":"Check the cycle on video and confirm whether the piece was keyed in."}},{"id":"ciclo-largo","kind":"review","rank":6,"headline":{"es":"El ciclo más largo tomó 6 min 22 s","en":"The longest cycle took 6 min 22 s"},"number":"6:22","unit":"min","numberLabel":{"es":"ciclo de las 14:32","en":"cycle at 14:32"},"context":{"es":"Es tres veces la mediana (127 s). Mientras tanto, la pieza siguiente esperó en la cola.","en":"That is three times the median (127 s). Meanwhile, the next piece waited in the queue."},"source":{"kind":"video","label":"Video","detail":{"es":"Ciclo 40","en":"Cycle 40"}},"confidence":{"level":"media","note":{"es":"El ciclo se ve completo; el motivo hay que verlo en el video.","en":"The whole cycle is in view; the video shows why it ran long."}},"moment":{"t":5011,"clip":[5011,5401],"plant":["14:32:52","14:39:22"]},"proof":[],"method":{"es":"Ordenamos los ciclos claros por duración.","en":"We sorted the clear cycles by length."},"caveats":[],"idea":{"es":"Una pieza difícil o un ajuste de máquina se ven aquí: vale la pena mirarlo.","en":"A tricky piece or a machine adjustment would show up here: worth a look."}}],"mock":{"label":{"es":"Ejemplo con una ficha técnica simulada. No son datos de su planta.","en":"Example built on a simulated technical sheet. This is not data from your plant."},"zones":[{"id":"A","name":{"es":"Puesto A","en":"Station A"},"sam":2.2,"sec":132.0,"sew":1.5,"extra":0.7},{"id":"B","name":{"es":"Puesto B","en":"Station B"},"sam":2.3,"sec":138.0,"sew":2.3,"extra":0.0}],"takt":128.6,"target":28,"theoretical":26.1,"balance":97.8,"minOperators":3,"ops":[{"id":"OP06","name":{"es":"Cerrar costados y mangas","en":"Close both underarms and side seams"},"machine":{"es":"Fileteadora · 4 hilos","en":"Overlock, 4 thread"},"zone":"B","sam":0.8,"sec":48},{"id":"OP05","name":{"es":"Montar ambas mangas","en":"Set both sleeves into open armholes"},"machine":{"es":"Fileteadora · 4 hilos","en":"Overlock, 4 thread"},"zone":"B","sam":0.55,"sec":33},{"id":"OP08","name":{"es":"Dobladillar bajo","en":"Hem bottom"},"machine":{"es":"Recubridora · 2 agujas","en":"Coverstitch, 2 needle"},"zone":"A","sam":0.55,"sec":33},{"id":"OP03","name":{"es":"Montar cuello de rib","en":"Attach crew-neck rib"},"machine":{"es":"Fileteadora · 4 hilos","en":"Overlock, 4 thread"},"zone":"B","sam":0.45,"sec":27},{"id":"OP07","name":{"es":"Dobladillar mangas","en":"Hem both sleeves"},"machine":{"es":"Recubridora · 2 agujas","en":"Coverstitch, 2 needle"},"zone":"A","sam":0.4,"sec":24},{"id":"OP01","name":{"es":"Unir hombros","en":"Join both shoulders"},"machine":{"es":"Fileteadora · 4 hilos","en":"Overlock, 4 thread"},"zone":"B","sam":0.35,"sec":21},{"id":"OP04","name":{"es":"Recubrir escote","en":"Topstitch neck seam"},"machine":{"es":"Recubridora · 2 agujas","en":"Coverstitch, 2 needle"},"zone":"A","sam":0.35,"sec":21},{"id":"OP09","name":{"es":"Fijar etiqueta interior","en":"Attach combined inside label"},"machine":{"es":"Plana · 1 aguja","en":"Lockstitch, 1 needle"},"zone":"A","sam":0.2,"sec":12},{"id":"OP02","name":{"es":"Cerrar tira de rib","en":"Close neck-rib short ends"},"machine":{"es":"Fileteadora · 4 hilos","en":"Overlock, 4 thread"},"zone":"B","sam":0.15,"sec":9}],"hourly":[{"label":"06:00","A":32,"B":50,"module":41,"flags":["partial"]},{"label":"07:00","A":45,"B":69,"module":57,"flags":[]},{"label":"08:00","A":45,"B":69,"module":57,"flags":[]},{"label":"09:00","A":25,"B":38,"module":32,"flags":["gap","pause"]},{"label":"10:00","A":25,"B":38,"module":32,"flags":["gap"]},{"label":"11:00","A":102,"B":157,"module":130,"flags":["burst"]},{"label":"12:00","A":50,"B":77,"module":63,"flags":["pause"]},{"label":"13:00","A":57,"B":88,"module":73,"flags":[]},{"label":"14:00","A":35,"B":54,"module":44,"flags":["partial"]}],"restriction":{"id":"OP06","name":{"es":"Cerrar costados y mangas","en":"Close both underarms and side seams"},"sam":0.8,"zone":"B"}}}</script>
+<script defer src="app.js?v=5d7f8f7df8"></script>
+</head>
+<body class="rk">
+<a class="skip-link" href="#main" data-i18n="skip">Saltar al contenido</a>
+
+<header class="app-head" role="banner">
+  <div class="wrap head-row">
+    <a class="brand" href="#/panel" aria-label="EnPiso Visión, ir al panel" data-i18n-attr="aria-label:head.brandAria">
+      <img class="brand-enpiso" src="logo-enpiso.png" alt="EnPiso" width="107" height="30">
+      <span class="brand-sub">Visión</span>
+    </a>
+    <nav class="seg nav-seg" aria-label="Secciones" data-i18n-attr="aria-label:head.sections">
+      <a href="#/panel" data-route="panel" aria-current="page"><svg aria-hidden="true" viewBox="0 0 20 20" width="18" height="18"><path d="M3 3h6v8H3zM11 3h6v5h-6zM11 10h6v7h-6zM3 13h6v4H3z" fill="currentColor"/></svg><span data-i18n="nav.panel">Panel</span></a>
+      <a href="#/video" data-route="video"><svg aria-hidden="true" viewBox="0 0 20 20" width="18" height="18"><path d="M2 5.5A1.5 1.5 0 0 1 3.5 4h9A1.5 1.5 0 0 1 14 5.5v9a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 14.5zM15 8l3.2-2v8L15 12z" fill="currentColor"/></svg><span data-i18n="nav.video">Video</span></a>
+    </nav>
+    <div class="seg lang-seg" role="group" id="lang-switch" aria-label="Idioma" data-i18n-attr="aria-label:head.lang">
+      <button type="button" data-lang="es" lang="es" aria-pressed="true" aria-label="ES, Español">ES</button>
+      <button type="button" data-lang="en" lang="en" aria-pressed="false" aria-label="EN, English">EN</button>
+    </div>
+    <p class="powered"><span data-i18n="head.powered">con tecnología</span> <img src="logo-rikuy-negative.svg" alt="Rikuy" width="72" height="35"></p>
+  </div>
+</header>
+
+<main id="main" tabindex="-1">
+
+<!-- =============================== PANEL =============================== -->
+<div id="view-panel" class="view" data-view="panel">
+
+  <section class="band-menta hero" aria-labelledby="hero-title">
+    <div class="wrap">
+      <ul class="ctx" aria-label="Contexto de los datos" data-i18n-attr="aria-label:hero.ctxAria" id="ctx"></ul>
+      <h1 id="hero-title" class="display" data-i18n="hero.title_html">Lo que vimos en el Módulo&nbsp;28</h1>
+      <p class="lead measure" data-i18n="hero.lead_html">Tres hallazgos para equilibrar el módulo, cada uno con su prueba en video. Toque <b>Ver en video</b> para revisarlo usted mismo.</p>
+      <div class="grid3 insights" id="top-insights"></div>
+    </div>
+  </section>
+
+  <section class="band-noche trust section-tight" aria-labelledby="trust-title" id="confianza">
+    <div class="wrap trust-grid" id="trust"></div>
+  </section>
+
+  <section class="band-blanco section-tight" aria-labelledby="data-title" id="datos">
+    <div class="wrap stack gap-6">
+      <div class="stack gap-2">
+        <h2 id="data-title" class="h2" data-i18n="data.title">Los datos</h2>
+        <p class="lead measure" data-i18n="data.lead">Lo que pidió el experto de la industria: eficiencia por hora, por puesto, la operación que frena el módulo y los minutos efectivos.</p>
+      </div>
+
+      <article class="solid card" aria-labelledby="h-eff" id="eficiencia">
+        <div class="card-head">
+          <h3 id="h-eff" class="h3" data-i18n="eff.title">Eficiencia del módulo por hora</h3>
+          <div class="row gap-2" id="eff-chips"></div>
+        </div>
+        <p class="p" data-i18n="eff.lead_html">Cuánto del tiempo pagado se convirtió en minutos estándar de camiseta (<button type="button" class="tip" data-tip="sam">SAM</button>, <button type="button" class="tip" data-tip="eficiencia">eficiencia</button>). Las horas con cámara se pueden abrir en video.</p>
+        <div class="chart" id="eff-chart"></div>
+        <ul class="chart-legend" id="eff-legend" aria-hidden="true"></ul>
+        <ul class="flag-notes" id="eff-notes"></ul>
+        <p class="note" id="eff-assume"></p>
+      </article>
+
+      <div class="grid2">
+        <article class="solid card" aria-labelledby="h-min" id="minutos-efectivos">
+          <div class="card-head">
+            <h3 id="h-min" class="h3" data-i18n="min.title">Minutos efectivos y de espera</h3>
+            <div class="row gap-2" id="min-chips"></div>
+          </div>
+          <p class="p" id="min-lead"></p>
+          <div id="min-bars"></div>
+        </article>
+
+        <article class="solid card" aria-labelledby="h-res" id="restriccion-op">
+          <div class="card-head">
+            <h3 id="h-res" class="h3" data-i18n="res.title">Operación restricción</h3>
+            <div class="row gap-2" id="res-chips"></div>
+          </div>
+          <div id="res-body"></div>
+        </article>
+      </div>
+
+      <article class="solid card" aria-labelledby="h-st" id="por-puesto">
+        <div class="card-head">
+          <h3 id="h-st" class="h3" data-i18n="st.title">Por puesto, solo costura</h3>
+          <div class="row gap-2" id="st-chips"></div>
+        </div>
+        <p class="p" data-i18n="st.lead_html">Comparamos puestos, no personas. El ritmo <b>solo costura</b> deja por fuera los traslados y las esperas, como pidió el experto.</p>
+        <div class="stations" id="st-cards"></div>
+        <p class="cap" id="st-note"></p>
+      </article>
+
+      <div class="stack gap-3" id="review-wrap">
+        <h3 class="h3" data-i18n="review.title">Para revisar en video</h3>
+        <div class="grid2" id="review"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band-papel section-tight mock" aria-labelledby="mock-title" id="ejemplo">
+    <div class="wrap stack gap-6">
+      <div class="mock-banner" role="note"><span class="chip mock-chip" data-i18n="mock.chip">Ejemplo</span><span id="mock-label"></span></div>
+      <div class="stack gap-2">
+        <h2 id="mock-title" class="h2" data-i18n="mock.title">Eficiencia contra SAM, por puesto y por operación</h2>
+        <p class="lead measure" data-i18n="mock.lead">Así se verá cuando cargue la ficha técnica real de la camiseta, con el SAM de cada operación. Por ahora usamos una ficha simulada.</p>
+      </div>
+      <div class="grid2">
+        <article class="solid card" aria-labelledby="h-mz">
+          <h3 id="h-mz" class="h3" data-i18n="mock.zonesTitle_html">Carga de cada puesto contra el <button type="button" class="tip" data-tip="takt">takt</button></h3>
+          <div id="mock-zones"></div>
+        </article>
+        <article class="solid card" aria-labelledby="h-mo">
+          <h3 id="h-mo" class="h3" data-i18n="mock.opsTitle">Operaciones de costura, de la más larga a la más corta</h3>
+          <ol class="ops" id="mock-ops"></ol>
+        </article>
+      </div>
+      <div class="grid2">
+        <article class="solid card" aria-labelledby="h-mh">
+          <h3 id="h-mh" class="h3" data-i18n="mock.hourlyTitle">Eficiencia por puesto y por hora</h3>
+          <p class="p" data-i18n="mock.hourlyLead">Piezas de CP × SAM de las operaciones de cada puesto en la ficha simulada ÷ 60 min. Sirve para ver dónde está el desbalance, no para medir a nadie.</p>
+          <ul class="pair-legend" aria-hidden="true"><li><i class="pa"></i><span id="pl-a"></span></li><li><i class="pb"></i><span id="pl-b"></span></li><li><i class="p100"></i><span id="pl-100"></span></li></ul>
+          <ol class="pairs" id="mock-hourly"></ol>
+          <p class="cap" id="mock-hourly-note"></p>
+        </article>
+        <article class="solid card mock-video" aria-labelledby="h-mv" id="mock-video-card">
+          <div class="stack gap-2">
+            <h3 id="h-mv" class="h3" data-i18n="mock.videoTitle">Así se arma la camiseta en la ficha simulada</h3>
+            <p class="p" data-i18n="mock.videoLead">Animación de 33 s con las once operaciones del ejemplo. No es la ficha del cliente.</p>
+          </div>
+          <div class="mock-video-box" id="mock-video-box"></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="band-menta section-tight" aria-labelledby="gl-title" id="como-leer">
+    <div class="wrap grid2">
+      <div class="stack gap-4">
+        <h2 id="gl-title" class="h2" data-i18n="gl.title">Cómo leer estos datos</h2>
+        <ul class="checks">
+          <li data-i18n="gl.p1">Hablamos de puestos y del módulo, no de personas. Sin nombres ni rankings de personas.</li>
+          <li data-i18n="gl.p2">Es para equilibrar el trabajo y apoyar al equipo: separamos el tiempo de costura del tiempo de espera y de traslado.</li>
+          <li data-i18n="gl.p3">Cada número dice de dónde sale (video, CP o ejemplo) y qué tan seguros estamos.</li>
+          <li data-i18n="gl.p4">Todo está en hora de planta. El reloj dentro del video va una hora adelantado.</li>
+        </ul>
+      </div>
+      <dl class="glossary glass card" id="glossary"></dl>
+    </div>
+  </section>
+</div>
+
+<!-- =============================== VIDEO =============================== -->
+<div id="view-video" class="view" data-view="video" hidden>
+  <section class="band-blanco video-band">
+    <div class="wrap">
+      <div class="back-bar" id="back-bar" hidden>
+        <a class="btn btn-soft btn-sm" id="back-link" href="#/panel"><span aria-hidden="true">←</span> <span data-i18n="video.back">Volver al panel</span></a>
+        <p class="back-ctx" id="back-ctx"></p>
+      </div>
+      <h1 class="sr-only" id="video-title" data-i18n="video.srTitle">Video del Módulo 28</h1>
+      <div class="video-layout">
+        <div class="player-col">
+          <div class="stage-panel theme-noche">
+            <div class="stage" id="stage">
+              <video id="video0" class="vid active" muted playsinline preload="none" poster="poster.jpg" aria-label="Grabación del Módulo 28" data-i18n-attr="aria-label:video.aria"></video>
+              <video id="video1" class="vid" muted playsinline preload="none" aria-hidden="true"></video>
+              <canvas id="overlay" aria-hidden="true"></canvas>
+              <div class="frame-corners" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+              <p class="time-badge" id="time-badge" aria-hidden="true">13:09:21</p>
+              <p class="loading" id="loading" hidden>Cargando video…</p>
+              <button type="button" class="big-play" id="big-play" aria-label="Reproducir" data-i18n-attr="aria-label:video.play"><svg viewBox="0 0 24 24" width="30" height="30" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></button>
+            </div>
+            <div class="controls" role="group" aria-label="Controles del video" data-i18n-attr="aria-label:video.controls">
+              <button type="button" class="ctl" id="play" aria-label="Reproducir"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path class="i-play" d="M8 5v14l11-7z"/><path class="i-pause" d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg></button>
+              <button type="button" class="ctl" id="back10" aria-label="Atrás 10 segundos" data-i18n-attr="aria-label:video.back10"><span aria-hidden="true">−10 s</span></button>
+              <button type="button" class="ctl" id="fwd10" aria-label="Adelante 10 segundos" data-i18n-attr="aria-label:video.fwd10"><span aria-hidden="true">+10 s</span></button>
+              <p class="clock" aria-live="off"><span class="clock-now" id="clock-now">13:09:21</span> <span class="clock-unit" data-i18n="video.plantTime">hora planta</span></p>
+              <div class="seg speed" role="group" aria-label="Velocidad" data-i18n-attr="aria-label:video.speed">
+                <button type="button" data-speed="1" aria-pressed="true">1×</button>
+                <button type="button" data-speed="2" aria-pressed="false">2×</button>
+                <button type="button" data-speed="4" aria-pressed="false">4×</button>
+              </div>
+            </div>
+            <div class="tl-head">
+              <div class="seg tl-zoom" role="group" aria-label="Escala de la línea de tiempo" data-i18n-attr="aria-label:video.zoomAria">
+                <button type="button" data-zoom="all" aria-pressed="true" data-i18n="video.zoomAll">Toda la grabación</button>
+                <button type="button" data-zoom="10" aria-pressed="false" data-i18n="video.zoom10">10 minutos</button>
+              </div>
+              <div class="row gap-2 tl-jump">
+                <button type="button" class="ctl ctl-sm" id="prev-mark" aria-label="Momento anterior" data-i18n-attr="aria-label:video.prev"><span aria-hidden="true">‹</span></button>
+                <button type="button" class="ctl ctl-sm" id="next-mark" aria-label="Momento siguiente" data-i18n-attr="aria-label:video.next"><span aria-hidden="true">›</span></button>
+              </div>
+            </div>
+            <div class="timeline" id="timeline" role="slider" tabindex="0" aria-label="Línea de tiempo de la grabación" data-i18n-attr="aria-label:video.timeline" aria-valuemin="0" aria-valuemax="5760" aria-valuenow="0" aria-valuetext="13:09:21 hora planta">
+              <canvas id="tl-canvas"></canvas>
+            </div>
+            <ul class="tl-legend" aria-label="Leyenda de la línea de tiempo" data-i18n-attr="aria-label:tl.legend">
+              <li><i class="lg-ins"></i><span data-i18n="tl.ins">Hallazgos</span></li>
+              <li><i class="lg-cyc"></i><span data-i18n="tl.cyc">Ciclos del Puesto B</span></li>
+              <li><i class="lg-cp"></i><span data-i18n="tl.cp">Registros CP</span></li>
+              <li><i class="lg-wait"></i><span data-i18n="tl.wait">Esperas y cola</span></li>
+            </ul>
+            <div class="clip-bar" id="clip-bar" hidden>
+              <p class="clip-txt" id="clip-txt"></p>
+              <div class="row gap-2">
+                <button type="button" class="btn btn-paper btn-sm" id="clip-replay" data-i18n="clip.replay">Repetir clip</button>
+                <button type="button" class="btn btn-ghostdark btn-sm" id="clip-clear" data-i18n="clip.clear">Seguir viendo</button>
+              </div>
+            </div>
+          </div>
+          <ul class="live" id="live" aria-label="Qué pasa en este momento" data-i18n-attr="aria-label:live.aria"></ul>
+        </div>
+
+        <aside class="side" aria-label="Opciones del video" data-i18n-attr="aria-label:side.aria">
+          <section class="solid card-sm stack gap-3" aria-labelledby="h-layers">
+            <h2 id="h-layers" class="h3" data-i18n="layers.title">Capas sobre el video</h2>
+            <p class="cap" data-i18n="layers.lead">Encendidas al inicio. Apáguelas si quiere ver el video limpio.</p>
+            <label class="switch"><span class="txt"><span data-i18n="layers.zonas">Zonas</span><small data-i18n="layers.zonasSub">Cola de piezas y teclado CP</small></span><input type="checkbox" id="layer-zonas" data-layer="zonas" checked><span class="track" aria-hidden="true"></span></label>
+            <label class="switch"><span class="txt"><span data-i18n="layers.puestos">Puestos</span><small data-i18n="layers.puestosSub">Puesto A y Puesto B</small></span><input type="checkbox" id="layer-puestos" data-layer="puestos" checked><span class="track" aria-hidden="true"></span></label>
+            <label class="switch"><span class="txt"><span data-i18n="layers.esqueletos">Esqueletos</span><small data-i18n="layers.esqueletosSub">Postura y dedos estimados, no identifica a nadie</small></span><input type="checkbox" id="layer-esqueletos" data-layer="esqueletos" checked><span class="track" aria-hidden="true"></span></label>
+            <p class="cap" id="layer-status" aria-live="polite"></p>
+          </section>
+          <section class="solid card-sm stack gap-3 moments-card" aria-labelledby="h-moments">
+            <div class="row-between">
+              <h2 id="h-moments" class="h3" data-i18n="moments.title">Momentos</h2>
+              <button type="button" class="btn btn-soft btn-sm" id="copy-link" data-i18n="moments.copy">Copiar enlace</button>
+            </div>
+            <div class="filters" role="group" aria-label="Mostrar en la lista" data-i18n-attr="aria-label:moments.filters">
+              <button type="button" class="fchip" data-kind="hallazgo" aria-pressed="true" data-i18n="f.hallazgo">Hallazgos</button>
+              <button type="button" class="fchip" data-kind="ciclo" aria-pressed="false" data-i18n="f.ciclo">Ciclos</button>
+              <button type="button" class="fchip" data-kind="cp" aria-pressed="false" data-i18n="f.cp">Registros CP</button>
+              <button type="button" class="fchip" data-kind="espera" aria-pressed="false" data-i18n="f.espera">Esperas</button>
+            </div>
+            <ol class="moments" id="moments"></ol>
+            <p class="cap" id="copy-status" aria-live="polite"></p>
+          </section>
+        </aside>
+      </div>
+    </div>
+  </section>
+</div>
+</main>
+
+<div class="tip-pop" id="tip-pop" role="tooltip" hidden></div>
+
+<footer class="ft" role="contentinfo">
+  <div class="wrap ft-row">
+    <div class="stack gap-2">
+      <p class="ft-brand"><b>EnPiso Visión</b> · <span data-i18n="ft.powered">con tecnología</span> <img src="logo-rikuy-blanco.svg" alt="Rikuy" width="72" height="35"></p>
+      <p class="cap" id="ft-meta" data-version="0.1.3" data-built="2026-11-04">Versión 0.1.3 · uso privado · generado 2026-11-04. Datos del viernes 30 de octubre de 2026, Módulo 28, planta [PLANT].</p>
+    </div>
+    <p class="cap ft-note" id="ft-note"></p>
+  </div>
+</footer>
+<noscript><p class="note" style="margin:16px" lang="es">Esta página necesita JavaScript para mostrar los datos y el video.</p><p class="note" style="margin:16px" lang="en">This page needs JavaScript to show the data and the video.</p></noscript>
+</body>
+</html>
