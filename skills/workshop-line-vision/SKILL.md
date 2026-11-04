@@ -25,8 +25,9 @@ before writing any finding).
 
 ## Procedure
 
-1. **Fetch and align clocks.** Follow `skills/rikuy-video/SKILL.md`, historical clips, for the
-   window. Find the camera-to-CP offset (DST, drift) from at least three keypad touches.
+1. **Fetch and align clocks.** Get the recordings through the Rikuy gateway MCP, as in
+   `skills/rikuy-video/SKILL.md`: `list_cameras` for the bridge, then `download_history` for the
+   window (the EZVIZ or Hikvision bridge downloads and decodes on site). Find the camera-to-CP offset (DST, drift) from at least three keypad touches.
    Done when every recording has a start time on the CP clock with a stated uncertainty (±s).
 2. **Track the stations.** Detect and track people, embed tracklets, seed station A/B galleries
    from the reference frame, assign tracklets.

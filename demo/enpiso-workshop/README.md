@@ -37,7 +37,9 @@ Skill: `skills/workshop-line-vision/`.
 - Employee names and codes, client, plant, module, product and work-order identifiers, replaced
   by `[MODULE]`, `[PLANT]`, `[PRODUCT]`, `None`. The privacy scan in `build.py` and the tests now
   reads its name list from a private `private/pii.json` (`PII_PATTERNS`).
-- The EZVIZ acquisition and decryption tooling, the ERP browser scripts and every secret.
+- The one-off EZVIZ acquisition scripts used during the field run: in the product, `rikuy-bridge`
+  (`apps/rikuy-bridge/crates/ezviz`) fetches recordings and the skill asks for them through the
+  gateway MCP (`download_history`). Also removed: the ERP browser scripts and every secret.
 
 The code is the code that produced the published app, with the edits above; it expects the
 private recordings, CP exports and analysis tree, so it is not runnable from this repo alone.
