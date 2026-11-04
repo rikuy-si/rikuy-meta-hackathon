@@ -1,0 +1,20 @@
+{
+  "site": "[CLIENT]",
+  "camera": "Entrance · turnstile",
+  "window": ["2026-10-29T05:30:00", "2026-10-29T06:45:00"],
+  "validated": ["2026-10-29T05:44:00", "2026-10-29T06:38:00"],
+  "clock_offset_s": -24.0,
+  "tailgate_s": 5.0,
+  "line": {"a": [0.33, 0.3], "b": [0.64, 0.3], "inside": "left"},
+  "question": {
+    "en": "How did people move through the entrance this morning?",
+    "es": "¿Cómo se movió la gente por la entrada esta mañana?"
+  },
+  "look": "CAM 01 · 05:30–06:45 · audit",
+  "sources": {
+    "records": "Access-control export, per minute (no identities)",
+    "video": "Recorder, original footage, motion-triggered",
+    "measure": "On-premises person detector + line crossing (RF-DETR, 5 fps)",
+    "masks": "SAM 3 'person' (Meta), 2 fps"
+  }
+}

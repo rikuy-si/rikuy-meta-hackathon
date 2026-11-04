@@ -1,0 +1,531 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rikuy · Audit · Entrance turnstile</title>
+<link rel="preload" href="../fonts/onest-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="rikuy.css">
+</head>
+<body>
+<div class="bg"><i></i><i></i></div>
+<div class="wrap">
+  <header class="top">
+    <div class="logo">rikuy<b></b></div>
+    <nav class="cases"><a href="index.html" aria-current="page" data-i="caseGym"></a></nav>
+    <div class="crumb"><span data-i="crumb1"></span><span>›</span><strong data-i="crumb2"></strong></div>
+    <div class="sp"></div>
+    <div class="lang" role="group" aria-label="Language"><button data-lang="en">EN</button><button data-lang="es">ES</button></div>
+    <button class="pill y" id="exportTop" data-i="export"></button>
+  </header>
+
+  <section class="hero">
+    <div class="rise">
+      <div class="eyebrow"><i></i><span data-i="eyebrow"></span></div>
+      <h1 data-i="h1" data-html></h1>
+      <p class="lead" data-i="lead"></p>
+    </div>
+    <div class="ask rise" style="animation-delay:.15s" id="ask">
+      <div class="q"><span data-i="question"></span></div>
+      <div class="a"><div class="av">M</div><p id="answer"><span class="typing"><i></i><i></i><i></i></span></p></div>
+      <div class="meta" id="askmeta"></div>
+    </div>
+  </section>
+
+  <section class="kpis" id="kpis"></section>
+
+  <section class="stage">
+    <div class="player rise" style="animation-delay:.25s">
+      <div class="screen" id="screen">
+        <video id="video" preload="auto" muted playsinline></video>
+        <canvas id="ov"></canvas>
+        <div class="hud">
+          <div class="chip rec"><i></i><span data-i="cam"></span></div>
+          <div class="chip"><span data-i="camclock"></span> <b id="hudCam">--:--:--</b></div>
+          <div class="chip"><span data-i="accclock"></span> <b id="hudAcc">--:--:--</b></div>
+        </div>
+        <div class="hud-r">
+          <div class="chip" id="hudMin"></div>
+        </div>
+        <div class="banner" id="banner"></div>
+        <div class="gapnote" id="gapnote"><div><b data-i="gapTitle"></b><span id="gapText"></span></div></div>
+      </div>
+      <div class="controls">
+        <button class="cbtn play" id="play" aria-label="Play">▶</button>
+        <button class="cbtn" data-step="-10">−10s</button><button class="cbtn" data-step="-1">−1s</button>
+        <button class="cbtn" data-step="-0.2">‹</button><button class="cbtn" data-step="0.2">›</button>
+        <button class="cbtn" data-step="1">+1s</button><button class="cbtn" data-step="10">+10s</button>
+        <span class="sep"></span>
+        <button class="cbtn" id="prevEv" data-i="prevEv"></button><button class="cbtn" id="nextEv" data-i="nextEv"></button>
+        <span class="sep"></span>
+        <button class="cbtn" id="speed">1×</button>
+        <span class="sep"></span>
+        <button class="cbtn" data-ov="masks" aria-pressed="true" data-i="ovMasks"></button>
+        <button class="cbtn" data-ov="boxes" aria-pressed="true" data-i="ovBoxes"></button>
+        <button class="cbtn" data-ov="line" aria-pressed="true" data-i="ovLine"></button>
+        <span class="sp"></span>
+        <span class="clock" id="clock"></span>
+      </div>
+      <div class="legend">
+        <span><i class="sw" style="background:#7fccb466;outline:1px solid #7fccb4"></i><span data-i="lgMask"></span></span>
+        <span><i class="sw" style="background:transparent;outline:1.5px solid #fff"></i><span data-i="lgBox"></span></span>
+        <span><i class="sw" style="background:#dce064"></i><span data-i="lgLine"></span></span>
+        <span><i class="sw" style="background:#7fccb4;border-radius:50%;width:10px;height:10px"></i><span data-i="lgCrossOk"></span></span>
+        <span><i class="sw" style="background:#e0644f;border-radius:50%;width:10px;height:10px"></i><span data-i="lgCross"></span></span>
+      </div>
+    </div>
+
+    <aside class="side rise" style="animation-delay:.35s">
+      <div class="tabs" role="tablist" id="tabs">
+        <button role="tab" data-tab="records"></button><button role="tab" data-tab="entries"></button><button role="tab" data-tab="exits"></button>
+      </div>
+      <div class="progress"><span id="revText"></span><span class="track"><i id="revBar"></i></span></div>
+      <div class="filters" id="filters"></div>
+      <div class="list" id="list"></div>
+      <div class="foot"><button class="pill g" id="exportCsv" data-i="exportCsv"></button><button class="pill g" id="exportJson" data-i="exportJson"></button></div>
+    </aside>
+  </section>
+
+  <section class="card" id="flowCard">
+    <h2 data-i="flowTitle"></h2>
+    <p class="sub" data-i="flowSub"></p>
+    <div class="flow" id="flow"></div>
+  </section>
+
+  <section class="card">
+    <h2 data-i="tlTitle"></h2>
+    <p class="sub" data-i="tlSub"></p>
+    <div class="tl" id="tl"></div>
+    <div class="tlkey" id="tlkey"></div>
+    <div class="tl" id="tlz"></div>
+  </section>
+
+  <section class="grid3" id="insights"></section>
+  <section class="method" id="method"></section>
+</div>
+<div class="toast" id="toast"></div>
+<div class="cap" id="cap"></div>
+
+<script src="data/audit.js"></script>
+<script src="data/overlay.js" defer></script>
+<script src="data/overlay_hd.js" defer></script>
+<script>
+(() => {
+const A = window.AUDIT;
+const T = {
+en: {
+  caseGym: "Gym", caseBus: "Bus",
+  crumb1: "Audit", crumb2: "Entrance turnstile · Oct 29 · 05:30–06:45",
+  export: "Export review", eyebrow: "People flow · peak hour",
+  h1: "Every person in, every person out. <em>Counted</em> by the camera you already have.",
+  lead: "Rikuy reads the entrance camera on-premises: who comes in, who leaves, when the rush hits. Then it puts your access log on the same clock, so the numbers you run the business on are people.",
+  question: "How did people move through the entrance this morning?",
+  cam: "CAM 01 · ENTRANCE", camclock: "camera", accclock: "access log",
+  gapTitle: "No footage here", gapText: "The recorder stores motion only. Nothing moved in view from {a} to {b}.",
+  prevEv: "◂ event", nextEv: "event ▸", ovMasks: "Masks", ovBoxes: "Boxes", ovLine: "Line",
+  lgMask: "SAM 3.1 person mask (Meta)", lgBox: "Tracked person", lgLine: "Turnstile line · inside is up", lgCrossOk: "Entry with check-in", lgCross: "Entry without check-in",
+  tabs: { records: "Records", entries: "Entries", exits: "Exits" },
+  filters: { all: "All", confirmed: "Confirmed", phantom: "Nobody seen", recorded: "Recorded", unrecorded: "No record", unreviewed: "Unreviewed" },
+  verdict: { confirmed: "On camera", phantom: "Nobody seen", recorded: "Recorded", unrecorded: "No record", exit: "Exit" },
+  recSub: { confirmed: "Matched to entry {e} · camera {t}", phantom: "Nobody crossed the turnstile" },
+  entSub: { recorded: "Matches record {r}", unrecorded: "Walked in, no check-in", tg: " · {g}s after the previous entry" },
+  exitSub: "Left through the turnstile",
+  agree: "Agree", disagree: "Disagree", reviewed: "{n} of {t} reviewed",
+  exportCsv: "Export CSV", exportJson: "Export JSON",
+  kpi: [
+    ["entries", "people walked in", "05:30–06:45"],
+    ["exits", "people walked out", ""],
+    ["rush", "came in during the busiest 10 minutes", ""],
+    ["pace", "between arrivals · median", ""],
+    ["logged", "entries matched a check-in", "05:44–06:38"]
+  ],
+  rushSub: "· {o} out", rushTag: "{a}–{b}",
+  flowTitle: "People in, people out", flowSub: "Turnstile crossings on camera, every 5 minutes. Click a bar to jump there.", flowIn: "Entries", flowOut: "Exits",
+  tlTitle: "One clock, two sources", tlSub: "Access-log check-ins above, people crossing the turnstile below. Click anywhere to jump to that second. Shaded: check-ins with nobody at the turnstile.",
+  lanes: ["Access log", "Entries on camera", "Exits", "Footage"],
+  key: ["Check-in confirmed", "Check-in, nobody seen", "Entry with record", "Entry without record", "Exit", "Recorded footage", "Playhead"],
+  burst: "check-ins, nobody seen",
+  zoom: "±5 min around the playhead",
+  ins: [
+    ["Rush hour", "32 of 46 crossings in 10 minutes.", "From 05:55 to 06:05, 19 people came in while 13 left: more movement than the rest of the morning combined. That is when the front desk, the floor and the lockers are under pressure, measured instead of guessed."],
+    ["Records vs. reality", "1 in 3 entries left no check-in.", "In the validated window 24 people walked in and 16 had a check-in. Earlier, 23 check-ins were logged in six minutes with nobody at the turnstile. Both are lines to reconcile, not verdicts: the owner reviews each one."],
+    ["What it takes", "No new hardware. Flows, not identities.", "The camera and the access software were already there. Rikuy measures on-premises, counts crossings without recognizing anyone and hands the owner a list to confirm in minutes."]
+  ],
+  method: [
+    ["Records", "Access-control export, per minute, no identities. 39 granted check-ins between 05:30 and 06:45."],
+    ["Measurement", "Original footage measured on-premises: person detector + tracking at 5 fps, net crossing of the turnstile line. SAM 3.1 (Meta) segments every person for the evidence layer: every frame from 05:56 to 06:06, 2 fps elsewhere."],
+    ["Clock", "Camera runs 24 s behind the access log, set by the owner from the footage. Each check-in pairs with an entry in its minute ±1."],
+    ["Limits", "Estimates, not verdicts: every row waits for the owner's review. The recorder stores motion only, so gaps mean nothing moved in view. No face recognition, no identities."]
+  ],
+  muse: "Muse Spark", logged: "Logged by Rikuy", gapSkipped: "Skipped {s} with no footage",
+  bannerPhantom: "Access log: <b>{n} check-ins</b> this minute · camera: nobody at the turnstile",
+  bannerEntry: "{id} · entry at {t}", bannerExit: "{id} · exit at {t}", noOverlay: "Overlays loading…", minNobody: "nobody seen"
+},
+es: {
+  caseGym: "Gimnasio", caseBus: "Bus",
+  crumb1: "Auditoría", crumb2: "Torniquete de entrada · 29 oct · 05:30–06:45",
+  export: "Exportar revisión", eyebrow: "Flujo de personas · hora pico",
+  h1: "Cada persona que entra, cada persona que sale. <em>Contadas</em> con la cámara que ya tienes.",
+  lead: "Rikuy lee la cámara de la entrada en el local: quién entra, quién sale, cuándo se llena. Luego pone tu registro de acceso en el mismo reloj, para que las cifras con que operas sean personas.",
+  question: "¿Cómo se movió la gente por la entrada esta mañana?",
+  cam: "CAM 01 · ENTRADA", camclock: "cámara", accclock: "registro",
+  gapTitle: "Sin grabación aquí", gapText: "El grabador solo guarda movimiento. Nada se movió a la vista de {a} a {b}.",
+  prevEv: "◂ evento", nextEv: "evento ▸", ovMasks: "Máscaras", ovBoxes: "Cajas", ovLine: "Línea",
+  lgMask: "Máscara de persona SAM 3.1 (Meta)", lgBox: "Persona seguida", lgLine: "Línea del torniquete · adentro es arriba", lgCrossOk: "Entrada con registro", lgCross: "Entrada sin registro",
+  tabs: { records: "Registros", entries: "Entradas", exits: "Salidas" },
+  filters: { all: "Todos", confirmed: "Confirmados", phantom: "Sin persona", recorded: "Registradas", unrecorded: "Sin registro", unreviewed: "Sin revisar" },
+  verdict: { confirmed: "En cámara", phantom: "Sin persona", recorded: "Registrada", unrecorded: "Sin registro", exit: "Salida" },
+  recSub: { confirmed: "Casa con la entrada {e} · cámara {t}", phantom: "Nadie cruzó el torniquete" },
+  entSub: { recorded: "Casa con el registro {r}", unrecorded: "Entró sin registrarse", tg: " · {g}s después de la entrada anterior" },
+  exitSub: "Salió por el torniquete",
+  agree: "De acuerdo", disagree: "No", reviewed: "{n} de {t} revisados",
+  exportCsv: "Exportar CSV", exportJson: "Exportar JSON",
+  kpi: [
+    ["entries", "personas entraron", "05:30–06:45"],
+    ["exits", "personas salieron", ""],
+    ["rush", "entraron en los 10 minutos de mayor flujo", ""],
+    ["pace", "entre llegadas · mediana", ""],
+    ["logged", "entradas casaron con un registro", "05:44–06:38"]
+  ],
+  rushSub: "· {o} salen", rushTag: "{a}–{b}",
+  flowTitle: "Entran y salen", flowSub: "Cruces del torniquete en cámara, cada 5 minutos. Haz clic en una barra para ir ahí.", flowIn: "Entradas", flowOut: "Salidas",
+  tlTitle: "Un reloj, dos fuentes", tlSub: "Arriba los ingresos del registro, abajo las personas que cruzan el torniquete. Haz clic para ir a ese segundo. Sombreado: ingresos sin nadie en el torniquete.",
+  lanes: ["Registro", "Entradas en cámara", "Salidas", "Grabación"],
+  key: ["Ingreso confirmado", "Ingreso sin persona", "Entrada con registro", "Entrada sin registro", "Salida", "Grabación disponible", "Cursor"],
+  burst: "ingresos sin persona",
+  zoom: "±5 min alrededor del cursor",
+  ins: [
+    ["Hora pico", "32 de 46 cruces en 10 minutos.", "De 05:55 a 06:05 entraron 19 personas mientras salían 13: más movimiento que todo el resto de la mañana. Es cuando la recepción, la sala y los camarines están bajo presión, medido en vez de supuesto."],
+    ["Registros vs. realidad", "1 de cada 3 entradas sin registro.", "En la franja validada entraron 24 personas y 16 tenían registro. Antes, 23 ingresos se registraron en seis minutos sin nadie en el torniquete. Son líneas por conciliar, no veredictos: el dueño revisa cada una."],
+    ["Lo que se necesita", "Sin hardware nuevo. Flujos, no identidades.", "La cámara y el software de acceso ya estaban. Rikuy mide en el local, cuenta cruces sin reconocer a nadie y le entrega al dueño una lista para confirmar en minutos."]
+  ],
+  method: [
+    ["Registros", "Exportación del control de acceso, por minuto, sin identidades. 39 ingresos concedidos entre 05:30 y 06:45."],
+    ["Medición", "Grabación original medida en el local: detector de personas + seguimiento a 5 fps, cruce neto de la línea del torniquete. SAM 3.1 (Meta) segmenta a cada persona para la capa de evidencia: cada cuadro de 05:56 a 06:06, 2 fps en el resto."],
+    ["Reloj", "La cámara va 24 s detrás del registro, fijado por el dueño desde la grabación. Cada ingreso se empareja con una entrada en su minuto ±1."],
+    ["Límites", "Estimaciones, no veredictos: cada fila espera la revisión del dueño. El grabador solo guarda movimiento, así que un hueco significa que nada se movió a la vista. Sin reconocimiento facial, sin identidades."]
+  ],
+  muse: "Muse Spark", logged: "Registrado por Rikuy", gapSkipped: "Se saltaron {s} sin grabación",
+  bannerPhantom: "Registro: <b>{n} ingresos</b> en este minuto · cámara: nadie en el torniquete",
+  bannerEntry: "{id} · entrada a las {t}", bannerExit: "{id} · salida a las {t}", noOverlay: "Cargando capas…", minNobody: "sin persona"
+}};
+let lang = new URLSearchParams(location.search).get("lang") === "es" ? "es" : (localStorage.getItem("rikuy.audit.lang") || "en");
+const t = (k) => k.split(".").reduce((o, p) => o?.[p], T[lang]);
+const fmt = (s, o) => s.replace(/\{(\w+)\}/g, (_, k) => o[k] ?? "");
+const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+
+/* ---------- time ---------- */
+const ms = (iso) => Date.parse(iso);
+const W0 = ms(A.window.from), W1 = ms(A.window.to);
+const WALL0 = (() => { const [h, m, s] = A.window.from.slice(11, 19).split(":").map(Number); return h * 3600 + m * 60 + s; })();
+const OFF = A.clock_offset_s * 1000;
+const hms = (epoch, sub) => { let s = WALL0 + (epoch - W0) / 1000; s = ((s % 86400) + 86400) % 86400; const h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), x = s % 60;
+  return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${(sub ? x.toFixed(1).padStart(4, "0") : String(Math.floor(x)).padStart(2, "0"))}`; };
+const segs = A.video.segments.map((s) => ({ ...s, c0: ms(s.cam_start), c1: ms(s.cam_start) + s.duration * 1000 }));
+const camAt = (vt) => { const s = segs.findLast((x) => x.video_start <= vt + 1e-6) || segs[0]; return { seg: s, cam: s.c0 + (vt - s.video_start) * 1000 }; };
+const vtAt = (cam) => { const s = segs.find((x) => cam < x.c1); if (!s) return { vt: A.video.total - 0.05, gap: false }; if (cam < s.c0) return { vt: s.video_start, gap: true, from: cam, to: s.c0 };
+  return { vt: s.video_start + (cam - s.c0) / 1000, gap: false }; };
+
+/* ---------- data ---------- */
+const recs = A.records.map((r) => ({ ...r, kind: "records", cam: ms(r.cam_ts) }));
+const ents = A.entries.map((e) => ({ ...e, kind: "entries", camMs: ms(e.cam), v: e.verdict }));
+const exts = A.exits.map((x, i) => ({ ...x, id: `X${String(i + 1).padStart(2, "0")}`, kind: "exits", camMs: ms(x.cam), v: "exit" }));
+const entById = Object.fromEntries(ents.map((e) => [e.id, e]));
+const events = [...ents.map((e) => ({ cam: e.camMs, ref: e })), ...exts.map((x) => ({ cam: x.camMs, ref: x }))].sort((a, b) => a.cam - b.cam);
+const phantomMin = {}; recs.forEach((r) => { if (r.verdict === "phantom") phantomMin[r.minute] = (phantomMin[r.minute] || 0) + 1; });
+const st = A.stats;
+const BIN = 300000, accMs = (o) => o.camMs - OFF;
+const flow = Array.from({ length: Math.floor((W1 - W0) / BIN) }, (_, i) => ({ a: W0 + i * BIN, in: 0, out: 0 }));
+for (const [k, list] of [["in", ents], ["out", exts]]) for (const o of list) { const i = Math.floor((accMs(o) - W0) / BIN); if (flow[i]) flow[i][k]++; }
+const rush = () => flow.slice(0, -1).map((b, i) => ({ a: b.a, in: b.in + flow[i + 1].in, out: b.out + flow[i + 1].out })).reduce((m, x) => x.in > m.in ? x : m);
+
+/* ---------- review store ---------- */
+const RK = "rikuy.audit.review.v1";
+let review = JSON.parse(localStorage.getItem(RK) || "{}");
+const saveReview = () => localStorage.setItem(RK, JSON.stringify(review));
+
+/* ---------- i18n render ---------- */
+function applyLang() {
+  document.documentElement.lang = lang;
+  $$("[data-i]").forEach((el) => { const v = t(el.dataset.i); if (typeof v !== "string") return; if (el.hasAttribute("data-html")) el.innerHTML = v; else el.textContent = v; });
+  $$(".lang button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
+  renderKpis(); renderTabs(); renderList(); renderTimeline(); renderInsights(); if (typed) renderAnswer(false);
+}
+$$(".lang button").forEach((b) => b.onclick = () => { lang = b.dataset.lang; localStorage.setItem("rikuy.audit.lang", lang); applyLang(); });
+
+/* ---------- KPIs ---------- */
+function countUp(el, to, dur = 1300, dec = 0) { const t0 = performance.now(); const step = (now) => { const p = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+  el.firstChild.nodeValue = (to * e).toFixed(dec); if (p < 1) requestAnimationFrame(step); }; requestAnimationFrame(step); }
+let kpiDone = false;
+function renderKpis() {
+  const r = rush();
+  const vals = { entries: [ents.length, ""], exits: [exts.length, ""], rush: [r.in, fmt(t("rushSub"), { o: r.out })],
+    pace: [Math.round(st.median_gap_s), "s"], logged: [st.validated.recorded, `/ ${st.validated.entries}`] };
+  const tags = { rush: fmt(t("rushTag"), { a: hms(r.a).slice(0, 5), b: hms(r.a + 600000).slice(0, 5) }) };
+  const cls = { entries: "dark" };
+  const bars = { entries: "var(--amarillo)", exits: "#a9b6d3", rush: "var(--teal)", pace: "var(--menta)", logged: "var(--amarillo)" };
+  $("#kpis").innerHTML = t("kpi").map(([k, l, tag], i) => (tag = tag || tags[k], `<div class="kpi ${cls[k] || ""} rise" style="animation-delay:${.08 * i}s">${tag ? `<span class="tag">${tag}</span>` : ""}
+    <div class="n"><span>${kpiDone ? vals[k][0] : 0}</span><small>${vals[k][1]}</small></div><div class="l">${l}</div><i class="bar" style="background:${bars[k]};animation-delay:${.3 + .08 * i}s"></i></div>`)).join("");
+  if (!kpiDone) { $$("#kpis .n span").forEach((el, i) => countUp(el, Object.values(vals)[i][0], 1300 + i * 120)); kpiDone = true; }
+}
+
+/* ---------- Muse answer ---------- */
+let typed = false;
+function renderAnswer(animate = true) {
+  const m = A.muse; const el = $("#answer");
+  if (!m) { el.innerHTML = '<span class="typing"><i></i><i></i><i></i></span>'; return; }
+  const text = (m.answer[lang] || m.answer.en);
+  const html = text.replace(/\[([ERX]\d{2})\]/g, (_, id) => `<button class="cite" data-jump="${id}">${id} · ${labelTime(id)}</button>`).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>");
+  $("#askmeta").innerHTML = `<span>${t("muse")} · ${m.model}</span><span>${m.latency_s}s</span><span>${t("logged")} · ${m.look || "CAM 01 · 05:30–06:45"}</span>`;
+  if (!animate || typed) { el.innerHTML = html; return; }
+  typed = true; el.innerHTML = '<span class="typing"><i></i><i></i><i></i></span>';
+  setTimeout(() => { el.innerHTML = html; el.animate([{ opacity: 0, filter: "blur(6px)" }, { opacity: 1, filter: "none" }], { duration: 700, easing: "cubic-bezier(.2,.7,.2,1)" }); }, 1100);
+}
+const byId = (id) => recs.find((r) => r.id === id) || entById[id] || exts.find((x) => x.id === id);
+const labelTime = (id) => { const o = byId(id); if (!o) return ""; return hms(o.kind === "records" ? ms(o.access_ts) : o.camMs - OFF); };
+document.addEventListener("click", (e) => { const j = e.target.closest("[data-jump]"); if (j) { const o = byId(j.dataset.jump); if (o) select(o, true); } });
+
+/* ---------- list ---------- */
+let tab = "records", filter = "all", selected = null;
+function renderTabs() {
+  const n = { records: recs.length, entries: ents.length, exits: exts.length };
+  $$("#tabs button").forEach((b) => { b.innerHTML = `${t("tabs")[b.dataset.tab]}<small>${n[b.dataset.tab]}</small>`; b.setAttribute("aria-selected", String(b.dataset.tab === tab));
+    b.onclick = () => { tab = b.dataset.tab; filter = "all"; renderTabs(); renderList(); }; });
+  const opts = tab === "records" ? ["all", "confirmed", "phantom", "unreviewed"] : tab === "entries" ? ["all", "recorded", "unrecorded", "unreviewed"] : ["all"];
+  $("#filters").innerHTML = opts.map((o) => `<button data-f="${o}" aria-pressed="${o === filter}">${t("filters")[o]}</button>`).join("");
+  $$("#filters button").forEach((b) => b.onclick = () => { filter = b.dataset.f; renderTabs(); renderList(); });
+}
+function items() { return tab === "records" ? recs : tab === "entries" ? ents : exts; }
+function renderList() {
+  const list = items().filter((o) => filter === "all" || (filter === "unreviewed" ? !review[o.id] : (o.verdict || o.v) === filter));
+  $("#list").innerHTML = list.map((o, i) => {
+    const v = o.kind === "records" ? o.verdict : o.v;
+    let time, sub;
+    if (o.kind === "records") { time = hms(ms(o.access_ts)).slice(0, 5); sub = fmt(t("recSub")[v], { e: o.entry, t: hms(o.cam) }); }
+    else if (o.kind === "entries") { time = hms(o.camMs - OFF); sub = v === "recorded" ? fmt(t("entSub").recorded, { r: o.record }) : t("entSub").unrecorded + (o.gap_s != null && o.gap_s < 15 ? fmt(t("entSub").tg, { g: o.gap_s }) : ""); }
+    else { time = hms(o.camMs - OFF); sub = t("exitSub"); }
+    const r = review[o.id];
+    const rv = o.kind === "exits" ? "" : `<div class="rv"><button class="ok" data-rv="agree" aria-pressed="${r === "agree"}">✓ ${t("agree")}</button><button class="no" data-rv="disagree" aria-pressed="${r === "disagree"}">✕ ${t("disagree")}</button></div>`;
+    return `<div class="row ${selected === o ? "sel" : ""}" data-id="${o.id}" style="animation-delay:${Math.min(i, 20) * 18}ms"><span class="id">${o.id}</span>
+      <div><div class="t">${time}</div><div class="s">${sub}</div>${rv}</div><span class="vp v-${v}">${t("verdict")[v]}</span></div>`;
+  }).join("");
+  $$("#list .row").forEach((row) => row.onclick = (e) => {
+    const o = byId(row.dataset.id); const b = e.target.closest("[data-rv]");
+    if (b) { review[o.id] = review[o.id] === b.dataset.rv ? undefined : b.dataset.rv; if (!review[o.id]) delete review[o.id]; saveReview(); renderList(); return; }
+    select(o, true);
+  });
+  const all = [...recs, ...ents]; const n = all.filter((o) => review[o.id]).length;
+  $("#revText").textContent = fmt(t("reviewed"), { n, t: all.length }); $("#revBar").style.width = `${100 * n / all.length}%`;
+}
+
+/* ---------- player ---------- */
+const video = $("#video"), cv = $("#ov"), cx = cv.getContext("2d");
+video.src = A.video.file;
+const show = { masks: true, boxes: true, line: true };
+$$("[data-ov]").forEach((b) => b.onclick = () => { show[b.dataset.ov] = !show[b.dataset.ov]; b.setAttribute("aria-pressed", String(show[b.dataset.ov])); });
+$("#play").onclick = () => video.paused ? video.play() : video.pause();
+video.onplay = () => { $("#play").textContent = "❚❚"; }; video.onpause = () => { $("#play").textContent = "▶"; };
+$$("[data-step]").forEach((b) => b.onclick = () => { video.currentTime = Math.max(0, Math.min(A.video.total, video.currentTime + Number(b.dataset.step))); });
+const speeds = [1, 2, 4, 8, 0.5]; let sp = 0; $("#speed").onclick = () => { sp = (sp + 1) % speeds.length; video.playbackRate = speeds[sp]; $("#speed").textContent = speeds[sp] + "×"; };
+const evNow = () => camAt(video.currentTime).cam;
+$("#nextEv").onclick = () => { const c = evNow() + 500; const e = events.find((x) => x.cam - 1500 > c - 500 && x.cam > c); if (e) select(e.ref, true); };
+$("#prevEv").onclick = () => { const c = evNow() - 2000; const e = [...events].reverse().find((x) => x.cam - 1500 < c); if (e) select(e.ref, true); };
+document.addEventListener("keydown", (e) => { if (e.target.closest("input,textarea")) return; if (e.code === "Space") { e.preventDefault(); $("#play").click(); }
+  if (e.key === "ArrowRight") video.currentTime += e.shiftKey ? 10 : 1; if (e.key === "ArrowLeft") video.currentTime -= e.shiftKey ? 10 : 1; });
+
+function select(o, seek) {
+  selected = o; renderList();
+  const row = $(`#list .row[data-id="${o.id}"]`);
+  if (!row && tab !== o.kind) { tab = o.kind; filter = "all"; renderTabs(); renderList(); }
+  $(`#list .row[data-id="${o.id}"]`)?.scrollIntoView({ block: "nearest", behavior: "smooth" });
+  if (!seek) return;
+  const cam = o.kind === "records" ? (o.verdict === "confirmed" ? entById[o.entry].camMs : o.cam) : o.camMs;
+  goCam(cam - 3000);
+  if (o.kind !== "records" || o.verdict === "confirmed") { video.play(); stopAt = cam + 3500; }
+}
+let stopAt = null, gapTimer = null;
+function goCam(cam) {
+  const r = vtAt(cam); video.currentTime = r.vt;
+  if (r.gap) { $("#gapText").textContent = fmt(t("gapText"), { a: hms(r.from), b: hms(r.to) }); $("#gapnote").classList.add("on"); clearTimeout(gapTimer); gapTimer = setTimeout(() => $("#gapnote").classList.remove("on"), 3200); }
+}
+let lastSeg = null;
+function toast(s) { const el = $("#toast"); el.textContent = s; el.classList.add("on"); clearTimeout(el._t); el._t = setTimeout(() => el.classList.remove("on"), 2200); }
+
+const LINE = A.line;
+function fit() { const r = cv.getBoundingClientRect(); const d = devicePixelRatio || 1; cv.width = r.width * d; cv.height = r.height * d; cx.setTransform(d, 0, 0, d, 0, 0); }
+new ResizeObserver(fit).observe(cv);
+const unscale = (f, s) => s ? f.map(([id, c, b, ps]) => [id, c, b.map((v) => v / s), ps.map((p) => p.map((v) => v / s))]) : f;
+function samAt(src, seg, rel) { if (!src) return null; const i = Math.round((rel + (seg.c0 - ms(src.start)) / 1000) * src.fps); return i >= 0 && i < src.frames.length ? unscale(src.frames[i], src.scale) : null; }
+let tracked = false;
+function samFrame(seg, rel) { const f = samAt(window.OVERLAY_HD?.[seg.recording], seg, rel); tracked = !!f; if (f) return f;
+  const s = window.OVERLAY?.sam?.[seg.recording]; if (!s) return null; const i = Math.round((rel + (seg.c0 - ms(s.start)) / 1000) * s.fps); return s.frames[Math.max(0, Math.min(s.frames.length - 1, i))]; }
+const trackColor = (k) => `hsl(${(k * 137.508) % 360} 72% 72%)`;
+let frameT = null;
+if (video.requestVideoFrameCallback) { const onFrame = (_, md) => { frameT = md.mediaTime; video.requestVideoFrameCallback(onFrame); }; video.requestVideoFrameCallback(onFrame); }
+video.addEventListener("seeked", () => { frameT = null; });
+
+function draw() {
+  const w = cv.clientWidth, h = cv.clientHeight; cx.clearRect(0, 0, w, h);
+  const { seg, cam } = camAt(!video.paused && frameT != null ? frameT : video.currentTime); const rel = (cam - seg.c0) / 1000;
+  if (lastSeg && lastSeg !== seg && !video.paused && seg.c0 - lastSeg.c1 > 2000) toast(fmt(t("gapSkipped"), { s: dur((seg.c0 - lastSeg.c1) / 1000) }));
+  lastSeg = seg;
+  if (stopAt && cam > stopAt) { video.pause(); stopAt = null; }
+  $("#hudCam").textContent = hms(cam, true); $("#hudAcc").textContent = hms(cam - OFF, true);
+  $("#clock").innerHTML = `<b>${hms(cam)}</b> · ${hms(W0).slice(0, 5)}–${hms(W1).slice(0, 5)}`;
+  const minute = hms(cam - OFF).slice(0, 5); const pm = phantomMin[minute];
+  const near = events.filter((e) => Math.abs(e.cam - cam) < 1600);
+  const ban = $("#banner");
+  if (near.length && near[0].ref.kind === "entries") { const e = near[0].ref; ban.innerHTML = `<span class="badge v-${e.v}">${t("verdict")[e.v]}</span><span>${fmt(t("bannerEntry"), { id: e.id, t: hms(e.camMs - OFF) })}${e.record ? " · " + e.record : ""}</span>`; ban.classList.add("on"); }
+  else if (near.length) { const x = near[0].ref; ban.innerHTML = `<span class="badge v-exit">${t("verdict").exit}</span><span>${fmt(t("bannerExit"), { id: x.id, t: hms(x.camMs - OFF) })}</span>`; ban.classList.add("on"); }
+  else if (pm) { ban.innerHTML = `<span class="badge v-phantom">${t("verdict").phantom}</span><span>${fmt(t("bannerPhantom"), { n: pm })}</span>`; ban.classList.add("on"); }
+  else ban.classList.remove("on");
+  $("#hudMin").innerHTML = pm ? `<span style="color:#ffb4a6">● ${minute} · ${pm} ${t("minNobody")}</span>` : `${minute}`;
+
+  const sam = show.masks || show.boxes ? samFrame(seg, rel) : null;
+  if (sam && show.masks) for (const [id, c, b, polys] of sam) { const col = tracked ? trackColor(id) : "#7fccb4"; for (const p of polys) { cx.beginPath(); for (let i = 0; i < p.length; i += 2) { const x = p[i] * w, y = p[i + 1] * h; i ? cx.lineTo(x, y) : cx.moveTo(x, y); } cx.closePath();
+    cx.globalAlpha = .32; cx.fillStyle = col; cx.fill(); cx.globalAlpha = .95; cx.strokeStyle = col; cx.lineWidth = 1.5; cx.stroke(); cx.globalAlpha = 1; } }
+  if (show.boxes && sam) for (const [id, c, b] of sam) { const x = b[0] * w, y = b[1] * h, bw = (b[2] - b[0]) * w, bh = (b[3] - b[1]) * h; const col = tracked ? trackColor(id) : "#ffffff";
+    cx.strokeStyle = col; cx.lineWidth = 1.6; cx.beginPath(); cx.roundRect(x, y, bw, bh, 6); cx.stroke();
+    if (w >= 640) { const lab = `P${id} · ${c.toFixed(2)}`; cx.font = "600 11px 'JetBrains Mono'"; const tw = cx.measureText(lab).width + 10;
+      cx.fillStyle = "#14133fcc"; cx.beginPath(); cx.roundRect(x, Math.max(0, y - 18), tw, 16, 5); cx.fill(); cx.fillStyle = col; cx.fillText(lab, x + 5, Math.max(12, y - 6)); }
+    cx.fillStyle = col; cx.beginPath(); cx.arc(x + bw / 2, y + bh, 3, 0, 7); cx.fill(); }
+  if (show.line) { const ax = LINE.a[0] * w, ay = LINE.a[1] * h, bx = LINE.b[0] * w, by = LINE.b[1] * h;
+    cx.save(); cx.setLineDash([10, 6]); cx.lineDashOffset = -performance.now() / 60; cx.strokeStyle = "#dce064"; cx.lineWidth = 3; cx.beginPath(); cx.moveTo(ax, ay); cx.lineTo(bx, by); cx.stroke(); cx.restore();
+    cx.font = "600 11px 'JetBrains Mono'"; cx.fillStyle = "#dce064"; cx.fillText(lang === "es" ? "▲ ADENTRO" : "▲ INSIDE", bx + 8, by - 4);
+    const cand = (sam || samFrame(seg, rel) || []).map(([, , b]) => [(b[0] + b[2]) / 2 * w, b[3] * h]);
+    const segDist = ([px, py]) => { const dx = bx - ax, dy = by - ay; const u = Math.max(0, Math.min(1, ((px - ax) * dx + (py - ay) * dy) / (dx * dx + dy * dy))); return Math.hypot(px - ax - u * dx, py - ay - u * dy); };
+    const foot = cand.sort((p, q) => segDist(p) - segDist(q))[0];
+    for (const e of near) { const p = 1 - Math.abs(e.cam - cam) / 1600; const [mx, my] = foot && segDist(foot) < h * 0.25 ? foot : [(ax + bx) / 2, (ay + by) / 2]; const col = e.ref.kind === "exits" ? "rgba(169,182,211," : e.ref.v === "recorded" ? "rgba(127,204,180," : "rgba(224,100,79,";
+      cx.strokeStyle = col + p + ")"; cx.lineWidth = 3; cx.beginPath(); cx.arc(mx, my, 18 + (1 - p) * 40, 0, 7); cx.stroke(); cx.fillStyle = col + (p * .25) + ")"; cx.beginPath(); cx.arc(mx, my, 18 + (1 - p) * 40, 0, 7); cx.fill(); }
+  }
+  if (!window.OVERLAY) { cx.font = "12px Onest"; cx.fillStyle = "#fff9"; cx.fillText(t("noOverlay"), w - 130, h - 14); }
+  updatePlayhead(cam);
+  requestAnimationFrame(draw);
+}
+const dur = (s) => s >= 60 ? `${Math.floor(s / 60)}m ${String(Math.round(s % 60)).padStart(2, "0")}s` : `${Math.round(s)}s`;
+
+/* ---------- timeline ---------- */
+const BURST0 = ms(A.window.from.slice(0, 11) + A.stats.phantom_burst.from + ":00" + A.window.from.slice(19)), BURST1 = ms(A.window.from.slice(0, 11) + A.stats.phantom_burst.to + ":00" + A.window.from.slice(19));
+function lanesSvg(id, a, b, ticksEvery, height) {
+  const el = $(id); const W = el.clientWidth || 1200, L = 150, R = 16, H = height; const X = (c) => L + (c - a) / (b - a) * (W - L - R);
+  const lanes = t("lanes"); const y = [26, 74, 112, 140];
+  let s = `<svg viewBox="0 0 ${W} ${H}" height="${H}">`;
+  s += `<defs><pattern id="hatch${id.slice(1)}" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" fill="#fbe3dd"/><line x1="0" y1="0" x2="0" y2="6" stroke="#e0644f" stroke-width="2"/></pattern></defs>`;
+  const ba = Math.max(a, BURST0), bb = Math.min(b, BURST1);
+  if (bb > ba) s += `<rect x="${X(ba)}" y="4" width="${X(bb) - X(ba)}" height="${H - 26}" rx="8" fill="#e0644f14"/><text x="${X(ba) + 6}" y="16" style="fill:#b4432f">${t("burst")}</text>`;
+  lanes.forEach((l, i) => { s += `<text class="lab" x="0" y="${y[i] + 4}">${l}</text><line x1="${L}" x2="${W - R}" y1="${y[i]}" y2="${y[i]}" stroke="#14133f14"/>`; });
+  for (let c = Math.ceil(a / ticksEvery) * ticksEvery; c <= b; c += ticksEvery) s += `<line x1="${X(c)}" x2="${X(c)}" y1="${H - 24}" y2="${H - 18}" stroke="#14133f40"/><text x="${X(c)}" y="${H - 4}" text-anchor="middle">${hms(c).slice(0, 5)}</text>`;
+  const byMin = {}; recs.forEach((r) => { (byMin[r.minute] ||= []).push(r); });
+  for (const [m, rs] of Object.entries(byMin)) { const c0 = ms(rs[0].access_ts) + OFF; rs.forEach((r, k) => { const x = X(c0) + 0.5, w = Math.max(2, X(c0 + 60000) - X(c0) - 1); if (x + w < L || x > W - R) return;
+      const hh = 34 / Math.max(6, rs.length); s += `<rect data-jump="${r.id}" x="${x}" y="${y[0] + 16 - (k + 1) * hh}" width="${w}" height="${hh - 1}" rx="2" fill="${r.verdict === "phantom" ? `url(#hatch${id.slice(1)})` : "#2e7d7c"}" style="cursor:pointer"><title>${r.id} · ${r.minute}</title></rect>`; }); }
+  ents.forEach((e) => { const x = X(e.camMs); if (x < L || x > W - R) return; const col = e.v === "recorded" ? "#2e7d7c" : "#e0644f";
+    s += `<g data-jump="${e.id}" style="cursor:pointer"><circle cx="${x}" cy="${y[1]}" r="${e.v === "recorded" ? 6 : 7}" fill="${col}" ${e.v === "unrecorded" ? 'stroke="#fff" stroke-width="2"' : ""}/><title>${e.id} · ${hms(e.camMs - OFF)}</title></g>`; });
+  exts.forEach((x0) => { const x = X(x0.camMs); if (x < L || x > W - R) return; s += `<path data-jump="${x0.id}" d="M${x - 5} ${y[2] - 4} L${x + 5} ${y[2] - 4} L${x} ${y[2] + 5}Z" fill="#a9b6d3" style="cursor:pointer"/>`; });
+  segs.forEach((g) => { const x0 = Math.max(L, X(g.c0)), x1 = Math.min(W - R, X(g.c1)); if (x1 > x0) s += `<rect x="${x0}" y="${y[3] - 5}" width="${Math.max(1, x1 - x0)}" height="10" rx="3" fill="#7fccb4"/>`; });
+  s += `<line class="ph" x1="0" x2="0" y1="4" y2="${H - 22}" stroke="#14133f" stroke-width="2"/><circle class="phd" cx="0" cy="4" r="5" fill="#dce064" stroke="#14133f" stroke-width="2"/>`;
+  s += `<rect class="hit" x="${L}" y="0" width="${W - L - R}" height="${H - 22}" fill="transparent"/></svg>`;
+  el.innerHTML = s; el._X = X; el._a = a; el._b = b; el._L = L; el._W = W; el._R = R;
+  $(`${id} .hit`).onclick = (ev) => { const r = el.querySelector("svg").getBoundingClientRect(); const px = (ev.clientX - r.left) * (W / r.width); goCam(a + (px - L) / (W - L - R) * (b - a)); };
+  el.querySelector(".hit").parentNode.querySelectorAll("[data-jump]").forEach((n) => n.parentNode.appendChild(n));
+}
+function renderFlow() {
+  const el = $("#flow"); const W = el.clientWidth || 1200, H = 260, L = 8, R = 8, mid = 128, top = 26, n = flow.length, bw = (W - L - R) / n;
+  const peak = Math.max(...flow.map((b) => Math.max(b.in, b.out))), k = (mid - top - 4) / peak;
+  let s = `<svg viewBox="0 0 ${W} ${H}" height="${H}"><line x1="${L}" x2="${W - R}" y1="${mid}" y2="${mid}" stroke="#14133f26"/>`;
+  flow.forEach((b, i) => { const x = L + i * bw + bw * .18, w = bw * .64, d = "";
+    s += `<g class="fb" data-bin="${i}"><rect x="${L + i * bw}" y="0" width="${bw}" height="${H - 22}" fill="transparent"/>`;
+    if (b.in) s += `<rect class="up" ${d} x="${x}" y="${mid - b.in * k}" width="${w}" height="${b.in * k}" rx="6" fill="#2e7d7c"/><text x="${x + w / 2}" y="${mid - b.in * k - 8}" text-anchor="middle" class="v">${b.in}</text>`;
+    if (b.out) s += `<rect class="dn" ${d} x="${x}" y="${mid + 2}" width="${w}" height="${b.out * k}" rx="6" fill="#a9b6d3"/><text x="${x + w / 2}" y="${mid + b.out * k + 18}" text-anchor="middle" class="v">${b.out}</text>`;
+    if (i % 3 === 0) s += `<text x="${L + i * bw}" y="${H - 4}">${hms(b.a).slice(0, 5)}</text>`;
+    s += `</g>`; });
+  s += `<rect class="fph" x="0" y="${top - 18}" width="${bw}" height="${H - top - 8}" rx="8" fill="#dce06433"/></svg>`;
+  el.innerHTML = s + `<div class="tlkey"><span><i class="sw" style="background:#2e7d7c"></i>${t("flowIn")}</span><span><i class="sw" style="background:#a9b6d3"></i>${t("flowOut")}</span></div>`;
+  el._bw = bw; el._L = L;
+  el.querySelector("svg").animate([{ clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0 0 0)" }], { duration: 1400, easing: "cubic-bezier(.2,.7,.2,1)" });
+  $$("#flow .fb").forEach((g) => g.onclick = () => { const b = flow[g.dataset.bin]; const e = events.find((x) => x.cam - OFF >= b.a); if (e && e.cam - OFF < b.a + BIN) select(e.ref, true); else goCam(b.a + OFF); });
+}
+function renderTimeline() {
+  renderFlow();
+  lanesSvg("#tl", W0, W1, 5 * 60000, 176);
+  const k = t("key");
+  $("#tlkey").innerHTML = [["#2e7d7c", k[0]], ["url", k[1]], ["#2e7d7c", k[2], 1], ["#e0644f", k[3], 1], ["#a9b6d3", k[4]], ["#7fccb4", k[5]]].map(([c, l, dot]) =>
+    `<span><i class="sw" style="${c === "url" ? "background:repeating-linear-gradient(45deg,#e0644f 0 2px,#fbe3dd 2px 5px)" : `background:${c}`};${dot ? "border-radius:50%;width:11px;height:11px" : ""}"></i>${l}</span>`).join("") + `<span style="margin-left:auto">${t("zoom")}</span>`;
+  zoomAt = null;
+}
+let zoomAt = null;
+function updatePlayhead(cam) {
+  const fl = $("#flow"), fp = fl.querySelector(".fph"); if (fp) { const i = Math.floor((cam - OFF - W0) / BIN); fp.setAttribute("x", fl._L + Math.max(0, Math.min(flow.length - 1, i)) * fl._bw); }
+  for (const id of ["#tl", "#tlz"]) { const el = $(id); if (!el._X) continue; const x = el._X(Math.max(el._a, Math.min(el._b, cam))); el.querySelector(".ph")?.setAttribute("x1", x); el.querySelector(".ph")?.setAttribute("x2", x); el.querySelector(".phd")?.setAttribute("cx", x); }
+  const c = Math.round(cam / 30000) * 30000; if (c !== zoomAt) { zoomAt = c; lanesSvg("#tlz", c - 300000, c + 300000, 60000, 176); }
+}
+
+/* ---------- insights & method ---------- */
+function renderInsights() {
+  $("#insights").innerHTML = t("ins").map(([k, h, p], i) => `<div class="ins ${["dark", "mint", ""][i]} rise" style="animation-delay:${.1 * i}s"><div class="k">${k}</div><h3>${h}</h3><p>${p}</p></div>`).join("");
+  $("#method").innerHTML = t("method").map(([b, p]) => `<div><b>${b}</b>${p}</div>`).join("");
+}
+
+/* ---------- export ---------- */
+function download(name, text, type) { const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([text], { type })); a.download = name; a.click(); }
+const rowsOut = () => [...recs.map((r) => ({ id: r.id, kind: "record", access_time: hms(ms(r.access_ts)).slice(0, 5), camera_time: r.verdict === "confirmed" ? hms(entById[r.entry].camMs) : "", verdict: r.verdict, pair: r.entry || "", review: review[r.id] || "" })),
+  ...ents.map((e) => ({ id: e.id, kind: "entry", access_time: hms(e.camMs - OFF), camera_time: hms(e.camMs), verdict: e.v, pair: e.record || "", review: review[e.id] || "" }))];
+$("#exportCsv").onclick = () => { const r = rowsOut(); download("rikuy-audit-2026-10-29.csv", [Object.keys(r[0]).join(","), ...r.map((o) => Object.values(o).join(","))].join("\n"), "text/csv"); };
+$("#exportJson").onclick = $("#exportTop").onclick = () => download("rikuy-audit-2026-10-29.json", JSON.stringify({ window: A.window, stats: st, rows: rowsOut() }, null, 1), "application/json");
+
+/* ---------- boot ---------- */
+window.__audit = { goCam: (iso) => goCam(ms(iso)), select: (id) => select(byId(id), true), video, kpis: () => { kpiDone = false; renderKpis(); } };
+applyLang();
+video.addEventListener("loadedmetadata", () => { goCam(ms(A.start_at || A.window.from)); });
+requestAnimationFrame(draw);
+setTimeout(() => renderAnswer(true), 400);
+window.addEventListener("resize", () => { renderTimeline(); });
+
+/* ---------- guided tour (?tour=1): scripted, for recording ---------- */
+const TOUR = {
+  en: [
+    [0, "cap", "The entrance camera sees every person who comes and goes. <em>Nobody counts them.</em>"],
+    [6500, "cap", "Rikuy measures the footage and asks <em>Muse Spark</em>: how did people move this morning?"], [7000, "answer"],
+    [14000, "scroll", ".kpis"], [14500, "cap", "26 in, 20 out, <em>19 arrivals in ten minutes.</em>"],
+    [21000, "scroll", ".stage"], [21500, "jump", "R05"], [22000, "cap", "05:39. The log fills with check-ins. At the turnstile: <em>nobody.</em> A line to reconcile."],
+    [29000, "play"], [33000, "jump", "R24"], [33500, "cap", "A real check-in, matched to the person crossing, <em>to the second.</em>"],
+    [42000, "jump", "E07"], [42500, "cap", "And people who walked in with <em>no check-in at all.</em>"],
+    [51000, "jump", "E02"], [51500, "cap", "Every person is segmented by <em>SAM 3.1</em>, measured on-premises, never identified."],
+    [60000, "scroll", "#flowCard"], [60500, "cap", "Every crossing, every five minutes: <em>the rush, measured.</em>"],
+    [69000, "scroll", ".stage"], [69500, "review", "E07"], [70000, "cap", "The owner reviews every finding and <em>exports the list.</em>"],
+    [78000, "end"]
+  ],
+  es: [
+    [0, "cap", "La cámara de la entrada ve a cada persona que entra y sale. <em>Nadie las cuenta.</em>"],
+    [6500, "cap", "Rikuy mide la grabación y le pregunta a <em>Muse Spark</em>: ¿cómo se movió la gente esta mañana?"], [7000, "answer"],
+    [14000, "scroll", ".kpis"], [14500, "cap", "26 entran, 20 salen, <em>19 llegadas en diez minutos.</em>"],
+    [21000, "scroll", ".stage"], [21500, "jump", "R05"], [22000, "cap", "05:39. El registro se llena de ingresos. En el torniquete: <em>nadie.</em> Una línea por conciliar."],
+    [29000, "play"], [33000, "jump", "R24"], [33500, "cap", "Un ingreso real, emparejado con la persona que cruza, <em>al segundo.</em>"],
+    [42000, "jump", "E07"], [42500, "cap", "Y personas que entraron <em>sin ningún registro.</em>"],
+    [51000, "jump", "E02"], [51500, "cap", "Cada persona la segmenta <em>SAM 3.1</em>, se mide en el local, nunca se identifica."],
+    [60000, "scroll", "#flowCard"], [60500, "cap", "Cada cruce, cada cinco minutos: <em>la hora pico, medida.</em>"],
+    [69000, "scroll", ".stage"], [69500, "review", "E07"], [70000, "cap", "El dueño revisa cada hallazgo y <em>exporta la lista.</em>"],
+    [78000, "end"]
+  ]
+};
+function runTour() {
+  const cap = $("#cap"); typed = true; $("#answer").innerHTML = '<span class="typing"><i></i><i></i><i></i></span>';
+  const steps = TOUR[lang]; const t0 = performance.now(); window.__tourDone = false;
+  const act = ([, k, v]) => {
+    if (k === "cap") { cap.classList.remove("on"); setTimeout(() => { cap.innerHTML = v; cap.classList.add("on"); }, 350); }
+    if (k === "answer") { typed = false; renderAnswer(true); }
+    if (k === "scroll") { const el = $(v); window.scrollTo({ top: el.getBoundingClientRect().top + scrollY - 24, behavior: "smooth" }); if (v === ".kpis") { kpiDone = false; renderKpis(); } }
+    if (k === "jump") { const o = byId(v); select(o, true); const r = $(`#list .row[data-id="${v}"]`); r?.classList.add("spot"); setTimeout(() => r?.classList.remove("spot"), 2600); }
+    if (k === "play") { stopAt = null; video.play(); }
+    if (k === "review") { const o = byId(v); if (tab !== o.kind) { tab = o.kind; renderTabs(); } review[v] = "agree"; saveReview(); renderList();
+      const b = $("#exportCsv"); b.classList.add("spot"); setTimeout(() => b.classList.remove("spot"), 2500); }
+    if (k === "end") { cap.classList.remove("on"); video.pause(); window.__tourDone = true; }
+  };
+  let i = 0; const tick = () => { const now = performance.now() - t0; while (i < steps.length && steps[i][0] <= now) act(steps[i++]); if (i < steps.length) requestAnimationFrame(tick); };
+  tick();
+}
+window.__audit.tour = runTour;
+if (new URLSearchParams(location.search).get("tour")) video.addEventListener("canplay", () => setTimeout(runTour, 800), { once: true });
+})();
+</script>
+</body>
+</html>
