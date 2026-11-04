@@ -29,7 +29,7 @@ Most small businesses already own a DVR or IP cameras, and nobody watches them. 
 Rikuy Connect is the safe connection layer:
 
 ```
-[AI agent + Rikuy skills]          Muse Code agent (Muse Wonder) on pi.dev
+[AI agent + Rikuy skills]          Muse (Meta's personal agent) or Muse Code (Muse Wonder) on pi.dev
         │ MCP
         ▼
 [FastMCP gateway]  apps/gateway     per-agent grants · audit log · instant revocation
@@ -65,8 +65,11 @@ Customer footage, member identities and ERP exports are private and are **not** 
 
 Meta models are on the main path: the agent, the masks that make every count reviewable, and the answer the owner reads.
 
+Two Meta agents run the skills. **Muse**, Meta's personal agent, is connected to the Rikuy MCP server (`https://mcp.rikuy.si/mcp`) and calls the camera tools directly; we also asked it about the results. **Muse Code** on pi.dev (Muse Wonder) runs the same skills and writes the site pipelines. The field deployments used both. Interviews with domain experts and with the businesses themselves were done by us, not by an agent.
+
 | Step | Model | Meta? | Where |
 |---|---|---|---|
+| Agent: calls the camera tools over MCP, follows the skills, looks at frames and checks results | **Muse** (Meta's personal agent, via `mcp.rikuy.si`) | ✅ Meta | `skills/*/SKILL.md`, `apps/gateway/` |
 | Agent: plans, writes and adapts pipeline code, looks at frames and checks results | **Muse Wonder** (Muse Code on pi.dev) | ✅ Meta | `skills/*/SKILL.md` |
 | Answer to the owner, with citations to event ids | **Muse Spark 1.3** (Meta Model API) | ✅ Meta | `demo/animalx-gym/inference/src/rikuy_gym/report.py` |
 | Pixel masks that make each counted person reviewable; occupancy; material flow | **SAM 3 / SAM 3.1** | ✅ Meta | `rikuy_gym/segment.py`, `rikuy_bus/occupancy.py`, `enpiso-workshop/vision/sam3_material.py`, `animalx-epic/pipeline/epic/masks_v003.py` |

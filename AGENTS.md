@@ -4,7 +4,7 @@ All authored repository, issue, and project content must be in English, regardle
 
 # Agent Runtime
 
-Skills in `skills/` run in the Muse Code agent on pi.dev (model: Muse Wonder). The same agent writes or adapts pipeline code and does every look-and-analyze step a skill names.
+Skills in `skills/` run in a Meta agent: Muse Code on pi.dev (model: Muse Wonder), or Muse, Meta's personal agent, connected to the Rikuy MCP server (`https://mcp.rikuy.si/mcp`). The running agent writes or adapts pipeline code and does every look-and-analyze step a skill names.
 
 # Writing Skills
 
