@@ -54,8 +54,8 @@ Each one went from an existing camera, through the bridge, to an answer the owne
 | Site | Question | Result | Code |
 |---|---|---|---|
 | Gym, Caldas (Hikvision DVR) | Does the turnstile log match the people who came in? | 26 entries and 20 exits on camera vs. 39 access records; 16 pair to an entry, 23 records in 6 minutes have nobody at the turnstile, 8 validated entries have no record. Awaiting the owner's review. | `demo/animalx-gym/` |
-| Urban bus, cabin camera | Do boardings match the fare counter? | 9 boardings on camera vs. 7 on the fare counter at one stop; 2 to reconcile. | `demo/tratam-bus/` |
-| Garment workshop (EZVIZ camera + EnPiso production-control ERP) | Where does the sewing module lose time? | Station B sets the pace at 127 s per piece; 34 of 35 ERP captures match the operator's hand on the keypad (median −1.2 s); 13 of 45 cycles have no capture. | `demo/enpiso-workshop/` |
+| Tratam (urban transport), bus cabin camera | Do boardings match the fare counter? | 9 boardings on camera vs. 7 on the fare counter at one stop; 2 to reconcile. | `demo/tratam-bus/` |
+| Garment workshop on EnPiso (production-control ERP) + EZVIZ camera | Where does the sewing module lose time? | Station B sets the pace at 127 s per piece; 34 of 35 ERP captures match the operator's hand on the keypad (median −1.2 s); 13 of 45 cycles have no capture. | `demo/enpiso-workshop/` |
 | Gym, Caldas (4 cameras + ERP) | Which members are worth keeping, and show them why | Two members' training highlight videos from three mornings of CCTV, plus an owner page; rep count within ±1 on 8 of 10 sets. | `demo/animalx-epic/` |
 | Mock Ezviz camera | Did the package arrive at the door? | Full agent run: skill → MCP → bridge → camera → object store → link. Reproducible offline. | `demo/run_poc.py` |
 
