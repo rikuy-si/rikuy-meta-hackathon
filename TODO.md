@@ -1,6 +1,6 @@
 # Rikuy Connect — TODO
 
-**Deadline: Nov 4, 2026, 5:00 pm (UTC-5).** About one day left as of Nov 3.
+**Deadline: Nov 4, 2026, 9:00 pm ET (UTC-5).**
 
 ## Done
 
@@ -21,7 +21,7 @@
       the R2 stand-in; idempotent re-runs; nothing lost on partial failure).
 - [x] Windows cross-build (`x86_64-pc-windows-gnu` via zig): PE32+ console
       binaries build; runtime unverified.
-- [x] Static reverse pass over iVMS-4200 (`docs/reverse-notes.md`): endpoint
+- [x] Static reverse pass over iVMS-4200 (`apps/rikuy-bridge/crates/docs/reverse-notes.md`): endpoint
       shapes confirmed, 5 new protocol leads.
 
 ## Critical path — do in this order
@@ -43,9 +43,10 @@
 - [x] 6. **POC + demo video (WS7)** — done Nov 3: `demo/run_poc.py` runs the
        package-at-the-door skill against the mock Ezviz camera. Cut is
        `demo/poc.mp4`; still is `demo/artifacts/door.jpg`.
-- [ ] 7. **Polish + submission (WS8)**: README is on day 9 and the checklist
-       is in `demo/README.md`. Fill the hackathon form by hand before
-       Nov 4, 5:00 pm (UTC-5). No new features after this. — S
+- [ ] 7. **Polish + submission (WS8)**: README rewritten for submission (Nov 4):
+       pre-existing work, models table, Quickstart, limitations; `.env.example`
+       added. Still open: demo video link in the README. Fill the hackathon form by hand before
+       Nov 4, 9:00 pm ET (UTC-5). No new features after this. — S
 
 ## Blocked / conditional
 
@@ -64,7 +65,6 @@
 
 ## Hygiene
 
-- [ ] Final README polish before submission: screenshots, demo video link,
-      submission checklist (WS8, Nov 3–4).
-- [ ] Keep local scratch out of the submitted repository — `runs/` is already
-      gitignored.
+- [x] Final README polish before submission (Nov 4); demo video link still to add.
+- [x] Keep local scratch out of the submitted repository — `runs/` is
+      gitignored and was never committed.

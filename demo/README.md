@@ -20,10 +20,12 @@ Needs ffmpeg and ffprobe on `PATH`. The script rebuilds `mock-onvif` and `rikuy-
 
 ## Submission checklist
 
-Deadline: **Nov 4, 2026, 5:00 pm (UTC-5).**
+Deadline: **Nov 4, 2026, 9:00 pm ET (UTC-5).**
 
+- Track: Startup — Elevate Endeavors LLC (Rikuy). Representative: Sebastian Rojo.
 - Repository: `https://github.com/rikuy-si/rikuy-meta-hackathon`
-- Video: `demo/poc.mp4`
+- Video: 3-minute cut on YouTube or Vimeo (public); its link also goes at the top of the root README. `demo/poc.mp4` is the 14-second proof of concept, not the submission video.
+- X post: the demo post (not the Nov 3 teaser), for Most Viral.
 - Still: `demo/artifacts/door.jpg`
 - Blurb: Rikuy Connect lets an agent ask for a live image or a historical clip. A FastMCP gateway checks a grant, audits the call, and hands the job to a Rust bridge on the customer network (Hikvision ISAPI or Ezviz ONVIF). Recordings go to object storage through presigned URLs and the agent gets a shareable link back.
 

@@ -1,6 +1,6 @@
 # Rikuy Connect — Hackathon Plan (High Level)
 
-Meta Global AI Developer Hackathon (Cerebral Valley x Meta). Window: **Oct 26 – Nov 4, 2026, 5:00 pm (UTC-5) submission deadline.**
+Meta Global AI Developer Hackathon (Cerebral Valley x Meta). Window: **Oct 26 – Nov 4, 2026, 9:00 pm ET (UTC-5) submission deadline.**
 
 ## Goal
 
@@ -56,7 +56,7 @@ Effort: S (< half day), M (~1 day), L (2+ days) — sequential per stream, paral
 | 5 | `skills/rikuy-video` — agent skill: how to ask the MCP for a live image, download a historical range, push to R2, and return a shareable URL | M | Oct 31 | Nov 1 | Depends on 4 (tools stable) |
 | 6 | End-user use-case skills — one skill per scenario (e.g. "did the salon open on time", "find the moment X happened and save the clip", "package left at the door") | M | Nov 1 | Nov 2 | Depends on 5 |
 | 7 | POC + demo video — recorded agent runs end-to-end on this architecture (agent → skill → MCP → rust connector → camera → R2), edited submission video | M | Nov 2 | Nov 3 | Depends on 2–6 |
-| 8 | Polish + submission — README, screenshots, submission form, final push | S | Nov 3 | Nov 4 (5 pm UTC-5) | Hard deadline; no new features after Nov 3 |
+| 8 | Polish + submission — README, screenshots, submission form, final push | S | Nov 3 | Nov 4 (9 pm ET, UTC-5) | Hard deadline; no new features after Nov 3 |
 
 ## Critical path
 
@@ -71,7 +71,7 @@ Ezviz (3) runs parallel off the shared connector crate; it enriches the demo but
 - **Nov 1** — Agent completes a full task unassisted via `rikuy-video` skill (live image + historical clip uploaded to R2 with returned URL).
 - **Nov 2** — Use-case skills demonstrated on 2–3 scenarios.
 - **Nov 3** — POC recorded end-to-end; demo video cut.
-- **Nov 4, 5:00 pm (UTC-5)** — Submitted.
+- **Nov 4, 9:00 pm ET (UTC-5)** — Submitted.
 
 ## Risks & mitigations
 
@@ -81,4 +81,4 @@ Ezviz (3) runs parallel off the shared connector crate; it enriches the demo but
 
 ## Definition of done (hackathon)
 
-Working end-to-end: an AI agent, given a natural-language task, uses Rikuy skills → FastMCP gateway → Rust connector on the customer network → camera, retrieves live or historical video, uploads evidence to Cloudflare R2, and returns the result — with permissions and audit trail. Captured on video and submitted before Nov 4, 5:00 pm (UTC-5).
+Working end-to-end: an AI agent, given a natural-language task, uses Rikuy skills → FastMCP gateway → Rust connector on the customer network → camera, retrieves live or historical video, uploads evidence to Cloudflare R2, and returns the result — with permissions and audit trail. Captured on video and submitted before Nov 4, 9:00 pm ET (UTC-5).

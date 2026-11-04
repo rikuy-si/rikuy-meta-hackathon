@@ -10,8 +10,7 @@ pi.dev (model: Muse Wonder) following that skill.
 
 ## Result
 
-- Owner page (published, unlisted, first names only, expires 30 days after Nov 4, 2026):
-  https://ve.rikuy.si/tmp/arpagon/arpagon-01-med/pi/01a1a524-15f3-7456-8409-ae4400f6d94a/animalx-socios.html
+- Owner page (shared privately with the gym owner; not linked here because it names members).
 - 8 videos: 2 members × Spanish/English × 16:9 (web) / 9:16 (WhatsApp).
 - Member A (loyal): 1,539 visits since 2020, 12 of 12 months active, but September 2026 was
   the lowest month since 2021 (9 visits). Edit: 196 s, 19 training shots, 94.7 % with ≥ 3 reps.
