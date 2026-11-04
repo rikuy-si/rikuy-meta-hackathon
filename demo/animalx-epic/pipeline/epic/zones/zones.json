@@ -1,0 +1,28 @@
+{
+  "_doc": "Per-camera zones in 1280x720 pixel coordinates, tested on the foot point (bottom-centre) of the person box. First matching polygon wins. Labels are Spanish because they are shown on screen in the edit. Drawn on frames from 2026-10-30 06:00 (zones/frame_cam*.jpg).",
+  "cam101": [
+    {"id": "piernas", "label": "Máquinas de pierna", "poly": [[0,150],[330,150],[330,480],[0,480]]},
+    {"id": "fondo", "label": "Fondo del gimnasio", "poly": [[330,0],[1280,0],[1280,170],[330,170]]},
+    {"id": "mancuernas", "label": "Zona de mancuernas", "poly": [[330,170],[1040,170],[1040,420],[330,420]]},
+    {"id": "racks", "label": "Racks y barras", "poly": [[1040,170],[1280,170],[1280,450],[1040,450]]},
+    {"id": "bancos", "label": "Bancos y barras", "poly": [[0,420],[1280,420],[1280,720],[0,720]]},
+    {"id": "otro", "label": "Piso principal", "poly": [[0,0],[1280,0],[1280,720],[0,720]]}
+  ],
+  "cam201": [
+    {"id": "poleas", "label": "Poleas y máquinas", "poly": [[0,80],[500,80],[500,560],[0,560]]},
+    {"id": "lounge", "label": "Barra de jugos", "poly": [[500,60],[880,60],[880,300],[500,300]]},
+    {"id": "piso", "label": "Piso abierto", "poly": [[500,300],[880,300],[880,560],[500,560]]},
+    {"id": "entrada", "label": "Zona de entrada", "poly": [[880,60],[1280,60],[1280,560],[880,560]]},
+    {"id": "bancos2", "label": "Bancos laterales", "poly": [[0,560],[1280,560],[1280,720],[0,720]]},
+    {"id": "otro", "label": "Zona lateral", "poly": [[0,0],[1280,0],[1280,720],[0,720]]}
+  ],
+  "cam301": [
+    {"id": "recepcion", "label": "Recepción", "poly": [[0,0],[1280,0],[1280,720],[0,720]]}
+  ],
+  "cam401": [
+    {"id": "fondo4", "label": "Fondo del gimnasio", "poly": [[0,0],[1280,0],[1280,300],[0,300]]},
+    {"id": "plataformas", "label": "Plataformas y racks", "poly": [[0,300],[400,300],[400,720],[0,720]]},
+    {"id": "mancuernas4", "label": "Zona de mancuernas", "poly": [[400,300],[880,300],[880,720],[400,720]]},
+    {"id": "maquinas4", "label": "Máquinas", "poly": [[880,300],[1280,300],[1280,720],[880,720]]}
+  ]
+}
