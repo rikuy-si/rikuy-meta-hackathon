@@ -40,7 +40,7 @@ prod = dict(
                             dict(name="Confeccion", sam=3.8, operations=["1 operation (Confección)"]),
                             dict(name="Empaque", sam=0.0, operations=["1 operation"])],
                  colors=[], size_ranges=[], category=None, images_in_cp=2),
-    workOrder=dict(number=None, client=None, issued="2026-10-27", due="2026-10-27", size_on_video="L", size_before_11_22="XL", package="3-2797672-003"),
+    workOrder=dict(number=None, client=None, issued="2026-10-27", due="2026-10-27", size_on_video="L", size_before_11_22="XL", package=None),
     models=out,
     sources=[
         "CP product image (151×117 px, '[BRAND] · [PRINT] · ESTD 1985'), red callouts removed, upscaled ×6 (detail invented by interpolation).",
