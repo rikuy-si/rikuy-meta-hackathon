@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rikuy · Audit · Bus cabin</title>
+<link rel="preload" href="../fonts/onest-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="rikuy.css">
+<style>
+.glance{background:var(--noche);color:#fff;border-radius:var(--r-lg);padding:22px 24px;box-shadow:var(--dark);position:relative;overflow:hidden}
+.glance .k{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--hielo)}
+.glance .big{display:flex;align-items:flex-end;gap:22px;margin:12px 0 4px}
+.glance .big div{display:flex;flex-direction:column}
+.glance .big b{font-size:58px;font-weight:500;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
+.glance .big span{font-size:13px;color:var(--hielo);margin-top:6px}
+.glance .vs{font-family:var(--mono);font-size:14px;color:var(--amarillo);padding-bottom:22px}
+.glance svg{display:block;width:100%;margin-top:14px}
+.glance .meta{margin-top:12px;padding-top:12px;border-top:1px solid #ffffff1a;font-family:var(--mono);font-size:11px;color:var(--hielo);display:flex;gap:14px;flex-wrap:wrap}
+.kpis.k4{grid-template-columns:repeat(4,1fr)}
+.v-boarded{background:#2e7d7c1f;color:var(--teal)}
+.v-pending{background:#dce06466;color:#5b5a12}
+.v-rejected{background:var(--blanco);color:var(--tinta)}
+.occ text{font-family:var(--mono);font-size:11px;fill:var(--tinta)}
+@media (max-width:1100px){.kpis.k4{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="bg"><i></i><i></i></div>
+<div class="wrap">
+  <header class="top">
+    <div class="logo">rikuy<b></b></div>
+    <nav class="cases"><a href="bus.html" aria-current="page" data-i="caseBus"></a></nav>
+    <div class="crumb"><span data-i="crumb1"></span><span>›</span><strong data-i="crumb2"></strong></div>
+    <div class="sp"></div>
+    <div class="lang" role="group" aria-label="Language"><button data-lang="en">EN</button><button data-lang="es">ES</button></div>
+    <button class="pill y" id="exportTop" data-i="export"></button>
+  </header>
+
+  <section class="hero">
+    <div class="rise">
+      <div class="eyebrow"><i></i><span data-i="eyebrow"></span></div>
+      <h1 id="h1"></h1>
+      <p class="lead" id="lead"></p>
+    </div>
+    <div class="glance rise" style="animation-delay:.15s">
+      <div class="k" data-i="glance"></div>
+      <div class="big">
+        <div><b id="gA">–</b><span id="gAL"></span></div>
+        <div class="vs">·</div>
+        <div><b id="gB">–</b><span data-i="gB"></span></div>
+      </div>
+      <svg id="spark" viewBox="0 0 600 90" height="90"></svg>
+      <div class="meta" id="gmeta"></div>
+    </div>
+  </section>
+
+  <section class="kpis k4" id="kpis"></section>
+
+  <section class="stage">
+    <div class="player rise" style="animation-delay:.25s">
+      <div class="screen">
+        <video id="video" preload="auto" muted playsinline></video>
+        <canvas id="ov"></canvas>
+        <div class="hud">
+          <div class="chip rec"><i></i><span data-i="cam"></span></div>
+          <div class="chip"><span data-i="clockL"></span> <b id="hudClock">--:--:--</b></div>
+          <div class="chip"><span data-i="speedL"></span> <b>0 km/h</b></div>
+        </div>
+        <div class="hud-r"><div class="chip" id="hudOcc"></div></div>
+        <div class="banner" id="banner"></div>
+      </div>
+      <div class="controls">
+        <button class="cbtn play" id="play" aria-label="Play">▶</button>
+        <button class="cbtn" data-step="-10">−10s</button><button class="cbtn" data-step="-1">−1s</button>
+        <button class="cbtn" data-step="-0.2">‹</button><button class="cbtn" data-step="0.2">›</button>
+        <button class="cbtn" data-step="1">+1s</button><button class="cbtn" data-step="10">+10s</button>
+        <span class="sep"></span>
+        <button class="cbtn" id="prevEv" data-i="prevEv"></button><button class="cbtn" id="nextEv" data-i="nextEv"></button>
+        <span class="sep"></span>
+        <button class="cbtn" id="speed">1×</button>
+        <span class="sep"></span>
+        <button class="cbtn" data-ov="masks" aria-pressed="true" data-i="ovMasks"></button>
+        <button class="cbtn" data-ov="boxes" aria-pressed="true" data-i="ovBoxes"></button>
+        <span class="sp"></span>
+        <span class="clock" id="clock"></span>
+      </div>
+      <div class="legend">
+        <span><i class="sw" style="background:#7fccb466;outline:1px solid #7fccb4"></i><span data-i="lgMask"></span></span>
+        <span><i class="sw" style="background:transparent;outline:1.5px solid #fff"></i><span data-i="lgBox"></span></span>
+        <span><i class="sw" style="background:#dce064;border-radius:50%;width:10px;height:10px"></i><span data-i="lgBoard"></span></span>
+      </div>
+    </div>
+
+    <aside class="side rise" style="animation-delay:.35s">
+      <div class="tabs" role="tablist"><button role="tab" aria-selected="true" id="tabB"></button></div>
+      <div class="progress"><span id="revText"></span><span class="track"><i id="revBar"></i></span></div>
+      <div class="list" id="list"></div>
+      <div class="foot"><button class="pill g" id="exportCsv" data-i="exportCsv"></button><button class="pill g" id="exportJson" data-i="exportJson"></button></div>
+    </aside>
+  </section>
+
+  <section class="card">
+    <h2 data-i="occTitle"></h2>
+    <p class="sub" data-i="occSub"></p>
+    <div class="tl occ" id="occ"></div>
+    <div class="tlkey" id="occkey"></div>
+  </section>
+
+  <section class="grid3" id="insights"></section>
+  <section class="method" id="method"></section>
+</div>
+<div class="toast" id="toast"></div>
+<div class="cap" id="cap"></div>
+
+<script src="data/bus.js"></script>
+<script>
+(() => {
+const B = window.BUS;
+const T = {
+en: {
+  caseGym: "Gym", caseBus: "Bus",
+  crumb1: "Audit", crumb2: "Bus cabin · Nov 1 · 06:52–06:59",
+  export: "Export review", eyebrow: "Passenger flow · terminal stop",
+  h1Pending: "Know who is on board. <em>{n}</em> boardings to confirm.",
+  h1Done: "Know who is on board, <em>second by second</em>.",
+  lead: "Same method, another business. The cabin camera already records every trip. Rikuy counts every boarding and every person in the cabin, frame by frame, and puts the fare counter on the same clock.",
+  glance: "This stop at a glance", gA: "boardings on camera", gAPending: "boardings to confirm", gB: "people in view at departure",
+  cam: "CAM 03 · CABIN", clockL: "camera", speedL: "speed", onboard: "{n} people in view",
+  prevEv: "◂ boarding", nextEv: "boarding ▸", ovMasks: "Masks", ovBoxes: "Boxes",
+  lgMask: "SAM 3.1 person mask (Meta)", lgBox: "Tracked person", lgBoard: "Boarding",
+  tab: "Boardings", reviewed: "{n} of {t} reviewed", agree: "Boarded", disagree: "Not a boarding",
+  verdict: { boarded: "Boarded", pending: "To review", rejected: "Discarded" },
+  rowSub: "Walks in from the door and down the aisle · {d}s on camera",
+  exportCsv: "Export CSV", exportJson: "Export JSON",
+  kpi: [["seen", "boardings counted on camera", "06:52–06:59"], ["burst", "boardings in {s} seconds, right before departure", ""], ["peak", "people in view at departure · SAM 3.1", ""], ["gap", "to reconcile with the fare counter ({f})", ""]],
+  kpiPending: "candidates · review pending", gapPending: "possible boardings to reconcile with the fare counter ({f})",
+  insPending: "{n} candidates against 7 on the counter.",
+  bannerBoard: "{id} · boarding at {t}",
+  occTitle: "Who is on board, second by second", occSub: "People in view of the cabin camera (SAM 3.1, smoothed), with every boarding marked. Click to jump to that second.",
+  key: ["People in view", "Boarding", "Playhead"],
+  ins: [
+    ["Boarding rush", "{b} boardings in {s} seconds.", "Right before departure the aisle fills and the cabin goes from 5 to 9 people in view. When and where a bus fills is what routes, frequencies and fleet size are planned on, measured instead of estimated."],
+    ["Fare reconciliation", "{g} of {n} boardings to reconcile.", "The counter logged {f}. The gap can be crew, a pass or a fare not collected: each one is a 5-second clip, segmented by SAM 3.1, that the operator confirms or discards in one click."],
+    ["What it takes", "No new hardware.", "The cabin camera and the fare counter are already on the bus. Rikuy reads the recording the platform already stores and compares it with the counter."]
+  ],
+  method: [
+    ["Records", "Fare counter for the stop, reported by the operator: 7 boardings between 06:52:17 and 06:59:39."],
+    ["Measurement", "Original cabin footage (CH3), 15 fps. SAM 3.1 (Meta) segments and tracks every person on every frame. Boardings are walks from the door down the aisle, confirmed on review."],
+    ["Context", "The bus is stopped at the terminal for the whole clip (0 km/h). The camera sees the aisle, not the door, so passengers who stay at the front can be missed."],
+    ["Limits", "Plate, position and route text are masked. No face recognition, no identities, no audio."]
+  ]
+},
+es: {
+  caseGym: "Gimnasio", caseBus: "Bus",
+  crumb1: "Auditoría", crumb2: "Cabina del bus · 1 nov · 06:52–06:59",
+  export: "Exportar revisión", eyebrow: "Flujo de pasajeros · parada en terminal",
+  h1Pending: "Sabe quién va a bordo. <em>{n}</em> subidas por confirmar.",
+  h1Done: "Sabe quién va a bordo, <em>segundo a segundo</em>.",
+  lead: "El mismo método, otro negocio. La cámara de la cabina ya graba cada viaje. Rikuy cuenta cada subida y cada persona en la cabina, cuadro a cuadro, y pone la registradora en el mismo reloj.",
+  glance: "Esta parada de un vistazo", gA: "subidas en cámara", gAPending: "subidas por confirmar", gB: "personas a la vista al salir",
+  cam: "CAM 03 · CABINA", clockL: "cámara", speedL: "velocidad", onboard: "{n} personas a la vista",
+  prevEv: "◂ subida", nextEv: "subida ▸", ovMasks: "Máscaras", ovBoxes: "Cajas",
+  lgMask: "Máscara de persona SAM 3.1 (Meta)", lgBox: "Persona seguida", lgBoard: "Subida",
+  tab: "Subidas", reviewed: "{n} de {t} revisadas", agree: "Subió", disagree: "No es subida",
+  verdict: { boarded: "Subió", pending: "Por revisar", rejected: "Descartada" },
+  rowSub: "Entra desde la puerta y avanza por el pasillo · {d}s en cámara",
+  exportCsv: "Exportar CSV", exportJson: "Exportar JSON",
+  kpi: [["seen", "subidas contadas en cámara", "06:52–06:59"], ["burst", "subidas en {s} segundos, justo antes de salir", ""], ["peak", "personas a la vista al salir · SAM 3.1", ""], ["gap", "por conciliar con la registradora ({f})", ""]],
+  kpiPending: "candidatas · revisión pendiente", gapPending: "posibles subidas por conciliar con la registradora ({f})",
+  insPending: "{n} candidatas frente a 7 en la registradora.",
+  bannerBoard: "{id} · subida a las {t}",
+  occTitle: "Quién va a bordo, segundo a segundo", occSub: "Personas a la vista de la cámara de cabina (SAM 3.1, suavizado), con cada subida marcada. Haz clic para ir a ese segundo.",
+  key: ["Personas a la vista", "Subida", "Cursor"],
+  ins: [
+    ["Ráfaga de subidas", "{b} subidas en {s} segundos.", "Justo antes de salir el pasillo se llena y la cabina pasa de 5 a 9 personas a la vista. Cuándo y dónde se llena un bus es la base para planificar rutas, frecuencias y flota, medido en vez de estimado."],
+    ["Conciliación de pasajes", "{g} de {n} subidas por conciliar.", "La registradora marcó {f}. La diferencia puede ser tripulación, un pase o un pasaje no cobrado: cada una es un clip de 5 segundos, segmentado por SAM 3.1, que el operador confirma o descarta con un clic."],
+    ["Lo que se necesita", "Sin hardware nuevo.", "La cámara de cabina y la registradora ya están en el bus. Rikuy lee la grabación que la plataforma ya guarda y la compara con la registradora."]
+  ],
+  method: [
+    ["Registros", "Registradora de la parada, reportada por el operador: 7 pasajeros entre 06:52:17 y 06:59:39."],
+    ["Medición", "Grabación original de la cabina (CH3), 15 fps. SAM 3.1 (Meta) segmenta y sigue a cada persona en cada cuadro. Una subida es un recorrido desde la puerta por el pasillo, confirmado en revisión."],
+    ["Contexto", "El bus está detenido en la terminal todo el clip (0 km/h). La cámara ve el pasillo, no la puerta, así que alguien que se queda adelante puede no aparecer."],
+    ["Límites", "Placa, posición y textos de ruta tapados. Sin reconocimiento facial, sin identidades, sin audio."]
+  ]
+}};
+let lang = new URLSearchParams(location.search).get("lang") === "es" ? "es" : (localStorage.getItem("rikuy.audit.lang") || "en");
+const t = (k) => k.split(".").reduce((o, p) => o?.[p], T[lang]);
+const fmt = (s, o) => s.replace(/\{(\w+)\}/g, (_, k) => o[k] ?? "");
+const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+
+const [H0, M0, S0] = B.start.slice(11, 19).split(":").map(Number); const WALL0 = H0 * 3600 + M0 * 60 + S0;
+const hms = (rel, sub) => { const s = WALL0 + rel; const h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), x = s % 60;
+  return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${sub ? x.toFixed(1).padStart(4, "0") : String(Math.floor(x)).padStart(2, "0")}`; };
+const DUR = B.video.duration;
+const RK = "rikuy.audit.bus.review.v1";
+let review = JSON.parse(localStorage.getItem(RK) || "{}");
+const saveReview = () => localStorage.setItem(RK, JSON.stringify(review));
+const status = (b) => review[b.id] === "agree" ? "boarded" : review[b.id] === "disagree" ? "rejected" : b.status;
+const pending = () => B.boardings.some((b) => status(b) === "pending");
+const seen = () => B.boardings.filter((b) => status(b) !== "rejected").length;
+const occAt = (rel) => { const o = B.occupancy; return o.values[Math.max(0, Math.min(o.values.length - 1, Math.round(rel * o.fps)))]; };
+const occEnd = () => { const v = B.occupancy.values; return Math.max(...v.slice(-20)); };
+const burst = () => { const ts = B.boardings.filter((b) => status(b) !== "rejected").map((b) => b.t0).sort((a, b) => a - b);
+  return ts.map((a) => ts.filter((x) => x >= a && x - a <= 40)).reduce((m, w) => w.length > m.n ? { n: w.length, s: Math.round(w.at(-1) - w[0]) } : m, { n: 0, s: 0 }); };
+
+function applyLang() {
+  document.documentElement.lang = lang;
+  $$("[data-i]").forEach((el) => { const v = t(el.dataset.i); if (typeof v === "string") el.textContent = v; });
+  $$(".lang button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
+  renderHead(); renderKpis(); renderList(); renderOcc(); renderInsights();
+}
+$$(".lang button").forEach((b) => b.onclick = () => { lang = b.dataset.lang; localStorage.setItem("rikuy.audit.lang", lang); applyLang(); });
+
+function renderHead() {
+  const n = seen(), p = pending();
+  $("#h1").innerHTML = fmt(t(p ? "h1Pending" : "h1Done"), { n });
+  $("#lead").textContent = t("lead");
+  $("#gA").textContent = n; $("#gAL").textContent = t(p ? "gAPending" : "gA"); $("#gB").textContent = occEnd();
+  $("#gmeta").innerHTML = `<span>SAM 3.1 · ${B.cost.frames} frames · US$${B.cost.usd.toFixed(2)}</span><span>CH3 · 7m 22s · 0 km/h</span>`;
+  const v = B.occupancy.values, W = 600, Hh = 90, mx = Math.max(...v) + 1;
+  const pts = v.map((y, i) => `${(i / (v.length - 1) * W).toFixed(1)},${(Hh - 8 - y / mx * (Hh - 20)).toFixed(1)}`).join(" ");
+  $("#spark").innerHTML = `<defs><linearGradient id="sg" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#7fccb4" stop-opacity=".55"/><stop offset="1" stop-color="#7fccb4" stop-opacity="0"/></linearGradient></defs>
+    <polygon points="0,${Hh - 8} ${pts} ${W},${Hh - 8}" fill="url(#sg)"/><polyline points="${pts}" fill="none" stroke="#7fccb4" stroke-width="2"/>
+    ${B.boardings.filter((b) => status(b) !== "rejected").map((b) => `<circle cx="${(b.t0 / DUR * W).toFixed(1)}" cy="${Hh - 8}" r="4" fill="#dce064"/>`).join("")}`;
+}
+
+function countUp(el, to, dur = 1300) { const t0 = performance.now(); const step = (now) => { const p = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+  el.firstChild.nodeValue = Math.round(to * e); if (p < 1) requestAnimationFrame(step); }; requestAnimationFrame(step); }
+let kpiDone = false;
+function renderKpis() {
+  const n = seen(), p = pending();
+  const r = burst(), f = B.fare_counter;
+  const vals = { seen: [n, ""], burst: [r.n, ""], peak: [occEnd(), ""], gap: [Math.max(0, n - f), `/ ${n}`] };
+  const cls = { seen: "dark" }, bars = { seen: "var(--amarillo)", burst: "var(--teal)", peak: "var(--menta)", gap: "var(--amarillo)" };
+  $("#kpis").innerHTML = t("kpi").map(([k, l, tag], i) => `<div class="kpi ${cls[k] || ""} rise" style="animation-delay:${.08 * i}s">${tag || (k !== "seen" && p) ? `<span class="tag">${tag || (lang === "es" ? "en revisión" : "in review")}</span>` : ""}
+    <div class="n"><span>${kpiDone ? vals[k][0] : 0}</span><small>${vals[k][1]}</small></div><div class="l">${fmt(k === "seen" && p ? t("kpiPending") : k === "gap" && p ? t("gapPending") : l, { s: r.s, f })}</div><i class="bar" style="background:${bars[k]};animation-delay:${.3 + .08 * i}s"></i></div>`).join("");
+  if (!kpiDone) { $$("#kpis .n span").forEach((el, i) => countUp(el, Object.values(vals)[i][0], 1300 + i * 120)); kpiDone = true; }
+}
+
+let selected = null;
+function renderList() {
+  $("#tabB").innerHTML = `${t("tab")}<small>${B.boardings.length}</small>`;
+  $("#list").innerHTML = B.boardings.map((b, i) => { const s = status(b), r = review[b.id];
+    return `<div class="row ${selected === b ? "sel" : ""}" data-id="${b.id}" style="animation-delay:${i * 18}ms"><span class="id">${b.id}</span>
+      <div><div class="t">${hms(b.t0)}</div><div class="s">${fmt(t("rowSub"), { d: Math.round(b.t1 - b.t0) })}</div>
+      <div class="rv"><button class="ok" data-rv="agree" aria-pressed="${r === "agree"}">✓ ${t("agree")}</button><button class="no" data-rv="disagree" aria-pressed="${r === "disagree"}">✕ ${t("disagree")}</button></div></div>
+      <span class="vp v-${s}">${t("verdict")[s]}</span></div>`; }).join("");
+  $$("#list .row").forEach((row) => row.onclick = (e) => { const b = B.boardings.find((x) => x.id === row.dataset.id); const btn = e.target.closest("[data-rv]");
+    if (btn) { review[b.id] = review[b.id] === btn.dataset.rv ? undefined : btn.dataset.rv; if (!review[b.id]) delete review[b.id]; saveReview(); kpiDone = true; renderHead(); renderKpis(); renderList(); renderOcc(); renderInsights(); return; }
+    select(b, true); });
+  const n = B.boardings.filter((b) => review[b.id]).length;
+  $("#revText").textContent = fmt(t("reviewed"), { n, t: B.boardings.length }); $("#revBar").style.width = `${100 * n / B.boardings.length}%`;
+}
+
+const video = $("#video"), cv = $("#ov"), cx = cv.getContext("2d");
+video.src = new URLSearchParams(location.search).get("video") || B.video.file;
+const show = { masks: true, boxes: true };
+$$("[data-ov]").forEach((b) => b.onclick = () => { show[b.dataset.ov] = !show[b.dataset.ov]; b.setAttribute("aria-pressed", String(show[b.dataset.ov])); });
+$("#play").onclick = () => video.paused ? video.play() : video.pause();
+video.onplay = () => { $("#play").textContent = "❚❚"; }; video.onpause = () => { $("#play").textContent = "▶"; };
+$$("[data-step]").forEach((b) => b.onclick = () => { video.currentTime = Math.max(0, Math.min(DUR, video.currentTime + Number(b.dataset.step))); });
+const speeds = [1, 2, 4, 8, 0.5]; let sp = 0; $("#speed").onclick = () => { sp = (sp + 1) % speeds.length; video.playbackRate = speeds[sp]; $("#speed").textContent = speeds[sp] + "×"; };
+const live = () => B.boardings.filter((b) => status(b) !== "rejected");
+$("#nextEv").onclick = () => { const b = live().find((x) => x.t0 - 2 > video.currentTime); if (b) select(b, true); };
+$("#prevEv").onclick = () => { const b = [...live()].reverse().find((x) => x.t0 - 2 < video.currentTime - 1.5); if (b) select(b, true); };
+document.addEventListener("keydown", (e) => { if (e.code === "Space") { e.preventDefault(); $("#play").click(); }
+  if (e.key === "ArrowRight") video.currentTime += e.shiftKey ? 10 : 1; if (e.key === "ArrowLeft") video.currentTime -= e.shiftKey ? 10 : 1; });
+let stopAt = null;
+function select(b, seek) { selected = b; renderList(); $(`#list .row[data-id="${b.id}"]`)?.scrollIntoView({ block: "nearest", behavior: "smooth" });
+  if (!seek) return; video.currentTime = Math.max(0, b.t0 - 1.5); video.play(); stopAt = b.t1 + 1.5; }
+
+function fit() { const r = cv.getBoundingClientRect(); const d = devicePixelRatio || 1; cv.width = r.width * d; cv.height = r.height * d; cx.setTransform(d, 0, 0, d, 0, 0); }
+new ResizeObserver(fit).observe(cv);
+const samAt = (rel) => { const s = B.sam, f = s.frames[Math.max(0, Math.min(s.frames.length - 1, Math.round(rel * s.fps)))];
+  return s.scale ? f.map(([id, c, b, ps]) => [id, c, b.map((v) => v / s.scale), ps.map((p) => p.map((v) => v / s.scale))]) : f; };
+const trackColor = (k) => `hsl(${(k * 137.508) % 360} 72% 72%)`;
+let frameT = null;
+if (video.requestVideoFrameCallback) { const onFrame = (_, md) => { frameT = md.mediaTime; video.requestVideoFrameCallback(onFrame); }; video.requestVideoFrameCallback(onFrame); }
+video.addEventListener("seeked", () => { frameT = null; });
+
+function draw() {
+  const w = cv.clientWidth, h = cv.clientHeight; cx.clearRect(0, 0, w, h);
+  const rel = !video.paused && frameT != null ? frameT : video.currentTime;
+  if (stopAt && rel > stopAt) { video.pause(); stopAt = null; }
+  $("#hudClock").textContent = hms(rel, true);
+  $("#clock").innerHTML = `<b>${hms(rel)}</b> · 06:52–06:59`;
+  $("#hudOcc").textContent = fmt(t("onboard"), { n: occAt(rel) });
+  const cur = live().find((b) => rel >= b.t0 - 0.5 && rel <= b.t1 + 0.5);
+  const ban = $("#banner");
+  if (cur) { const s = status(cur); ban.innerHTML = `<span class="badge v-${s}">${t("verdict")[s]}</span><span>${fmt(t("bannerBoard"), { id: cur.id, t: hms(cur.t0) })}</span>`; ban.classList.add("on"); }
+  else ban.classList.remove("on");
+  const sam = samAt(rel);
+  if (sam && show.masks) for (const [id, , , polys] of sam) { const col = cur ? "#dce064" : trackColor(id); for (const p of polys) { cx.beginPath(); for (let i = 0; i < p.length; i += 2) { const x = p[i] * w, y = p[i + 1] * h; i ? cx.lineTo(x, y) : cx.moveTo(x, y); } cx.closePath();
+    cx.globalAlpha = cur ? .24 : .3; cx.fillStyle = col; cx.fill(); cx.globalAlpha = .95; cx.strokeStyle = col; cx.lineWidth = 1.5; cx.stroke(); cx.globalAlpha = 1; } }
+  if (sam && show.boxes) for (const [id, c, b] of sam) { const x = b[0] * w, y = b[1] * h, bw = (b[2] - b[0]) * w, bh = (b[3] - b[1]) * h; const col = trackColor(id), lab = `P${id} · ${c.toFixed(2)}`;
+    cx.strokeStyle = col; cx.lineWidth = 1.6; cx.beginPath(); cx.roundRect(x, y, bw, bh, 6); cx.stroke();
+    if (w >= 640) { cx.font = "600 11px 'JetBrains Mono'"; const tw = cx.measureText(lab).width + 10; cx.fillStyle = "#14133fcc"; cx.beginPath(); cx.roundRect(x, Math.max(0, y - 18), tw, 16, 5); cx.fill(); cx.fillStyle = col; cx.fillText(lab, x + 5, Math.max(12, y - 6)); } }
+  const el = $("#occ"); if (el._X) { const x = el._X(rel); el.querySelector(".ph")?.setAttribute("x1", x); el.querySelector(".ph")?.setAttribute("x2", x); el.querySelector(".phd")?.setAttribute("cx", x); }
+  requestAnimationFrame(draw);
+}
+
+function renderOcc() {
+  const el = $("#occ"); const W = el.clientWidth || 1200, L = 40, R = 16, H = 200, top = 16, bot = H - 26; const v = B.occupancy.values, mx = Math.max(...v) + 1;
+  const X = (s) => L + s / DUR * (W - L - R), Y = (n) => bot - n / mx * (bot - top);
+  const pts = v.map((n, i) => `${X(i / B.occupancy.fps).toFixed(1)},${Y(n).toFixed(1)}`).join(" ");
+  let s = `<svg viewBox="0 0 ${W} ${H}" height="${H}"><defs><linearGradient id="og" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#7fccb4" stop-opacity=".6"/><stop offset="1" stop-color="#7fccb4" stop-opacity=".05"/></linearGradient></defs>`;
+  for (let n = 0; n <= mx; n += 2) s += `<line x1="${L}" x2="${W - R}" y1="${Y(n)}" y2="${Y(n)}" stroke="#14133f10"/><text x="${L - 8}" y="${Y(n) + 4}" text-anchor="end">${n}</text>`;
+  for (let m = 0; m <= DUR; m += 60) s += `<line x1="${X(m)}" x2="${X(m)}" y1="${bot}" y2="${bot + 6}" stroke="#14133f40"/><text x="${X(m)}" y="${H - 4}" text-anchor="middle">${hms(m).slice(0, 5)}</text>`;
+  s += `<polygon points="${X(0)},${bot} ${pts} ${X(DUR)},${bot}" fill="url(#og)"/><polyline points="${pts}" fill="none" stroke="#2e7d7c" stroke-width="2.2"/>`;
+  live().forEach((b) => { const st = status(b), col = st === "boarded" ? "#2e7d7c" : "#c9cd4a"; s += `<g data-b="${b.id}" style="cursor:pointer"><rect x="${X(b.t0)}" y="${top}" width="${Math.max(3, X(b.t1) - X(b.t0))}" height="${bot - top}" rx="3" fill="#dce06433"/>
+    <circle cx="${X(b.t0)}" cy="${top + 4}" r="7" fill="#dce064" stroke="#14133f" stroke-width="1.5"/><text x="${X(b.t0)}" y="${top - 6}" text-anchor="middle" style="fill:#14133f;font-weight:600">${b.id}</text><title>${b.id} · ${hms(b.t0)}</title></g>`; });
+  s += `<line class="ph" x1="0" x2="0" y1="${top}" y2="${bot}" stroke="#14133f" stroke-width="2"/><circle class="phd" cx="0" cy="${bot}" r="5" fill="#dce064" stroke="#14133f" stroke-width="2"/>`;
+  s += `<rect class="hit" x="${L}" y="${top}" width="${W - L - R}" height="${bot - top}" fill="transparent"/></svg>`;
+  el.innerHTML = s; el._X = X;
+  el.querySelectorAll("[data-b]").forEach((n) => n.parentNode.appendChild(n));
+  el.querySelector(".hit").onclick = (ev) => { const r = el.querySelector("svg").getBoundingClientRect(); video.currentTime = Math.max(0, Math.min(DUR, ((ev.clientX - r.left) * (W / r.width) - L) / (W - L - R) * DUR)); };
+  el.querySelectorAll("[data-b]").forEach((n) => n.onclick = () => select(B.boardings.find((b) => b.id === n.dataset.b), true));
+  const k = t("key"); $("#occkey").innerHTML = `<span><i class="sw" style="background:#7fccb4"></i>${k[0]}</span><span><i class="sw" style="background:#dce064;border-radius:50%;width:11px;height:11px"></i>${k[1]}</span>`;
+}
+
+function renderInsights() {
+  const n = seen(), g = Math.max(0, n - B.fare_counter), r = burst(), o = { g, n, b: r.n, s: r.s, f: B.fare_counter };
+  $("#insights").innerHTML = t("ins").map(([k, hd, p], i) => `<div class="ins ${["dark", "mint", ""][i]} rise" style="animation-delay:${.1 * i}s"><div class="k">${k}</div><h3>${fmt(i === 1 && pending() ? t("insPending") : hd, o)}</h3><p>${fmt(p, o)}</p></div>`).join("");
+  $("#method").innerHTML = t("method").map(([b, p]) => `<div><b>${b}</b>${p}</div>`).join("");
+}
+
+function download(name, text, type) { const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([text], { type })); a.download = name; a.click(); }
+const rowsOut = () => B.boardings.map((b) => ({ id: b.id, camera_time: hms(b.t0), seconds_on_camera: Math.round(b.t1 - b.t0), status: status(b), review: review[b.id] || "" }));
+$("#exportCsv").onclick = () => { const r = rowsOut(); download("rikuy-bus-2026-11-01.csv", [Object.keys(r[0]).join(","), ...r.map((o) => Object.values(o).join(","))].join("\n"), "text/csv"); };
+$("#exportJson").onclick = $("#exportTop").onclick = () => download("rikuy-bus-2026-11-01.json", JSON.stringify({ fare_counter: B.fare_counter, boardings_seen: seen(), rows: rowsOut() }, null, 1), "application/json");
+
+window.__bus = { select: (id) => select(B.boardings.find((b) => b.id === id), true), video, kpis: () => { kpiDone = false; renderKpis(); } };
+applyLang();
+video.addEventListener("loadedmetadata", () => { video.currentTime = 0.5; });
+requestAnimationFrame(draw);
+window.addEventListener("resize", renderOcc);
+})();
+</script>
+</body>
+</html>
