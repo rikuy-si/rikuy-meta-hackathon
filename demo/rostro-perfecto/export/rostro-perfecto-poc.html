@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rikuy × Titivate · One provider, two services</title>
+<link rel="icon" href="rikuy-favicon.svg">
+<style>
+@font-face{font-family:'Grift';src:url(grift-600.woff2) format('woff2');font-weight:600;font-display:swap}
+@font-face{font-family:'Grift';src:url(grift-700.woff2) format('woff2');font-weight:700;font-display:swap}
+@font-face{font-family:'Grift';src:url(grift-500.woff2) format('woff2');font-weight:500;font-display:swap}
+@font-face{font-family:'Onest';src:url(onest.woff2) format('woff2');font-weight:300 700;font-display:swap}
+@font-face{font-family:'JetBrains Mono';src:url(jbm.woff2) format('woff2');font-weight:400 600;font-display:swap}
+:root{--noche:#14133F;--menta:#7FCCB4;--teal:#2E7D7C;--blanco:#F6F9F8;--amarillo:#DCE064;--tinta:#5B5B74;--hielo:#A9B6D3;--bruma:#CDD6E8;--mpal:#BFE6DA;
+--display:'Grift','Onest',system-ui,sans-serif;--text:'Onest',system-ui,sans-serif;--mono:'JetBrains Mono',ui-monospace,monospace;--ease:cubic-bezier(.2,.7,.2,1);
+--prov:#DCE064;--c1:#A9B6D3;--c2:#7FCCB4}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--blanco);color:var(--noche);font:16px/1.55 var(--text);-webkit-font-smoothing:antialiased}
+.wrap{max-width:1320px;margin:0 auto;padding:0 32px}
+.mono{font-family:var(--mono);font-size:13px}
+.bar{position:sticky;top:0;z-index:20;background:rgba(20,19,63,.88);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.08)}
+.bar .wrap{display:flex;align-items:center;justify-content:space-between;height:68px}
+.lockup{display:flex;align-items:center;gap:14px;color:var(--blanco)}
+.lockup img.rk{height:26px}
+.lockup .x{color:var(--hielo);font:500 18px var(--display)}
+.ally{display:flex;align-items:center;gap:8px;background:#fff;border-radius:999px;padding:5px 12px 5px 5px}
+.ally img{width:26px;height:26px;border-radius:8px}
+.ally span{font:600 13px var(--text);color:var(--noche)}
+.lang{display:flex;background:rgba(255,255,255,.08);border-radius:999px;padding:4px}
+.lang button{border:0;background:transparent;color:var(--hielo);font:600 13px var(--text);padding:7px 14px;border-radius:999px;cursor:pointer;min-height:36px}
+.lang button.on{background:var(--menta);color:var(--noche)}
+.hero{background:radial-gradient(1200px 600px at 80% -10%,rgba(127,204,180,.22),transparent 60%),var(--noche);color:var(--blanco);padding:64px 0 40px}
+.eyebrow{font:600 12px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--menta)}
+h1{font:600 clamp(38px,4.2vw,64px)/1.04 var(--display);letter-spacing:-.04em;margin:14px 0 16px;max-width:16ch}
+h1 em{font-style:normal;color:var(--amarillo)}
+.lead{font-size:18px;color:var(--bruma);max-width:62ch;margin:0}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:40px}
+.kpi{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:18px 20px}
+.kpi b{display:block;font:600 40px/1 var(--display);letter-spacing:-.04em}
+.kpi small{display:block;color:var(--hielo);font-size:13px;margin:8px 0 12px}
+.kpi.flag b{color:var(--amarillo)}
+.src{display:inline-flex;align-items:center;gap:6px;font:600 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;border-radius:999px;padding:4px 10px 4px 4px;white-space:nowrap;vertical-align:middle}
+.src img{width:18px;height:18px;border-radius:5px;background:#fff}
+.src.pos{background:#fff;color:var(--noche);box-shadow:inset 0 0 0 1px rgba(20,19,63,.14)}
+.src.vis{background:var(--menta);color:var(--noche)}
+.src.vis img{background:var(--noche);padding:2px}
+.src.mix{background:var(--amarillo);color:var(--noche);padding-left:10px}
+.stage-sec{background:var(--noche);padding:8px 0 56px}
+.stage{position:relative;border-radius:24px;overflow:hidden;background:#000;box-shadow:0 30px 60px -30px rgba(0,0,0,.6);aspect-ratio:4/3;max-height:80vh;margin:0 auto}
+.stage video{width:100%;height:100%;object-fit:cover;display:block}
+.hud{position:absolute;left:18px;top:16px;display:flex;gap:8px;align-items:center}
+.pill{background:rgba(20,19,63,.8);backdrop-filter:blur(14px);color:var(--blanco);border-radius:999px;padding:6px 12px;font:600 13px var(--mono)}
+.pill.live::before{content:'';display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--menta);margin-right:8px;vertical-align:1px}
+.legend{position:absolute;left:18px;bottom:18px;display:flex;gap:8px;flex-wrap:wrap}
+.legend span{background:rgba(20,19,63,.8);backdrop-filter:blur(14px);color:var(--blanco);border-radius:999px;padding:6px 12px 6px 8px;font:600 12px var(--text);display:flex;align-items:center;gap:8px}
+.legend i{width:12px;height:12px;border-radius:4px;display:inline-block}
+.feed{position:absolute;right:16px;top:16px;width:min(400px,46%);display:flex;flex-direction:column;gap:10px}
+.chip{background:rgba(251,251,247,.95);backdrop-filter:blur(14px);border-radius:16px;padding:12px 14px;box-shadow:0 18px 40px -20px rgba(0,0,0,.6);transform:translateX(24px);opacity:0;transition:transform .45s var(--ease),opacity .45s var(--ease)}
+.chip.in{transform:none;opacity:1}
+.chip.pos{border-left:5px solid #fff;box-shadow:inset 0 0 0 1px rgba(20,19,63,.12),0 18px 40px -20px rgba(0,0,0,.6)}
+.chip.vis{border-left:5px solid var(--menta)}
+.chip.flag{border-left:5px solid var(--amarillo);background:#FDFDE9}
+.chip .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.chip .t{font:600 12px var(--mono);color:var(--tinta)}
+.chip p{margin:0;font:600 15px/1.35 var(--text);color:var(--noche)}
+.tl{margin-top:22px;color:var(--blanco)}
+.tl-row{display:grid;grid-template-columns:120px 1fr;align-items:center;gap:14px;margin:8px 0}
+.tl-row label{font:600 12px var(--mono);color:var(--hielo);text-transform:uppercase;letter-spacing:.08em}
+.track{position:relative;height:30px;background:rgba(255,255,255,.06);border-radius:10px;cursor:pointer}
+.seg{position:absolute;top:4px;bottom:4px;border-radius:7px;display:flex;align-items:center;padding:0 10px;font:600 12px var(--mono);color:var(--noche);white-space:nowrap;overflow:hidden}
+.tick{position:absolute;top:0;bottom:0;width:2px;transform:translateX(-1px)}
+.tick.pos{background:#fff}.tick.flag{background:var(--amarillo)}
+.tick::after{content:'';position:absolute;top:-1px;left:-5px;width:12px;height:12px;border-radius:50%;background:inherit;box-shadow:0 0 0 3px var(--noche)}
+.head{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--amarillo);box-shadow:0 0 12px var(--amarillo);pointer-events:none}
+.axis{display:flex;justify-content:space-between;font:12px var(--mono);color:var(--hielo);margin-left:134px}
+.controls{display:flex;gap:10px;align-items:center;margin-top:18px;flex-wrap:wrap}
+.btn{border:0;border-radius:999px;font:600 14px var(--text);padding:12px 20px;cursor:pointer;background:var(--amarillo);color:var(--noche);min-height:44px}
+.btn.ghost{background:rgba(255,255,255,.08);color:var(--blanco)}
+section.band{padding:80px 0}
+.band.menta{background:var(--mpal)}
+h2{font:600 clamp(28px,2.6vw,40px)/1.1 var(--display);letter-spacing:-.03em;margin:10px 0 12px}
+.sub{color:var(--tinta);max-width:64ch;margin:0 0 36px}
+.eyebrow.dark{color:var(--teal)}
+.provider{display:grid;grid-template-columns:1.1fr 1.4fr;gap:24px}
+.card{background:#fff;border-radius:24px;box-shadow:0 1px 2px rgba(20,19,63,.04),0 24px 48px -28px rgba(20,19,63,.28);overflow:hidden}
+.card .pad{padding:28px}
+.who{display:flex;align-items:center;gap:16px}
+.avatar{width:64px;height:64px;border-radius:18px;background:var(--noche);display:grid;place-items:center;color:var(--amarillo);font:700 24px var(--display)}
+.who h3{font:600 28px/1.1 var(--display);letter-spacing:-.03em;margin:0}
+.who .role{color:var(--tinta);font-size:14px;margin-top:4px}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:24px}
+.stat{background:var(--blanco);border-radius:18px;padding:16px}
+.stat b{display:block;font:600 34px/1 var(--display);letter-spacing:-.04em}
+.stat small{display:block;color:var(--tinta);font-size:13px;margin:6px 0 10px}
+.occ{height:12px;background:var(--bruma);border-radius:999px;overflow:hidden;display:flex;margin-top:18px}
+.occ i{display:block;height:100%}
+.occ-legend{display:flex;gap:16px;font:12px var(--mono);color:var(--tinta);margin-top:10px;flex-wrap:wrap}
+.occ-legend span::before{content:'';display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px;background:var(--c)}
+.still{position:relative;background:var(--noche);min-height:320px}
+.still>img{width:100%;height:100%;object-fit:cover;display:block}
+.still .cap{position:absolute;left:16px;bottom:16px}
+.services{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
+.svc .shot{position:relative;aspect-ratio:16/10;background:var(--noche);overflow:hidden}
+.svc .shot>img{width:100%;height:100%;object-fit:cover;display:block}
+.svc .shot .tag{position:absolute;left:16px;top:16px;display:flex;gap:8px}
+.svc .shot .who2{position:absolute;left:16px;bottom:14px;color:#fff;font:600 22px var(--display);letter-spacing:-.02em;text-shadow:0 2px 14px rgba(0,0,0,.6)}
+.svc h3{font:600 24px/1.15 var(--display);letter-spacing:-.02em;margin:0 0 6px}
+.big{display:flex;align-items:flex-end;gap:28px;margin:18px 0 6px;flex-wrap:wrap}
+.big div b{display:block;font:600 52px/1 var(--display);letter-spacing:-.045em}
+.big div small{display:block;color:var(--tinta);font-size:13px;margin-top:6px}
+.big .money b{color:var(--teal)}
+.big .none b{color:#9a9e2c}
+.rows{margin-top:18px;border-top:1px solid var(--bruma)}
+.r{display:grid;grid-template-columns:1fr auto auto;gap:14px;align-items:center;padding:11px 0;border-bottom:1px solid var(--bruma);font-size:14px}
+.r .v{font:600 14px var(--mono)}
+.mini{position:relative;height:40px;background:var(--blanco);border-radius:12px;margin-top:18px}
+.mini .tick.pos{background:var(--noche)}
+.mini .tick::after{box-shadow:0 0 0 3px #fff}
+.callout{margin-top:18px;border-radius:18px;padding:16px 18px;font-size:14px;display:flex;gap:12px;align-items:flex-start}
+.callout.flag{background:#F6F7D6}
+.callout.ok{background:var(--blanco)}
+.callout b{font-family:var(--display);font-weight:600}
+.ask{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.q{background:var(--noche);color:var(--blanco);border-radius:24px;padding:24px;position:relative;overflow:hidden}
+.q .qq{font:600 20px/1.3 var(--display);letter-spacing:-.02em;padding-right:24px}
+.q .aa{margin-top:16px;color:var(--bruma);font-size:14px}
+.q .aa b{color:var(--amarillo);font-family:var(--mono);font-weight:600}
+.q::after{content:'';position:absolute;right:18px;top:18px;width:22px;height:22px;border-top:3px solid var(--menta);border-right:3px solid var(--menta);border-radius:0 6px 0 0}
+.method{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.m{background:#fff;border-radius:18px;padding:18px;box-shadow:inset 0 0 0 1px rgba(20,19,63,.08)}
+.m b{display:block;font:600 15px var(--display);margin-bottom:6px}
+.m span{font-size:13px;color:var(--tinta)}
+.m .k{font:600 11px var(--mono);color:var(--teal);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;display:block}
+.fine{margin-top:22px;font-size:13px;color:var(--tinta);max-width:90ch}
+footer{background:var(--teal);color:var(--blanco);padding:36px 0}
+footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+footer b{font:600 22px var(--display);letter-spacing:-.02em}
+@media(max-width:980px){.kpis{grid-template-columns:repeat(2,1fr)}.provider,.services,.ask{grid-template-columns:1fr}.method{grid-template-columns:1fr 1fr}.feed{width:58%}.wrap{padding:0 18px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="bar"><div class="wrap">
+  <div class="lockup"><img class="rk" src="rikuy-logo-negative.svg" alt="Rikuy"><span class="x">×</span><span class="ally"><img src="titivate-icon.png" alt=""><span data-i="ally">Titivate POS</span></span></div>
+  <div class="lang"><button data-l="en" class="on">EN</button><button data-l="es">ES</button></div>
+</div></div>
+
+<header class="hero"><div class="wrap">
+  <div class="eyebrow" id="meta"></div>
+  <h1 data-i="h1"></h1>
+  <p class="lead" data-i="lead"></p>
+  <div class="kpis" id="kpis"></div>
+</div></header>
+
+<section class="stage-sec"><div class="wrap">
+  <div class="stage">
+    <video id="v" src="demo-timelapse.mp4" poster="poster.jpg" muted playsinline preload="auto"></video>
+    <div class="hud"><span class="pill live" id="clock">11:05:40</span><span class="pill" data-i="speed"></span></div>
+    <div class="legend" id="legend"></div>
+    <div class="feed" id="feed"></div>
+  </div>
+  <div class="tl" id="tl"></div>
+  <div class="controls"><button class="btn" id="play"></button><button class="btn ghost" id="restart" data-i="restart"></button><span class="mono" style="color:var(--hielo)" data-i="hint"></span></div>
+</div></section>
+
+<section class="band"><div class="wrap">
+  <div class="eyebrow dark" data-i="provEyebrow"></div>
+  <h2 data-i="provH2"></h2>
+  <p class="sub" data-i="provSub"></p>
+  <div class="provider">
+    <div class="card"><div class="pad" id="provcard"></div></div>
+    <div class="card still"><img src="still-provider.jpg" alt=""><div class="cap" id="provcap"></div></div>
+  </div>
+</div></section>
+
+<section class="band menta"><div class="wrap">
+  <div class="eyebrow dark" data-i="svcEyebrow"></div>
+  <h2 data-i="svcH2"></h2>
+  <p class="sub" data-i="svcSub"></p>
+  <div class="services" id="services"></div>
+</div></section>
+
+<section class="band"><div class="wrap">
+  <div class="eyebrow dark" data-i="askEyebrow"></div>
+  <h2 data-i="askH2"></h2>
+  <p class="sub" data-i="askSub"></p>
+  <div class="ask" id="ask"></div>
+</div></section>
+
+<section class="band" style="padding-top:0"><div class="wrap">
+  <div class="eyebrow dark" data-i="howEyebrow"></div>
+  <h2 data-i="howH2"></h2>
+  <div class="method" id="method"></div>
+  <p class="fine" id="fine"></p>
+</div></section>
+
+<footer><div class="wrap"><b data-i="brand"></b><span class="mono">rikuy.si · <span data-i="private"></span></span></div></footer>
+
+<script>
+const T={
+en:{ally:'Titivate POS',h1:'One provider. Two services. <em>One</em> ticket.',lead:'Camera 6 at Rostro Perfecto, side by side with the Titivate POS. Every number says where it comes from: the POS record, or what the camera shows.',
+speed:'12× time-lapse',play:'Play',pause:'Pause',restart:'From the start',hint:'Click the timeline to jump',
+kServices:'services seen on camera',kBilled:'billed in the POS',kTime:'with clients',kGap:'service with no POS ticket',
+lProv:'Provider · Provider (POS)',lC1:'Client 1 · Mr.',lC2:'Client 2 · Ms. [C2]',rowProv:'Provider',rowC1:'Client 1',rowC2:'Client 2',rowPos:'POS events',atStation:'at station',onBedShort:'on the bed',
+provEyebrow:'The provider',provH2:'the provider, 11:06 to 11:21',provSub:'Her name comes from the POS turn. The camera shows her working at the same station, one client right after the other.',
+role:'Eyebrows and waxing · station by the mirror',sBusy:'with clients',sChange:'between clients',sBilled:'billed (1 ticket)',sUnbilled:'service with no ticket',occA:'Client 1',occB:'Change',occC:'Client 2',
+svcEyebrow:'The services',svcH2:'What she did, how long it took, what was billed',svcSub:'Camera times come from where each person is. POS values are copied from the Titivate record as they are.',
+c1title:"Service at the provider's station",seen:'seen on camera',billed:'billed',noTicket:'no ticket',service:'Service',notInPos:'not in the POS',onBed:'On the bed',handsOn:'Provider at the station',arrive:'Arrives',leaves:'Leaves the view',atSt:'At the station',turn:'Turn open → closed',invoice:'Invoice',pay:'Payment',voided:'Voided invoice',
+c1flag:"<b>Check with the team.</b> The camera shows a 7 min service at the provider's station, but no POS ticket for Provider covers it. It may sit under another turn or provider.",
+c2ok:'<b>On the record.</b> Paid in cash at the desk, 1 min 20 s before she lay down. The POS closed the turn 1 min 29 s after she left. A duplicate invoice was voided at 11:24.',
+askEyebrow:'Ask your agent',askH2:'Questions the owner can answer now',askSub:'Your agent reads the camera and the POS together. You do not have to know where to look.',
+q1:'Did every service on camera get a ticket?',a1:'Today 11:06 to 11:21: <b>1 of 2</b>. Client 1 has no ticket.',
+q2:'How long does an eyebrow service really take?',a2:'On the bed: <b>6 min 02 s</b>. The POS turn stayed open <b>10 min 49 s</b>.',
+q3:'How fast does Provider turn her station?',a3:'<b>35 s</b> from one client leaving to the next lying down.',
+howEyebrow:'How it works',howH2:'Open models, one GPU, your existing camera',
+m:[['Detect','RF-DETR','People in every frame, plus a zoomed pass on the provider\'s station.'],['Track','Deep OC-SORT','Follows each person across frames with motion and appearance.'],['Re-identify','CLIP-ReID','Joins short tracks of one person and keeps provider and client apart.'],['Segment','SAM 3','Pixel masks for the provider and both clients, and face blur.'],['Join','Titivate POS','Turns, invoices and payments matched by time and station.']],
+fine:'Names come from the POS. The video shows where people are, not who they are. No face recognition: client and bystander faces are blurred. POS created_at is local time and completed_at is UTC; all times here are local (UTC−4). Camera times carry about 1 s of uncertainty. Private demo with local data.',
+brand:'Seen, not guessed.',private:'private demo',srcPos:'Titivate POS',srcVis:'Rikuy camera',srcMix:'Camera vs POS'},
+es:{ally:'POS Titivate',h1:'Una prestadora. Dos servicios. <em>Un</em> ticket.',lead:'Cámara 6 de Rostro Perfecto, junto al POS Titivate. Cada número dice de dónde sale: del registro del POS o de lo que muestra la cámara.',
+speed:'Time-lapse 12×',play:'Reproducir',pause:'Pausa',restart:'Desde el inicio',hint:'Haz clic en la línea de tiempo para saltar',
+kServices:'servicios vistos en cámara',kBilled:'facturado en el POS',kTime:'con clientes',kGap:'servicio sin ticket del POS',
+lProv:'Prestadora · Provider (POS)',lC1:'Cliente 1 · Sr.',lC2:'Clienta 2 · Sra. [C2]',rowProv:'Prestadora',rowC1:'Cliente 1',rowC2:'Clienta 2',rowPos:'Eventos POS',atStation:'en estación',onBedShort:'en camilla',
+provEyebrow:'La prestadora',provH2:'the provider, de 11:06 a 11:21',provSub:'Su nombre sale del turno del POS. La cámara la muestra trabajando en la misma estación, un cliente tras otro.',
+role:'Cejas y depilación · estación junto al espejo',sBusy:'con clientes',sChange:'entre clientes',sBilled:'facturado (1 ticket)',sUnbilled:'servicio sin ticket',occA:'Cliente 1',occB:'Cambio',occC:'Clienta 2',
+svcEyebrow:'Los servicios',svcH2:'Qué hizo, cuánto tardó, qué se facturó',svcSub:'Los tiempos de cámara salen de dónde está cada persona. Los valores del POS se copian tal cual del registro de Titivate.',
+c1title:'Servicio en la estación de la prestadora',seen:'visto en cámara',billed:'facturado',noTicket:'sin ticket',service:'Servicio',notInPos:'no está en el POS',onBed:'En la camilla',handsOn:'Prestadora en la estación',arrive:'Llega',leaves:'Sale de la vista',atSt:'En la estación',turn:'Turno abierto → cerrado',invoice:'Factura',pay:'Pago',voided:'Factura anulada',
+c1flag:'<b>Revisar con el equipo.</b> La cámara muestra un servicio de 7 min en la estación de la prestadora, pero ningún ticket del POS de Provider lo cubre. Puede estar en otro turno o con otra prestadora.',
+c2ok:'<b>En el registro.</b> Pagó en efectivo en recepción, 1 min 20 s antes de acostarse. El POS cerró el turno 1 min 29 s después de que salió. Una factura duplicada se anuló a las 11:24.',
+askEyebrow:'Pregúntale a tu agente',askH2:'Preguntas que la dueña ya puede responder',askSub:'Tu agente lee la cámara y el POS juntos. No tienes que saber dónde mirar.',
+q1:'¿Cada servicio en cámara tuvo su ticket?',a1:'Hoy de 11:06 a 11:21: <b>1 de 2</b>. El cliente 1 no tiene ticket.',
+q2:'¿Cuánto dura de verdad un servicio de cejas?',a2:'En la camilla: <b>6 min 02 s</b>. El turno del POS quedó abierto <b>10 min 49 s</b>.',
+q3:'¿Qué tan rápido rota Provider su estación?',a3:'<b>35 s</b> desde que sale un cliente hasta que se acuesta la siguiente.',
+howEyebrow:'Cómo funciona',howH2:'Modelos abiertos, una GPU, la cámara que ya tienes',
+m:[['Detectar','RF-DETR','Personas en cada cuadro, más una pasada ampliada sobre la estación de la prestadora.'],['Seguir','Deep OC-SORT','Sigue a cada persona entre cuadros con movimiento y apariencia.'],['Re-identificar','CLIP-ReID','Une tramos de una misma persona y separa prestadora y cliente.'],['Segmentar','SAM 3','Máscaras de píxeles de la prestadora y los dos clientes, y difuminado de caras.'],['Unir','POS Titivate','Turnos, facturas y pagos cruzados por hora y estación.']],
+fine:'Los nombres salen del POS. El video muestra dónde está cada persona, no quién es. Sin reconocimiento facial: las caras de clientes y otras personas están difuminadas. En el POS, created_at viene en hora local y completed_at en UTC; aquí todo está en hora local (UTC−4). Los tiempos de cámara tienen ~1 s de incertidumbre. Demo privado con datos locales.',
+brand:'Visto, no adivinado.',private:'demo privado',srcPos:'POS Titivate',srcVis:'Cámara Rikuy',srcMix:'Cámara vs POS'}};
+let L=localStorage.getItem('rk-lang')||'en',D,V,shown=new Set();
+const $=s=>document.querySelector(s),sod=h=>h.split(':').reduce((a,b)=>a*60+ +b,0),clk=s=>[s/3600,s%3600/60,s%60].map(x=>String(Math.floor(x)).padStart(2,'0')).join(':');
+const mm=s=>`${Math.floor(s/60)}:${String(Math.round(s%60)).padStart(2,'0')}`;
+const badge=k=>k==='pos'?`<span class="src pos"><img src="titivate-icon.png" alt="">${T[L].srcPos}</span>`:k==='vis'?`<span class="src vis"><img src="rikuy-icon.svg" alt="">${T[L].srcVis}</span>`:`<span class="src mix">${T[L].srcMix}</span>`;
+function bar(s0,s1,items){const X=s=>((s-s0)/(s1-s0)*100).toFixed(2)+'%',W=(a,b)=>((b-a)/(s1-s0)*100).toFixed(2)+'%';
+  return items.map(i=>i.tick?`<div class="tick ${i.cls||'pos'}" style="left:${X(i.at)}" title="${i.title||''}"></div>`:`<div class="seg" style="left:${X(i.a)};width:${W(i.a,i.b)};background:${i.c}">${i.l||''}</div>`).join('')}
+function render(){
+  const t=T[L];document.documentElement.lang=L;
+  document.querySelectorAll('[data-i]').forEach(e=>{const k=e.dataset.i;if(t[k]!==undefined)e.innerHTML=t[k]});
+  document.querySelectorAll('.lang button').forEach(b=>b.classList.toggle('on',b.dataset.l===L));
+  $('#play').textContent=$('#v').paused?t.play:t.pause;
+  const c1=D.cases[0],c2=D.cases[1],p=c2.pos,busy=c1.service_seconds+c2.service_seconds,ch=D.changeover_seconds;
+  $('#meta').textContent=`${D.store} · ${L==='en'?'Tue, Nov 3 2026 · Camera 6':'mar 3 nov 2026 · Cámara 6'}`;
+  $('#kpis').innerHTML=[['2',t.kServices,'vis'],[`RD$${p.amount}`,t.kBilled,'pos'],[mm(busy),t.kTime,'vis'],['1',t.kGap,'mix',1]]
+    .map(([b,s,k,f])=>`<div class="kpi${f?' flag':''}"><b>${b}</b><small>${s}</small>${badge(k)}</div>`).join('');
+  $('#legend').innerHTML=[[t.lProv,'var(--prov)'],[t.lC1,'var(--c1)'],[t.lC2,'var(--c2)']].map(([n,c])=>`<span><i style="background:${c}"></i>${n}</span>`).join('');
+  const a=V.t0_sod,b=a+V.duration_s*V.speed;
+  const posT=D.events.filter(e=>e.src==='pos').map(e=>({tick:1,at:e.sod,cls:e.flag?'flag':'pos',title:e[L]}));
+  $('#tl').innerHTML=`
+   <div class="tl-row"><label>${t.rowProv}</label><div class="track" data-seek>${bar(a,b,[{a:sod(c1.service_seen[0]),b:sod(c1.service_seen[1]),c:'var(--prov)',l:mm(c1.service_seconds)},{a:sod(c2.provider_hands_on[0]),b:sod(c2.provider_hands_on[1]),c:'var(--prov)',l:mm(sod(c2.provider_hands_on[1])-sod(c2.provider_hands_on[0]))}])}<div class="head"></div></div></div>
+   <div class="tl-row"><label>${t.rowC1}</label><div class="track" data-seek>${bar(a,b,[{a:sod(c1.service_seen[0]),b:sod(c1.service_seen[1]),c:'var(--c1)',l:t.atStation}])}<div class="head"></div></div></div>
+   <div class="tl-row"><label>${t.rowC2}</label><div class="track" data-seek>${bar(a,b,[{a:sod(c2.arrive),b:sod(c2.bed[0]),c:'rgba(127,204,180,.45)'},{a:sod(c2.bed[0]),b:sod(c2.bed[1]),c:'var(--c2)',l:t.onBedShort},{a:sod(c2.bed[1]),b:sod(c2.leave),c:'rgba(127,204,180,.45)'}])}<div class="head"></div></div></div>
+   <div class="tl-row"><label>${t.rowPos}</label><div class="track" data-seek>${bar(a,b,posT)}<div class="head"></div></div></div>
+   <div class="axis">${[0,1,2,3,4].map(i=>`<span>${clk(a+(b-a)*i/4).slice(0,5)}</span>`).join('')}</div>`;
+  document.querySelectorAll('[data-seek]').forEach(el=>el.onclick=ev=>{const r=el.getBoundingClientRect();$('#v').currentTime=Math.max(0,(ev.clientX-r.left)/r.width*V.duration_s)});
+  const span=sod(c2.bed[1])-sod(c1.service_seen[0]);
+  $('#provcard').innerHTML=`<div class="who"><div class="avatar">IT</div><div><h3>${D.provider.name}</h3><div class="role">${t.role}</div></div></div>
+   <div style="margin-top:14px">${badge('pos')}</div>
+   <div class="stats">
+    <div class="stat"><b>${mm(busy)}</b><small>${t.sBusy}</small>${badge('vis')}</div>
+    <div class="stat"><b>${ch} s</b><small>${t.sChange}</small>${badge('vis')}</div>
+    <div class="stat"><b style="color:var(--teal)">RD$${p.amount}</b><small>${t.sBilled}</small>${badge('pos')}</div>
+    <div class="stat"><b style="color:#9a9e2c">1</b><small>${t.sUnbilled}</small>${badge('mix')}</div>
+   </div>
+   <div class="occ"><i style="width:${c1.service_seconds/span*100}%;background:var(--c1)"></i><i style="width:${ch/span*100}%;background:var(--bruma)"></i><i style="width:${c2.service_seconds/span*100}%;background:var(--c2)"></i></div>
+   <div class="occ-legend"><span style="--c:var(--c1)">${t.occA} ${mm(c1.service_seconds)}</span><span style="--c:var(--bruma)">${t.occB} ${ch} s</span><span style="--c:var(--c2)">${t.occC} ${mm(c2.service_seconds)}</span></div>`;
+  $('#provcap').innerHTML=badge('vis');
+  const r=(k,v,bb)=>`<div class="r"><span>${k}</span><span class="v">${v}</span>${badge(bb)}</div>`;
+  const s1a=sod(c1.service_seen[0])-60,s1b=sod(c1.service_seen[1])+60,s2a=sod(c2.arrive)-30,s2b=sod(p.closed)+30;
+  $('#services').innerHTML=`
+  <div class="card svc"><div class="shot"><img src="still-c1.jpg" alt=""><div class="tag">${badge('vis')}</div><div class="who2">${L==='en'?c1.label_en:c1.label_es}</div></div><div class="pad">
+    <h3>${t.c1title}</h3>
+    <div class="big"><div><b>${mm(c1.service_seconds)}</b><small>${t.seen}</small></div><div class="none"><b>RD$0</b><small>${t.noTicket}</small></div></div>
+    <div class="mini">${bar(s1a,s1b,[{a:sod(c1.service_seen[0]),b:sod(c1.service_seen[1]),c:'var(--c1)',l:c1.service_seen[0].slice(0,5)+' → '+c1.service_seen[1].slice(0,5)}])}</div>
+    <div class="rows">${r(t.atSt,c1.service_seen.join(' → '),'vis')}${r(t.service,t.notInPos,'pos')}</div>
+    <div class="callout flag">⚑<div>${t.c1flag}</div></div></div></div>
+  <div class="card svc"><div class="shot"><img src="still-c2.jpg" alt=""><div class="tag">${badge('vis')} ${badge('pos')}</div><div class="who2">${L==='en'?c2.label_en:c2.label_es}</div></div><div class="pad">
+    <h3>${p.service}</h3>
+    <div class="big"><div><b>${mm(c2.service_seconds)}</b><small>${t.onBed} · ${t.seen}</small></div><div class="money"><b>RD$${p.amount}</b><small>${t.billed} · ${L==='en'?p.payment_en:p.payment_es}</small></div></div>
+    <div class="mini">${bar(s2a,s2b,[{a:sod(c2.arrive),b:sod(c2.bed[0]),c:'rgba(127,204,180,.5)'},{a:sod(c2.bed[0]),b:sod(c2.bed[1]),c:'var(--c2)',l:c2.bed[0].slice(0,5)+' → '+c2.bed[1].slice(0,5)},{a:sod(c2.bed[1]),b:sod(c2.leave),c:'rgba(127,204,180,.5)'},{tick:1,at:sod(p.opened)},{tick:1,at:sod(p.closed)}])}</div>
+    <div class="rows">${r(t.arrive,c2.arrive,'vis')}${r(t.onBed,c2.bed.join(' → '),'vis')}${r(t.handsOn,c2.provider_hands_on.join(' → '),'vis')}${r(t.leaves,c2.leave,'vis')}${r(t.turn,`${p.opened} → ${p.closed}`,'pos')}${r(t.invoice,`${p.invoice} · RD$${p.amount}`,'pos')}${r(t.pay,`${L==='en'?p.payment_en:p.payment_es} · ${p.opened}`,'pos')}${r(t.voided,`${p.voided_invoices.join(', ')} · ${p.voided_at}`,'pos')}</div>
+    <div class="callout ok">✓<div>${t.c2ok}</div></div></div></div>`;
+  $('#ask').innerHTML=[1,2,3].map(i=>`<div class="q"><div class="qq">“${t['q'+i]}”</div><div class="aa">${t['a'+i]}</div></div>`).join('');
+  $('#method').innerHTML=t.m.map(([k,bb,s])=>`<div class="m"><span class="k">${k}</span><b>${bb}</b><span>${s}</span></div>`).join('');
+  $('#fine').textContent=t.fine;
+  shown.clear();$('#feed').innerHTML='';
+}
+function tick(){
+  const v=$('#v');if(!V)return;$('#clock').textContent=clk(V.t0_sod+v.currentTime*V.speed);
+  document.querySelectorAll('.head').forEach(h=>h.style.left=(v.currentTime/V.duration_s*100)+'%');
+  D.events.forEach((e,i)=>{
+    const live=v.currentTime>=e.vt&&v.currentTime<e.vt+4.5;
+    if(live&&!shown.has(i)){shown.add(i);const d=document.createElement('div');const k=e.flag?'mix':e.src==='pos'?'pos':'vis';d.className='chip '+(e.flag?'flag':e.src==='pos'?'pos':'vis');d.dataset.i=i;
+      d.innerHTML=`<div class="top">${badge(k)}<span class="t">${e.clock}</span></div><p>${e[L]}</p>`;$('#feed').prepend(d);requestAnimationFrame(()=>requestAnimationFrame(()=>d.classList.add('in')));}
+    if(!live&&shown.has(i)){shown.delete(i);const d=$(`#feed .chip[data-i="${i}"]`);if(d){d.classList.remove('in');setTimeout(()=>d.remove(),450)}}
+  });
+}
+Promise.all([fetch('data.json').then(r=>r.json()),fetch('video.json').then(r=>r.json())]).then(([d,v])=>{D=d;V=v;const vid=$('#v');
+  vid.addEventListener('play',()=>$('#play').textContent=T[L].pause);vid.addEventListener('pause',()=>$('#play').textContent=T[L].play);
+  $('#play').onclick=()=>vid.paused?vid.play():vid.pause();$('#restart').onclick=()=>{vid.currentTime=0;vid.play()};
+  document.querySelectorAll('.lang button').forEach(b=>b.onclick=()=>{L=b.dataset.l;localStorage.setItem('rk-lang',L);render()});
+  render();(function loop(){tick();requestAnimationFrame(loop)})();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+{
+  "video": "media/demo-timelapse.mp4",
+  "t0_sod": 39940.0,
+  "speed": 12.0,
+  "fps": 25,
+  "frames": 2417,
+  "duration_s": 96.68,
+  "camera": "virtual, follows SAM masks",
+  "size": [
+    1280,
+    960
+  ],
+  "colors": {
+    "provider": "#DCE064",
+    "client1": "#A9B6D3",
+    "client2": "#7FCCB4"
+  }
+}

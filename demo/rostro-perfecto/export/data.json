@@ -1,0 +1,175 @@
+{
+  "store": "Rostro Perfecto",
+  "date": "2026-11-03",
+  "camera": "Camera 6",
+  "provider": {
+    "name": "the provider",
+    "name_source": "pos"
+  },
+  "cases": [
+    {
+      "id": "c1",
+      "label_en": "Client 1 · Mr.",
+      "label_es": "Cliente 1 · Sr.",
+      "service_seen": [
+        "11:06:19",
+        "11:13:47"
+      ],
+      "service_seconds": 448,
+      "pos": null,
+      "pos_note_en": "No POS ticket for Provider before 11:13:02 today (0 found). Check if it was billed under another turn or provider.",
+      "pos_note_es": "No hay ticket del POS de Provider antes de las 11:13:02 hoy (0 encontrados). Revisar si se cobró en otro turno o con otra prestadora."
+    },
+    {
+      "id": "c2",
+      "label_en": "Client 2 · Ms. [C2]",
+      "label_es": "Clienta 2 · Sra. [C2]",
+      "arrive": "11:12:51",
+      "bed": [
+        "11:14:22",
+        "11:20:24"
+      ],
+      "service_seconds": 362,
+      "provider_hands_on": [
+        "11:14:57",
+        "11:20:54"
+      ],
+      "leave": "11:22:22",
+      "visit_seconds": 570,
+      "pos": {
+        "turn": "2026-4872",
+        "invoice": "2026-14927",
+        "service": "Limp. Ceja o Pigmento",
+        "provider": "Provider",
+        "amount": 450,
+        "currency": "DOP",
+        "payment": "Efectivo",
+        "payment_en": "Cash",
+        "payment_es": "Efectivo",
+        "opened": "11:13:02",
+        "closed": "11:23:51",
+        "turn_seconds": 649,
+        "voided_invoices": [
+          "2026-14926"
+        ],
+        "voided_at": "11:24:48"
+      }
+    }
+  ],
+  "changeover_seconds": 35,
+  "events": [
+    {
+      "sod": 39979.414,
+      "src": "vision",
+      "who": "c1",
+      "en": "Client 1 sits at the workstation",
+      "es": "Cliente 1 se sienta en la estación",
+      "clock": "11:06:19",
+      "vt": 3.28
+    },
+    {
+      "sod": 40019.414,
+      "src": "vision",
+      "who": "p",
+      "en": "Provider works on client 1",
+      "es": "La prestadora atiende al cliente 1",
+      "clock": "11:06:59",
+      "vt": 6.62
+    },
+    {
+      "sod": 40371.801,
+      "src": "vision",
+      "who": "c2",
+      "en": "Client 2 arrives at the front desk",
+      "es": "Clienta 2 llega a recepción",
+      "clock": "11:12:51",
+      "vt": 35.98
+    },
+    {
+      "sod": 40382,
+      "src": "pos",
+      "who": "c2",
+      "en": "Turn 2026-4872 opened · Limp. Ceja o Pigmento · Provider",
+      "es": "Turno 2026-4872 abierto · Limp. Ceja o Pigmento · Provider",
+      "clock": "11:13:02",
+      "vt": 36.83
+    },
+    {
+      "sod": 40383,
+      "src": "pos",
+      "who": "c2",
+      "en": "Invoice 2026-14927 · RD$450 · paid in cash at arrival",
+      "es": "Factura 2026-14927 · RD$450 · pagada en efectivo al llegar",
+      "clock": "11:13:03",
+      "vt": 36.92
+    },
+    {
+      "sod": 40427.223,
+      "src": "vision",
+      "who": "c1",
+      "en": "Client 1 leaves the workstation",
+      "es": "Cliente 1 deja la estación",
+      "clock": "11:13:47",
+      "vt": 40.6
+    },
+    {
+      "sod": 40428.223,
+      "src": "pos",
+      "who": "c1",
+      "en": "No POS ticket for Provider covers client 1",
+      "es": "Ningún ticket del POS de Provider cubre al cliente 1",
+      "flag": true,
+      "clock": "11:13:48",
+      "vt": 40.69
+    },
+    {
+      "sod": 40462.0,
+      "src": "vision",
+      "who": "c2",
+      "en": "Client 2 on the bed · service starts",
+      "es": "Clienta 2 en la camilla · empieza el servicio",
+      "clock": "11:14:22",
+      "vt": 43.5
+    },
+    {
+      "sod": 40824.0,
+      "src": "vision",
+      "who": "c2",
+      "en": "Client 2 gets up · service ends",
+      "es": "Clienta 2 se levanta · termina el servicio",
+      "clock": "11:20:24",
+      "vt": 73.67
+    },
+    {
+      "sod": 40883.0,
+      "src": "vision",
+      "who": "c2",
+      "en": "Client 2 back at the front desk",
+      "es": "Clienta 2 vuelve a recepción",
+      "clock": "11:21:23",
+      "vt": 78.58
+    },
+    {
+      "sod": 40942.024,
+      "src": "vision",
+      "who": "c2",
+      "en": "Client 2 leaves the view",
+      "es": "Clienta 2 sale de la vista",
+      "clock": "11:22:22",
+      "vt": 83.5
+    },
+    {
+      "sod": 41031,
+      "src": "pos",
+      "who": "c2",
+      "en": "Turn 2026-4872 closed",
+      "es": "Turno 2026-4872 cerrado",
+      "clock": "11:23:51",
+      "vt": 90.92
+    }
+  ],
+  "notes": {
+    "pos_time": "POS created_at is local time; completed_at is UTC (minus 4 h).",
+    "identity": "Names come from the POS. The video shows where people are, not who they are. No face recognition; client faces blurred."
+  }
+}
