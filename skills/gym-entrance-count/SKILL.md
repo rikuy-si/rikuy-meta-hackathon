@@ -12,6 +12,9 @@ Reuse it; generate new code only for what a site needs differently.
 References: `references/models.md` (models and roles), `references/data-contract.md`
 (what the viewer reads), `references/report-prompt.md` (answer and citation rules).
 
+Steps marked **GPU** run on Modal per `skills/modal-gpu/SKILL.md`: quote price and ETA for all of
+them together and get the user's approval before the first one.
+
 ## Inputs to collect
 
 - Bridge id and the entrance channel, confirmed by the user.
@@ -30,7 +33,7 @@ References: `references/models.md` (models and roles), `references/data-contract
    for the window. Name each file `YYYYMMDDTHHMMSS.mp4` (camera start time) in one `clips/` dir.
    Done when `rikuy-gym timeline --clips clips/ --work work/ --concat` lists every recording
    and writes `work/review.mp4`.
-3. **Count and reconcile.** From `demo/animalx-gym/inference/`:
+3. **Count and reconcile** (GPU for `detect`). From `demo/animalx-gym/inference/`:
 
    ```bash
    uv sync --extra detect --extra segment
@@ -40,7 +43,7 @@ References: `references/models.md` (models and roles), `references/data-contract
 
    Done when `work/audit.json` exists and `reconcile` prints entries, exits, records,
    confirmed, phantom and unrecorded.
-4. **Masks.** SAM 3 at 2 fps over the window, then 15 fps on the recording that covers
+4. **Masks** (GPU). SAM 3 at 2 fps over the window, then 15 fps on the recording that covers
    `stats.peak_5min.from` in `work/audit.json`:
 
    ```bash

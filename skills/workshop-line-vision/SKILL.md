@@ -14,6 +14,9 @@ References: `references/models.md` (models and roles), `references/pipeline.md` 
 output per stage), `references/evidence-rules.md` (what each signal can and cannot prove; read
 before writing any finding).
 
+Steps marked **GPU** run on Modal per `skills/modal-gpu/SKILL.md`: quote price and ETA for all of
+them together and get the user's approval before the first one.
+
 ## Inputs to collect
 
 - Bridge id and the channel that sees the module, and the recording window.
@@ -29,11 +32,11 @@ before writing any finding).
    `skills/rikuy-video/SKILL.md`: `list_cameras` for the bridge, then `download_history` for the
    window (the EZVIZ or Hikvision bridge downloads and decodes on site). Find the camera-to-CP offset (DST, drift) from at least three keypad touches.
    Done when every recording has a start time on the CP clock with a stated uncertainty (±s).
-2. **Track the stations.** Detect and track people, embed tracklets, seed station A/B galleries
+2. **Track the stations** (GPU). Detect and track people, embed tracklets, seed station A/B galleries
    from the reference frame, assign tracklets.
    Done when the contact sheet of every assigned and uncertain tracklet has been reviewed and
    unresolved tracklets are split and flagged.
-3. **Pose and material.** Whole-body pose for A/B at 5 fps; SAM 3 text-prompted masks for the
+3. **Pose and material** (GPU). Whole-body pose for A/B at 5 fps; SAM 3 text-prompted masks for the
    material ("white fabric") at 1 fps inside the zones.
    Done when pose and mask files cover the window and the QA strips around 5 candidates look right.
 4. **Cycles.** Per-second role signals → events (fetch, sew, deposit, wait, key CP) → cycles.

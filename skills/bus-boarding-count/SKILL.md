@@ -10,6 +10,9 @@ each decision cites the clip it came from.
 Reference implementation: `demo/tratam-bus/inference/` (package `rikuy_bus`, CLI `rikuy-bus`);
 it reuses the SAM 3 stage of `demo/animalx-gym/inference/`. The viewer is `demo/tratam-bus/export/`.
 
+Steps marked **GPU** run on Modal per `skills/modal-gpu/SKILL.md`: quote price and ETA for all of
+them together and get the user's approval before the first one.
+
 ## Inputs to collect
 
 - Bridge id and the cabin channel, confirmed by the user.
@@ -24,7 +27,7 @@ it reuses the SAM 3 stage of `demo/animalx-gym/inference/`. The viewer is `demo/
    Done when the user has confirmed the zone drawn on the frame.
 2. **Fetch the recording.** Follow `skills/rikuy-video/SKILL.md`, historical clip, for the window.
    Done when the clip covers the whole window.
-3. **Masks and occupancy.** From `demo/tratam-bus/inference/`:
+3. **Masks and occupancy** (GPU for `segment`). From `demo/tratam-bus/inference/`:
 
    ```bash
    uv sync --extra segment

@@ -13,6 +13,9 @@ Reuse it; generate new code only for what a gym needs differently (camera map, z
 References: `references/models.md` (models and roles), `references/pipeline.md`
 (command and output per stage), `references/qa-gates.md` (gates for step 7).
 
+Steps marked **GPU** run on Modal per `skills/modal-gpu/SKILL.md`: quote price and ETA for all of
+them together and get the user's approval before the first one.
+
 ## Inputs to collect
 
 - Bridge id and the camera map: which channel is the entrance, which ones cover the floor.
@@ -30,18 +33,18 @@ References: `references/models.md` (models and roles), `references/pipeline.md`
 2. **Fetch footage.** Follow `skills/rikuy-video/SKILL.md`, historical clips, for every floor
    camera over each visit window (entrance minute −5 min to last sighting +5 min).
    Done when every camera × visit window has clips on disk.
-3. **Find the member at the entrance.** Match the access-log minute to turnstile crossings
+3. **Find the member at the entrance** (GPU). Match the access-log minute to turnstile crossings
    (−40 s / +20 s) and compare the crops with the reference photo.
    Done when one crossing per visit is confirmed against the photo.
-4. **Find the member on the floor.** Detect and track everyone, embed each track, rank tracks
+4. **Find the member on the floor** (GPU). Detect and track everyone, embed each track, rank tracks
    against the confirmed entrance sighting, and review contact sheets in rounds.
    Done when the next candidates are ≥ 90 % precise and every interval is `confirmed`,
    `mixed`, `auto` or `rescued`.
-5. **Understand the training.** Pose on every library clip, detect sets and reps, merge sets
+5. **Understand the training** (GPU). Pose on every library clip, detect sets and reps, merge sets
    seen by two cameras, label each set (exercise, equipment, spotter, epic rating 1–5,
    confidence) from one sheet row per set.
    Done when every set has a label and ≥ 10 sets have a manual rep count.
-6. **Select and render.** Best set per exercise from `confirmed`/`mixed`/`rescued` identity;
+6. **Select and render** (GPU). Best set per exercise from `confirmed`/`mixed`/`rescued` identity;
    the densest 7 s of reps; slow motion on the peak rep; SAM 3 mask on the member for the rim
    light and virtual camera; a SAM 3D Body replay of the finale; music on a fixed BPM with
    every cut on the beat.
