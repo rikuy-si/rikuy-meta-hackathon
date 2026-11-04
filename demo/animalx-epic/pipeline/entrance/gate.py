@@ -3,7 +3,8 @@
 Outputs (in work/):
   det/<clip>.json   per-clip detections: [t_rel, x1,y1,x2,y2, conf] for people overlapping the gate ROI
   osd/<clip>.json   OCR'd on-screen clock samples: [t_rel, osd_seconds_of_day]
-Run: uv run --with ultralytics --with av --with opencv-python-headless python gate.py [workers]
+Detector: RF-DETR Medium (Apache-2.0, COCO person), the same model as epic/track.py.
+Run: uv run --with rfdetr --with supervision --with av --with opencv-python-headless python gate.py [workers]
 """
 import json, sys, os, re, subprocess, tempfile, pathlib, multiprocessing as mp
 import numpy as np
@@ -14,6 +15,8 @@ WORK = ROOT / _os.environ.get('GATE_WORK', 'work')
 GATE = (360, 40, 720, 380)          # x1,y1,x2,y2 in 1280x720 frame (turnstile area)
 STRIDE = 5                          # analyse every 5th frame (~5 fps at 25 fps)
 OSD_EVERY = 30.0                    # seconds between OSD clock reads
+CONF = 0.35                         # detection threshold
+PERSON = 1                          # COCO category id returned by rfdetr predict
 
 def clips(day='2026-10-29', track='301'):
     """(absolute path, start) for every recording of `track` on `day` (local time)."""
@@ -57,9 +60,9 @@ def overlap(b):
 
 def worker(job):
     idx, items = job
-    import av, cv2, torch
-    from ultralytics import YOLO
-    model = YOLO(str(ROOT / 'yolov8s.pt'))
+    import av, cv2
+    from rfdetr import RFDETRMedium
+    model = RFDETRMedium()
     for rel, start in items:
         name = pathlib.Path(rel).stem
         dp, op = WORK / 'det' / f'{name}.json', WORK / 'osd' / f'{name}.json'
@@ -71,9 +74,12 @@ def worker(job):
             t0 = None; n = 0; next_osd = 0.0; batch, times = [], []
             def flush():
                 if not batch: return
-                res = model(batch, classes=[0], conf=0.35, verbose=False, imgsz=640)
-                for t, r in zip(times, res):
-                    for b, cf in zip(r.boxes.xyxy.tolist(), r.boxes.conf.tolist()):
+                res = model.predict([im[:, :, ::-1].copy() for im in batch], threshold=CONF)  # BGR -> RGB
+                if not isinstance(res, list):
+                    res = [res]
+                for t, d in zip(times, res):
+                    d = d[d.class_id == PERSON]
+                    for b, cf in zip(d.xyxy.tolist(), d.confidence.tolist()):
                         if overlap(b) >= 0.3:
                             dets.append([round(t, 2)] + [round(v) for v in b] + [round(cf, 3)])
                 batch.clear(); times.clear()

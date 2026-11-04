@@ -2,7 +2,7 @@
 
 | Stage | Model | Code (`demo/animalx-epic/pipeline/`) |
 |---|---|---|
-| Entrance person detection | YOLOv8s (COCO person), ~5 fps on the turnstile camera | `entrance/gate.py` |
+| Entrance person detection | **RF-DETR Medium** (COCO person), ~5 fps on the turnstile camera | `entrance/gate.py` |
 | On-screen DVR clock | Tesseract OCR every 30 s | `entrance/osd.py`, `entrance/gate.py` |
 | Floor detection + tracking | **RF-DETR Medium** (COCO person), 5 fps, Roboflow `trackers` ByteTrack | `epic/track.py` |
 | Re-identification | **CLIP-ReID ViT-B/16** (MSMT17) + per-camera logistic regression on reviewed labels | `epic/embed.py`, `epic/match.py`, `epic/rank.py` |
@@ -14,6 +14,10 @@
 | Look and analyze: sheets → labels, exercise names, epic rating, QA frames | **Muse Code** agent on pi.dev, model **Muse Wonder** | `epic/review.py`, `epic/lab.py`, `epic/exercises.py`, `epic/label_check.py` |
 | Code generation | **Muse Code** agent on pi.dev, model **Muse Wonder** | the whole pipeline |
 | Music | Synthesized 120 BPM track, beat-checked with librosa | `epic/make_music.py` |
+
+The Oct 29–31 Animal X run detected entrance people with YOLOv8s. The stage now uses RF-DETR
+Medium (Apache-2.0) to keep the repository free of AGPL code; the swap was checked on a frame
+from the same DVR, but the entrance stage has not been re-run end to end.
 
 Model gate measured on Animal X (zero-shot AP, lower bound):
 

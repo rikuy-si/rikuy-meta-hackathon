@@ -7,7 +7,7 @@
 | reconcile, report, build, cycles, CP alignment, page builds | vm | pure Python, seconds |
 | ffmpeg trim / concat / remux, contact sheets | vm | CPU, light |
 | Tesseract OCR every 30 s | vm | light |
-| RF-DETR, YOLO, ByteTrack | modal | GPU |
+| RF-DETR, ByteTrack | modal | GPU |
 | SAM 3 (image or video tracker), SAM 3D Body / Objects | modal | GPU, 8–24 GB VRAM |
 | RTMPose / RTMW3D, CLIP-ReID, DINOv2 embeddings | modal | GPU (CPU is 20–50× slower) |
 | Hunyuan3D-2 | modal | GPU, ≥ 24 GB VRAM |
@@ -17,7 +17,7 @@
 
 | GPU | VRAM | $/h | Use for |
 |---|---|---|---|
-| T4 | 16 GB | 0.59 | YOLO, RTMPose, embeddings |
+| T4 | 16 GB | 0.59 | RTMPose, embeddings |
 | L4 | 24 GB | 0.80 | RF-DETR, SAM 3 image, CLIP-ReID — default |
 | A10 | 24 GB | 1.10 | same as L4, faster |
 | L40S | 48 GB | 1.95 | SAM 3 video tracker, SAM 3D, Hunyuan3D-2 |
@@ -34,7 +34,6 @@ Starting points for the first quote. Step 3 of the skill replaces them with meas
 | Key | Model | T4 | L4 | A10 | L40S | A100 | H100 |
 |---|---|---|---|---|---|---|---|
 | `rfdetr` | RF-DETR Base, 560 px | 12 | 25 | 30 | 50 | 60 | 90 |
-| `yolo` | YOLOv8s | 80 | 150 | 170 | 250 | 280 | 350 |
 | `sam3-image` | SAM 3, text prompt "person" | 1.5 | 3 | 4 | 7 | 8 | 12 |
 | `sam3-video` | SAM 3 video tracker | 2 | 4 | 5 | 9 | 10 | 15 |
 | `rtmpose` | RTMPose-l / RTMW3D-x per person | 40 | 80 | 90 | 140 | 160 | 220 |
