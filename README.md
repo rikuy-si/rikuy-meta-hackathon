@@ -5,7 +5,7 @@
 Built for the **Meta Global AI Developer Hackathon** (Cerebral Valley × Meta, Oct 26 – Nov 4, 2026), Startup track.
 Rikuy is a product of [Elevate Endeavors LLC](https://elevateendeavors.ai/) (Florida, USA).
 
-- Demo video (3 min): **VIDEO_URL**
+- Demo video (2 min 47 s): https://www.youtube.com/watch?v=hJshXoe4S_Q
 - Repository: https://github.com/rikuy-si/rikuy-meta-hackathon
 
 ## What existed before vs. what we built this week
