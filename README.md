@@ -7,6 +7,21 @@ Rikuy is a product of [Elevate Endeavors LLC](https://elevateendeavors.ai/) (Flo
 
 - Demo video (2 min 47 s): https://www.youtube.com/watch?v=hJshXoe4S_Q
 - Repository: https://github.com/rikuy-si/rikuy-meta-hackathon
+- Post-submission video production: four 30-second demo films and an updated cut. See [below](#post-submission-video-production-demos).
+
+## Post-submission video production demos
+
+> **Note:** the demos below ran during the hackathon (Oct 26 – Nov 4), on the code and footage in this repository. Producing the videos (editing, voice-over, phone mockups) finished after the submission deadline. No code was added for these films. They show the same field deployments, framed as one owner question to Muse each.
+
+- Updated cut (2 min 58 s): https://x.com/arpagon/status/2119396228270334156
+- Thread: https://x.com/arpagon/status/2118158827501863030
+
+| Film | Owner asks Muse | What it shows | Demo in this repo |
+|---|---|---|---|
+| [01 Connect the cameras](https://x.com/arpagon/status/2119396819398697283) | "Help me improve my gym." / "How did people move through the entrance this morning?" | Muse suggests connecting Rikuy, picks the turnstile camera, counts 26 entries and builds a page with every crossing on the record. | `demo/animalx-gym/` |
+| [02 Keep your members](https://x.com/arpagon/status/2119398043631976534) | "Who's at risk of canceling this month?" | Two members flagged. Muse offers each one a highlight video of their own workouts and asks before sending it over WhatsApp. | `demo/animalx-epic/` |
+| [03 Find the bottleneck](https://x.com/arpagon/status/2119398971093537245) | "I need a comprehensive report on Module 28. It's not performing well." | Times every station: Station B sets the pace at 127 s per piece. 34 of 35 keypad captures appear on video. | `demo/enpiso-workshop/` |
+| [04 Check the register](https://x.com/arpagon/status/2119399784138289493) | "Today's attentions don't match what hit the POS. Were there services without payment?" | Camera 6 against the POS from 11:06 to 11:21: two services, one ticket. It flags the gap to check with the team, without accusing anyone. | `demo/rostro-perfecto/` |
 
 ## What existed before vs. what we built this week
 
